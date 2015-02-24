@@ -12,7 +12,8 @@
 	* `git pull origin`
 * **Liste branches:**
 	* **`git branch` for lokale branches**
-	* `git branch -r` for å også vise remote branches i repoen
+	* `git branch -r` for å vise remote branches
+	* `git branch -a` for å også vise remote branches i repoen
 * **Sjekke status på branchen/commiten du jobber i:**
 	* **`git status`**
 * Lage ny branch:
