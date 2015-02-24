@@ -18,16 +18,16 @@ group_id int unique primary key,
 group_name varchar(10)
 );
 
-/*
 create table isMember
 (
 group_id int,
 user_name varchar(10),
 role varchar(10),
-foreign key(group_id) references calenaccountaccountdarGroup(group_id) on update cascade,
-foreign key(user_name) references account(user_name) on update cascade
+primary key(group_id, user_name),
+foreign key(group_id) references calendarGroup(group_id) on delete cascade,
+foreign key(user_name) references account(user_name) on delete cascade
 );
-*/
+
 Create table room
 (
 room_name varchar(10) unique primary key,
