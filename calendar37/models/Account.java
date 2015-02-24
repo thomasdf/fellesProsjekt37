@@ -23,6 +23,16 @@ public class Account {
 			return "member_of";
 		}
 	};
+	private Property<ArrayList<Integer>> calendarsProperty = new ObjectPropertyBase<ArrayList<Integer>>() {
+		@Override
+		public Object getBean() {
+			return this;
+		}
+		@Override
+		public String getName() {
+			return "calendars";
+		}
+	};
 	
 	//Constructor
 	public Account(String username, int account_owner, String password) {
@@ -52,5 +62,15 @@ public class Account {
 	}
 	public Property<ArrayList<Integer>> member_ofProperty() {
 		return member_ofProperty;
+	}
+	
+	public ArrayList<Integer> getCalendars() {
+		return calendarsProperty.getValue();
+	}
+	public void setCalendars(ArrayList<Integer> calendars) {
+		calendarsProperty.setValue(calendars);
+	}
+	public Property<ArrayList<Integer>> calendarsProperty() {
+		return calendarsProperty;
 	}
 }

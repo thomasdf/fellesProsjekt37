@@ -1,5 +1,7 @@
 package models;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -11,6 +13,7 @@ public class Room {
 	private StringProperty room_nameProperty = new SimpleStringProperty();
 	private StringProperty buildingProperty = new SimpleStringProperty();
 	private StringProperty floorProperty = new SimpleStringProperty();
+	private IntegerProperty capacityProperty = new SimpleIntegerProperty();
 	
 	//Constructor
 	
@@ -24,7 +27,7 @@ public class Room {
 	public StringProperty room_nameProperty() {
 		return room_nameProperty;
 	}
-
+	
 	public String getBuilding() {
 		return buildingProperty.getValue();
 	}
@@ -34,7 +37,7 @@ public class Room {
 	public StringProperty buildingProperty() {
 		return buildingProperty;
 	}
-
+	
 	public String getFloor() {
 		return floorProperty.getValue();
 	}
@@ -43,5 +46,15 @@ public class Room {
 	}
 	public StringProperty floorProperty() {
 		return floorProperty;
+	}
+	
+	public Integer getCapacity() {
+		return capacityProperty.getValue();
+	}
+	public void setCapacity(Integer capacity) {
+		capacityProperty.setValue(capacity);
+	}
+	public IntegerProperty capacityProperty() {
+		return capacityProperty;
 	}
 }
