@@ -1,4 +1,4 @@
-# fellesProsjekt37
+﻿# fellesProsjekt37
 #### Fellesprosjekt Gruppe 37: Dag Erik Homdrum Løvgren, Daniel lines, Lars Moe Ellefsen, Oscar Thån Conrad, Thomas Drabløs Frøysa.
 
 ## Git-kommandoer
@@ -10,7 +10,7 @@
 * Oppdatere repository:
 	* **Pass på at du er i master!**
 	* `git pull origin`
-	* *Huske å oppdatere regelmessig*
+	* *Husk å oppdatere regelmessig*
 * **Liste branches:**
 	* **`git branch` for lokale branches**
 	* `git branch -r` for å vise remote branches
@@ -39,10 +39,11 @@
 		* Skal helst skrives på norsk
 		* De meldingene du skriver etter "-m" i commitsa bør være enten:
 			1. En linje med kort beskrivelse av hva du har endret/lagt til, ex `git commit -m "Endret readme-en"`
-			2. En linje med kort beskrivelse, så dobbelt linjeskift (SHIFT+ENTER) etterfulgt av en mer in-depth beskrivelse, ex:
+			* En linje med kort beskrivelse, så dobbelt linjeskift (SHIFT+ENTER) etterfulgt av en mer in-depth beskrivelse, ex:
 				* `git commit -m "Endret readme-en`
 				* `<tom linje>`
 				* `Har endret readme-en for å reflektere de endringer vi har gjort i prosjektet."`
+			* Bruk en teksteditor for å skrive commit-messagen med `git commit -m`
 * Java:
 	* Skriv klasser med stor forbokstav, ex "MyClass.java"
 	* Skriv funksjoner med liten forbokstav, og stor bokstav for hvert nytt ord, ex "myFunction()"
