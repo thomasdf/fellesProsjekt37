@@ -4,11 +4,11 @@
 ## Git-kommandoer
 #### Skrevet med tanke på en linux-maskin.
 * Klone repository:
-	1. Finn et directory der du vil opprette din lokale klone av prosjektet
+	* Finn et directory der du vil opprette din lokale klone av prosjektet
 	* `git clone https://github.com/thomasdf/fellesProsjekt37.git`
 	* evt. `git@github.com:thomasdf/fellesProsjekt37.git` hvis du bruker SSH
 * Oppdatere repository:
-	**1. Pass på at du er i master!**
+	* **Pass på at du er i master!**
 	* `git pull origin`
 * **Liste branches:**
 	* **`git branch` for lokale branches**
@@ -21,11 +21,11 @@
 * Bytte branch:
 	* `git checkout <branch_navn>`
 * Commite til repoen:
-	**1. Sjekk at du er på rett branch!**
+	1. **Sjekk at du er på rett branch!**
 	2. `git add .` legger til alle filene du har laget/modifisert i commiten din
 	3. `git commit -m "<commit-message>"` commiter (dvs. lager et checkpoint) med alle filene du added til commiten på denne branchen
 	4. `git push --set-upstream origin <branch_navn>` pusher branchen med commiten din opp til GitHub
-	5. Gå til GitHub, og så vil du se at branchen din er blitt lagt til. Trykk så på "Merge/Pull Request" for å forespør at branchen din skal merges inn i master
+	5. Gå til GitHub, og så vil du se at branchen din er blitt lagt til. Trykk så på "Compare & pull request" for å forespør at branchen din skal merges inn i master
 
 ## Konvensjoner
 * Git:
