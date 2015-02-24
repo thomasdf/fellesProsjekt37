@@ -37,13 +37,12 @@
 	* Commit så mye du vil (checkpoints), men vær sikker på at det du har gjort er funksjonelt før du pusher det
 	* Commit-messages:
 		* Skal helst skrives på norsk
-		* De meldingene du skriver etter "-m" i commitsa bør være enten:
+		* Du kan enten skrive `git commit -m "<melding>"`, eller du kan skrive `git commit` og skrive meldingen din i en teksteditor. Meldingene du skriver etter "-m" i commitsa bør uansett være på en av disse to formene:
 			1. En linje med kort beskrivelse av hva du har endret/lagt til, ex `git commit -m "Endret readme-en"`
-			* En linje med kort beskrivelse, så dobbelt linjeskift (SHIFT+ENTER) etterfulgt av en mer in-depth beskrivelse, ex:
+			* En linje med kort beskrivelse, så dobbelt linjeskift (SHIFT+ENTER i bash) etterfulgt av en mer in-depth beskrivelse, ex:
 				* `git commit -m "Endret readme-en`
 				* `<tom linje>`
 				* `Har endret readme-en for å reflektere de endringer vi har gjort i prosjektet."`
-			* Bruk en teksteditor for å skrive commit-messagen med `git commit -m`
 * Java:
 	* Skriv klasser med stor forbokstav, ex "MyClass.java"
 	* Skriv funksjoner med liten forbokstav, og stor bokstav for hvert nytt ord, ex "myFunction()"
