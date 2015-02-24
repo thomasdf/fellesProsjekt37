@@ -10,28 +10,39 @@
 * Oppdatere repository:
 	* **Pass på at du er i master!**
 	* `git pull origin`
+	* *Huske å oppdatere regelmessig*
 * **Liste branches:**
 	* **`git branch` for lokale branches**
 	* `git branch -r` for å vise remote branches
 	* `git branch -a` for å også vise remote branches i repoen
 * **Sjekke status på branchen/commiten du jobber i:**
 	* **`git status`**
+* **Sjekke commit-loggen på branchen du er i:**
+	* **`git log`**
 * Lage ny branch:
 	* `git branch <ny_branch_navn>`
 * Bytte branch:
 	* `git checkout <branch_navn>`
 * Commite til repoen:
 	1. **Sjekk at du er på rett branch!**
-	2. `git add .` legger til alle filene du har laget/modifisert i commiten din
-	3. `git commit -m "<commit-message>"` commiter (dvs. lager et checkpoint) med alle filene du added til commiten på denne branchen
-	4. `git push --set-upstream origin <branch_navn>` pusher branchen med commiten din opp til GitHub
-	5. Gå til GitHub, og så vil du se at branchen din er blitt lagt til. Trykk så på "Compare & pull request" for å forespør at branchen din skal merges inn i master
+	* `git add .` legger til alle filene du har laget/modifisert i commiten din
+	* `git commit -m "<commit-message>"` commiter (dvs. lager et checkpoint) med alle filene du added til commiten på denne branchen
+	* `git push --set-upstream origin <branch_navn>` pusher branchen med commiten din opp til GitHub
+	* Gå til GitHub, og så vil du se at branchen din er blitt lagt til. Trykk så på "Compare & pull request" for å forespør at branchen din skal merges inn i master
 
 ## Konvensjoner
 * Git:
 	* Branch ALLTID fra master
 	* Aldri push direkte på master, push din egen branch til GitHub og lag et pull-request som forklart over
 	* Commit så mye du vil (checkpoints), men vær sikker på at det du har gjort er funksjonelt før du pusher det
+	* Commit-messages:
+		* Skal helst skrives på norsk
+		* De meldingene du skriver etter "-m" i commitsa bør være enten:
+			1. En linje med kort beskrivelse av hva du har endret/lagt til, ex `git commit -m "Endret readme-en"`
+			2. En linje med kort beskrivelse, så dobbelt linjeskift (SHIFT+ENTER) etterfulgt av en mer in-depth beskrivelse, ex:
+				* `git commit -m "Endret readme-en`
+				* `<tom linje>`
+				* `Har endret readme-en for å reflektere de endringer vi har gjort i prosjektet."`
 * Java:
 	* Skriv klasser med stor forbokstav, ex "MyClass.java"
 	* Skriv funksjoner med liten forbokstav, og stor bokstav for hvert nytt ord, ex "myFunction()"
