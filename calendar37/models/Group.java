@@ -32,6 +32,16 @@ public class Group {
 			return "member_of";
 		}
 	};
+	private Property<ArrayList<Integer>> subgroupsProperty = new ObjectPropertyBase<ArrayList<Integer>>() {
+		@Override
+		public Object getBean() {
+			return this;
+		}
+		@Override
+		public String getName() {
+			return "subgroups";
+		}
+	};
 	
 	//Constructor
 	public Group(int group_id, String group_name) {
@@ -66,5 +76,15 @@ public class Group {
 	}
 	public Property<ArrayList<Integer>> member_ofProperty() {
 		return member_ofProperty;
+	}
+	
+	public ArrayList<Integer> getSubgroups() {
+		return subgroupsProperty.getValue();
+	}
+	public void setSubgroups(ArrayList<Integer> subgroups) {
+		subgroupsProperty.setValue(subgroups);
+	}
+	public Property<ArrayList<Integer>> subgroupsProperty() {
+		return subgroupsProperty;
 	}
 }
