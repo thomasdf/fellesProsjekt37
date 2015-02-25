@@ -1,26 +1,26 @@
-
-(#the following three lines are for problems with mySql and should be deleted before the final version
+#the following three lines are for problems with mySql and should be deleted before the final version
 drop schema fellesprosjekt;
 create schema fellesprosjekt;
 use fellesprosjekt;
-)
 
 Create table account( #entity including hasCalendar and hasAccount relation
 user_name varChar(10) unique primary key,
-employee_nr int unique not null,
+employee_nr int(5) unique not null,
 /*not null to assure that an account cannot exist without a relation to a person-entity.
 unique to ensure that there is 1 and only 1 person corresponding to 1 and only 1 account.*/
 activity_id int,
 room_name varchar(10),
-group_id int
+group_id int,
 calendar_id int not null,
-foreign key(employee_nr) references person(employee_nr) on delete cascade #hasAccount
+foreign key(employee_nr) references person(employee_nr) on delete cascade, #hasAccount
 foreign key(calendar_id) references calendar(calendar_id) on delete cascade #hasCalendar
 );
 
-Create table calendarGroup( #entity
+Create table calendarGroup( #entity, including groupHasCalendar-relation
 group_id int unique primary key,
-group_name varchar(10)
+group_name varchar(10),
+calendar_id int not null unique,
+foreign key(calendar_id) references calendar(calendar_id)
 );
 
 create table subGroup( #subgroup-Relation
@@ -51,7 +51,7 @@ foreign key(admin_user_name) references account(user_name) on delete cascade
 );
 
 create table person( #entity. This is an entity to be created before creating an account for the person
-employee_nr int unique primary key,
+employee_nr int(5) unique not null primary key,
 first_name varchar(10),
 last_name varchar(10),
 mobile_nr char(8)
@@ -78,7 +78,9 @@ foreign key(user_name) references account(user_name) on delete cascade
 );
 
 create table calendar( #including hasCalendar
-calendar_id int unique primary key,
+calendar_id int not null unique primary key,
 user_name varchar(10) unique,
+calendarGroup_id int unique,
+foreign key (calendarGroup_id) references calendarGroup(group_id),
 foreign key(user_name) references account(user_name)
 );
