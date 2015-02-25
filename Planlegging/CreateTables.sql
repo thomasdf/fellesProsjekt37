@@ -7,7 +7,9 @@ use fellesprosjekt;
 
 Create table account(
 user_name varChar(10) unique primary key,
-employee_nr int unique,
+employee_nr int unique not null,
+/*not null to assure that an account cannot exist without a relation to a person-entity.
+unique to ensure that there is 1 and only 1 person corresponding to 1 and only 1 account.*/
 activity_id int,
 room_name varchar(10),
 group_id int
@@ -20,13 +22,12 @@ group_name varchar(10)
 );
 
 create table subGroup(
-#subgroup relation. One group is connected to another group. None of the IDs are unique to ensure an n-n-relation.
-#i'm not so sure that this kind of subgroup will work, because this will in fact create a "supergroup" consisting of two groups. I think this will have to be reworked.
-group_id1 int,
-group_id2 int,
-primary key(group_id1, group_id2),
-foreign key(group_id1) references calendarGroup(group_id),
-foreign key(group_id2) references calendarGroup(group_id)
+#subgroup-relation. A group can have many "children" and "many parents". None of which needs to be unique, but the unique constraint checks that there are no duplicate relations.
+subgroup_id int,
+supergroup_id int,
+constraint unique (subgroup_id, supergroup_id),
+foreign key(subgroup_id) references calendarGroup(group_id),
+foreign key(supergroup_id) references calendarGroup(group_id)
 );
 
 create table isMember(
@@ -61,7 +62,17 @@ activity_date date,
 start_time time,
 end_time time,
 repetition int,
-end_date date
+end_date date,
+owner_user_name varchar(10) unique, # ensures 1 owner
+foreign key(owner_user_name) references account(user_name) #owner is a reserved word, and owner_user_name is used instead.
+);
+
+create table invited(
+activity_id int,
+user_name varchar(10),
+primary key (activity_id, user_name), #to ensure that no duplicated invitations to one activity exists.
+foreign key(activity_id) references activity(activity_id) on delete cascade,
+foreign key(user_name) references account(user_name) on delete cascade
 );
 
 create table attending(
