@@ -1,5 +1,11 @@
 package models;
 
+/**
+ * 
+ * 
+ * @author gruppe37
+ * @version %I%, %G%
+ */
 public class Person {
 
 	//Final attributes

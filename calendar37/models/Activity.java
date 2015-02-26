@@ -9,6 +9,12 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * 
+ * 
+ * @author gruppe37
+ * @version %I%, %G%
+ */
 public class Activity {
 
 	//Final attributes

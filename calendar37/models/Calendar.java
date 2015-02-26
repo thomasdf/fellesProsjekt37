@@ -5,6 +5,12 @@ import java.util.ArrayList;
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.Property;
 
+/**
+ * 
+ * 
+ * @author gruppe37
+ * @version %I%, %G%
+ */
 public class Calendar {
 
 	//Final attributes

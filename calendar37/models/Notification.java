@@ -1,5 +1,11 @@
 package models;
 
+/**
+ * 
+ * 
+ * @author gruppe37
+ * @version %I%, %G%
+ */
 public class Notification {
 
 	//Final attributes

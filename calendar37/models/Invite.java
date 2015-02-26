@@ -3,6 +3,12 @@ package models;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * 
+ * 
+ * @author gruppe37
+ * @version %I%, %G%
+ */
 public class Invite {
 
 	//Final attributes
