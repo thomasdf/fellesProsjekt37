@@ -1,3 +1,4 @@
+
 #the following three lines are for problems with mySql and should be deleted before the final version
 drop schema fellesprosjekt;
 create schema fellesprosjekt;
@@ -7,7 +8,7 @@ create table person( #entity. This is an entity to be created before creating an
 employee_nr int(5) unique not null primary key,
 first_name varchar(10) not null,
 last_name varchar(10) not null,
-mobile_nr char(8) not null
+mobile_nr varchar(8) not null
 );
 
 create table calendar(
@@ -19,7 +20,7 @@ activity_id int(5) unique
 
 Create table calendarGroup( #entity, including groupHasCalendar-relation
 group_id int unique not null primary key,
-group_name varchar(10),
+group_name varchar(10) not null,
 calendar_id int not null unique,
 foreign key(calendar_id) references calendar(calendar_id)
 );
@@ -78,7 +79,6 @@ activity_id int(5),
 user_name varchar(10),
 role varchar(10)
 );
-
 
 #altering tables for foreign keys
 
