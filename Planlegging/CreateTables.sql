@@ -59,7 +59,7 @@ foreign key(user_name) references account(user_name) on delete cascade
 #delete on cascade is used to assure that the relation is deleted if either the corresponding account or group is deleted
 );
 
-create table activity( #entity. includes isOwner-relation.
+create table activity( #entity. includes isOwner-relation and activityRoom
 activity_id int(5) unique primary key,
 description varchar(256),
 activity_date date,
