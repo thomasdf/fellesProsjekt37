@@ -75,7 +75,8 @@ foreign key(room_name) references room(room_name)
 
 create table invited( #relation n-n between account and activity
 activity_id int(5),
-user_name varchar(10)
+user_name varchar(10),
+role varchar(10)
 );
 
 
@@ -87,6 +88,6 @@ add foreign key(user_name) references account(user_name),
 add foreign key(activity_id) references activity(activity_id);
 
 alter table invited#problems underneath
-#add constraint unique (activity_id, user_name),
-#add foreign key(activity_id) references activity(activity_id) on delete cascade,
+add constraint unique (activity_id, user_name),
+add foreign key(activity_id) references activity(activity_id) on delete cascade,
 add foreign key(user_name) references account(user_name) on delete cascade;
