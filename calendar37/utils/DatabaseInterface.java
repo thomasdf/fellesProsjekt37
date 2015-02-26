@@ -59,7 +59,7 @@ public class DatabaseInterface	{
 	
 	
 	/*
-	 * Closes all the connections, always call this method after you are done with the resultset
+	 * Closes all the connections, always call this method after you are done with the result set
 	 */
 	public void closeItAll()	{
 		
