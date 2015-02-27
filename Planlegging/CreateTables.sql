@@ -6,8 +6,8 @@ use fellesprosjekt;
 
 create table person( #entity. This is an entity to be created before creating an account for the person
 employee_nr int(5) unique not null primary key,
-first_name varchar(10) not null,
-last_name varchar(10) not null,
+first_name varchar(20) not null,
+last_name varchar(20) not null,
 mobile_nr varchar(8) not null
 );
 
@@ -20,7 +20,7 @@ activity_id int(5) unique
 
 Create table calendarGroup( #entity, including groupHasCalendar-relation
 group_id int unique not null primary key,
-group_name varchar(10) not null,
+group_name varchar(20) not null,
 calendar_id int(5) not null unique,
 foreign key(calendar_id) references calendar(calendar_id)
 );
@@ -45,8 +45,8 @@ foreign key(supergroup_id) references calendarGroup(group_id)
 );
 
 Create table room( #entity including isAdmin-relationship
-room_name varchar(10) unique primary key,
-capacity varchar(3)
+room_name varchar(20) unique primary key,
+capacity int(3)
 );
 
 create table isMember( #isMember-relation
@@ -69,7 +69,7 @@ end_time time,
 repetition int,
 end_date date,
 owner_user_name varchar(10) not null, # ensures 1 owner
-room_name varchar(10),
+room_name varchar(20),
 foreign key(owner_user_name) references account(user_name), #owner is a reserved word, and owner_user_name is used instead.
 foreign key(room_name) references room(room_name)
 );
