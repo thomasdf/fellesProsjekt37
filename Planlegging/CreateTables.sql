@@ -20,9 +20,7 @@ foreign key(employee_nr) references person(employee_nr) on delete cascade #hasAc
 );
 
 create table calendar(
-calendar_id int(5) not null unique primary key,
-user_name varchar(10) unique not null,
-activity_id int(5) unique
+calendar_id int(5) not null unique primary key
 );
 
 Create table room(
