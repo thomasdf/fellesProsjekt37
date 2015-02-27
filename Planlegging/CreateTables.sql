@@ -14,7 +14,7 @@ mobile_nr varchar(8) not null
 create table calendar(
 calendar_id int(5) not null unique primary key,
 user_name varchar(10) unique not null,
-calendarGroup_id int unique not null,
+calendarGroup_id int unique,
 activity_id int(5) unique
 );
 
