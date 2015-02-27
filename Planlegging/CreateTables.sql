@@ -36,7 +36,6 @@ activity_date date,
 end_date date,
 start_time time,
 end_time time,
-repetition int,
 owner_user_name varchar(10) not null, # ensures 1 owner
 room_name varchar(20),
 foreign key(owner_user_name) references account(user_name), #owner is a reserved word, and owner_user_name is used instead.
@@ -45,7 +44,7 @@ foreign key(calendar_id) references calendar(calendar_id) #activityCalendar
 );
 
 Create table calendarGroup(
-group_id int unique not null primary key,
+group_id int(5) unique not null primary key,
 group_name varchar(20) not null
 );
 
