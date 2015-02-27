@@ -73,7 +73,7 @@ foreign key(group_id) references calendarGroup(group_id)
 
 create table isMember( #isMember-relation
 #this is the relationship, isMember, between calendarGroup and Account. The relationship entity has one field; "role"
-group_id int,
+group_id int(5),
 user_name varchar(10),
 role varchar(10),
 primary key(group_id, user_name),
