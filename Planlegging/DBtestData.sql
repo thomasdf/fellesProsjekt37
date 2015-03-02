@@ -1,4 +1,3 @@
-
 /*
 rekkefølgen for innsetting er viktig her. Entitetene først. Følgende rekkefølge gjelder:
 Følgende presedens for entiteter vil alltid virke. Andre rekkefølger kan virke, men trenger ikke virke. Derfor: det er ofte fornuftig å opprette ting i denne rekkefølgen, også i fremtiden.

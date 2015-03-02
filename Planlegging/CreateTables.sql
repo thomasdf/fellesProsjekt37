@@ -17,7 +17,7 @@ user_password varChar(10) not null, #should be scrambled
 employee_nr int(5) unique not null,
 /*not null to assure that an account cannot exist without a relation to a person-entity.
 unique to ensure that there is 1 and only 1 person corresponding to 1 and only 1 account.*/
-foreign key(employee_nr) references person(employee_nr) on delete cascade #hasAccount
+foreign key(employee_nr) references person(employee_nr) #hasAccount
 );
 
 create table calendar(
@@ -91,3 +91,4 @@ primary key(activity_id, user_name),
 foreign key(activity_id) references activity(activity_id),
 foreign key(user_name) references account(user_name)
 );
+
