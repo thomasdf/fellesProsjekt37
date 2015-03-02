@@ -13,6 +13,7 @@ mobile_nr varchar(8) not null
 
 Create table account( #entity including hasAccount
 user_name varChar(10) unique primary key,
+user_password varChar(10) not null, #should be scrambled
 employee_nr int(5) unique not null,
 /*not null to assure that an account cannot exist without a relation to a person-entity.
 unique to ensure that there is 1 and only 1 person corresponding to 1 and only 1 account.*/

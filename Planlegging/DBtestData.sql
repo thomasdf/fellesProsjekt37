@@ -28,16 +28,16 @@ values
 
 insert into account
 values
-('Spidey', 12345),
-('manBats', 67890),
-('S.Meister', 24680),
-('McLovin', 13579),
-('Hannibal', 13806),
-('Faceman', 76487),
-('Baracus', 75894),
-('Murdoc', 87931),
-('Lahey', 99883),
-('J-Roc', 13371);
+('Spidey', 'Spoider', 12345),
+('manBats', 'noParents', 67890),
+('S.Meister', 'shag',24680),
+('McLovin', 'alcohol', 13579),
+('Hannibal', 'Ateam1337', 13806),
+('Faceman', 'Ateam1337', 76487),
+('Baracus', 'Ateam1337', 75894),
+('Murdoc', 'Ateam1337', 87931),
+('Lahey', 'liquor', 99883),
+('J-Roc', 'mafk', 13371);
 
 insert into calendar
 values
