@@ -4,7 +4,7 @@ drop schema fellesprosjekt;
 create schema fellesprosjekt;
 use fellesprosjekt;
 
-create table person( #entity. This is an entity to be created before creating an account for the person
+create table person( #entity. This is an entity to be created before creating an account for the person, all fields needs to be filled in.
 employee_nr int(5) unique not null primary key,
 first_name varchar(20) not null,
 last_name varchar(20) not null,
@@ -36,7 +36,7 @@ activity_date date,
 end_date date,
 start_time time,
 end_time time,
-owner_user_name varchar(10) not null, # ensures 1 owner
+owner_user_name varchar(10) not null, # ensures 1 owner per activity
 room_name varchar(20),
 foreign key(owner_user_name) references account(user_name), #owner is a reserved word, and owner_user_name is used instead.
 foreign key(room_name) references room(room_name),
@@ -49,10 +49,10 @@ group_name varchar(20) not null
 );
 
 create table subGroup( #subgroup-Relation
-#subgroup-relation. A group can have many "children" and "many parents". None of which needs to be unique, but the unique constraint checks that there are no duplicate relations.
+#subgroup-relation. A group can have many "children" and "many parents". None of which needs to be unique, but the composite primary key ensures that there are no duplicates. To find all children, the supergroup-ID can be usedd.
 subgroup_id int,
 supergroup_id int,
-constraint unique (subgroup_id, supergroup_id),
+primary key(supergroup_id, subgroup_id),
 foreign key(subgroup_id) references calendarGroup(group_id),
 foreign key(supergroup_id) references calendarGroup(group_id)
 );
@@ -65,7 +65,7 @@ foreign key(calendar_id) references calendar(calendar_id)
 );
 
 create table groupHasCalendar(
-calendar_id int(5) not null,
+calendar_id int(5) primary key not null,
 group_id int (5) not null,
 foreign key(calendar_id) references calendar(calendar_id),
 foreign key(group_id) references calendarGroup(group_id)
@@ -83,9 +83,10 @@ foreign key(user_name) references account(user_name) on delete cascade
 );
 
 create table invited( #relation n-n between account and activity
-activity_id int(5),
-user_name varchar(10),
+activity_id int(5) not null,
+user_name varchar(10) not null,
 invitation_status varchar(5),
+primary key(activity_id, user_name),
 foreign key(activity_id) references activity(activity_id),
 foreign key(user_name) references account(user_name)
 );
