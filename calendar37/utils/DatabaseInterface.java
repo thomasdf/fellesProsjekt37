@@ -55,6 +55,7 @@ public class DatabaseInterface	{
 	 * Fetches a ResultSet from the database based on the given query.
 	 * 
 	 * @param query SQL query string
+	 * @return ResultSet result
 	 */ 
 	public ResultSet getQuery(String query)	{
 		try	{
