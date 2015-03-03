@@ -31,8 +31,8 @@ public class DatabaseInterface	{
 	 * instead of making it a static final field.
 	 */
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/fellesprosjekt";
-	private static final String USERNAME = "daniel";
-	private static final String PASSWORD = "bringIt1";
+	private static final String USERNAME = "thomas";
+	private static final String PASSWORD = "bringIt";
 	
 	private Connection connection;
 	private Statement statement;
@@ -123,5 +123,15 @@ public class DatabaseInterface	{
 			}
 		}
 	}
+	
+	public int getEmployeeNr(String user_name) throws SQLException {
+		try	{
+			this.resultset = this.statement.executeQuery("select person.employee_nr from person, account where account.employee_nr = person.employee_nr and account.user_name = " +"\"" + user_name +"\"");
+		}	catch (SQLException e)	{
+			System.out.println("Error from DatabaseInterface: " + e.getLocalizedMessage());
+		}
+		return resultset.getInt(0);
+	}
+	
 	
 }
