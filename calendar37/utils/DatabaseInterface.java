@@ -20,6 +20,10 @@ public class DatabaseInterface	{
 	private Statement statement;
 	private ResultSet resultset;
 	
+	/**
+	 * Class constructor. Nothing to add because we don't need support for different users. Therefore
+	 * the credentials are built into the class
+	 */	
 	public DatabaseInterface()	{
 		try	{
 			Class.forName(DB_DRIVER);
@@ -30,6 +34,12 @@ public class DatabaseInterface	{
 		}
 	}
 	
+	/**
+	 * Returns a resultset based on the query that is provided.
+	 * 
+	 * @param query SQL query for what you wish to get from the database
+	 * @return ResultSet The result of the query.
+	 */	
 	public ResultSet getQuery(String query)	{
 		try	{
 			this.resultset = this.statement.executeQuery(query);
