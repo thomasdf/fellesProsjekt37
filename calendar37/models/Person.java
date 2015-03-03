@@ -1,7 +1,9 @@
 package models;
 
 /**
- * 
+ * This is the base-class that initializes a person in our database, making him/her eligible for an {@link Account}.
+ * This class is an absolute requirement for using the Calendar-system, as a person cannot have an
+ * {@link Account} without it.
  * 
  * @author gruppe37
  * @version %I%, %G%

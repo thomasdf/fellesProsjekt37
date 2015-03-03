@@ -6,7 +6,9 @@ import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.Property;
 
 /**
- * 
+ * A Group-class acts in very much the same way as an {@link Account}-class, although the Group-class will
+ * ""belong"" to more than one {@link Person}, which will lead to more than one {@link Person} being able
+ * to see, edit and in other ways modify the {@link Calendar} it's linked to.
  * 
  * @author gruppe37
  * @version %I%, %G%

@@ -6,7 +6,9 @@ import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.Property;
 
 /**
- * 
+ * This class is the main class, and the basis of our application. It contains every {@link Activity} for a certain Calendar,
+ * and shows the correct {@link Activity} to the correct {@link Account}. A Calendar can either belong to a {@link Group} or
+ * an {@link Account}, which leads to it showing for certain people in our user-database.
  * 
  * @author gruppe37
  * @version %I%, %G%
