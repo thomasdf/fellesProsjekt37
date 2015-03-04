@@ -126,11 +126,11 @@ public class DatabaseInterface	{
 	
 	public int getEmployeeNr(String user_name) throws SQLException {
 		try	{
-			this.resultset = this.statement.executeQuery("select person.employee_nr from person, account where account.employee_nr = person.employee_nr and account.user_name = " +"\"" + user_name +"\"");
+			this.resultset = this.statement.executeQuery("select person.employee_nr from person, account where account.employee_nr = person.employee_nr and account.user_name = " +  "\'" + user_name +"\'");
 		}	catch (SQLException e)	{
 			System.out.println("Error from DatabaseInterface: " + e.getLocalizedMessage());
 		}
-		return resultset.getInt(0);
+		return resultset.getInt("employee_nr");
 	}
 	
 	
