@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+   <children>
+      <Pane layoutX="271.0" layoutY="31.0" prefHeight="734.0" prefWidth="734.0" style="-fx-border-style: dotted;">
+         <children>
+            <HBox layoutX="-1.0" prefHeight="100.0" prefWidth="734.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CalendarSystem" textAlignment="CENTER" wrappingWidth="734.13671875">
+                     <font>
+                        <Font name="Century Gothic" size="36.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets top="30.0" />
+                     </HBox.margin>
+                  </Text>
+               </children>
+            </HBox>
+            <GridPane hgap="6.0" layoutX="129.0" layoutY="226.0" prefHeight="53.0" prefWidth="358.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="137.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="10.0" prefWidth="221.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField prefHeight="25.0" prefWidth="251.0" GridPane.columnIndex="1" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" textAlignment="RIGHT" wrappingWidth="135.9365234375">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+               </children>
+            </GridPane>
+            <GridPane hgap="6.0" layoutX="129.0" layoutY="305.0" prefHeight="53.0" prefWidth="358.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" textAlignment="RIGHT" wrappingWidth="135.9365234375">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <PasswordField GridPane.columnIndex="1" />
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="137.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="10.0" prefWidth="221.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+            </GridPane>
+            <Button layoutX="308.0" layoutY="416.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="121.0" text="Log in" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.collections.*?>
+<?import fxmltableview.*?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="263.0" layoutY="23.0" prefHeight="747.0" prefWidth="778.0" style="-fx-border-style: dotted; -fx-background-color: d7d7d7;">
+         <children>
+            <HBox prefHeight="85.0" prefWidth="778.0">
+               <children>
+                  <TextFlow prefHeight="114.0" prefWidth="778.0" textAlignment="CENTER">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create Group" textAlignment="CENTER">
+                           <font>
+                              <Font name="Franklin Gothic Book" size="34.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <padding>
+                        <Insets top="30.0" />
+                     </padding>
+                  </TextFlow>
+               </children>
+            </HBox>
+            <Button layoutX="394.0" layoutY="605.0" mnemonicParsing="false" text="Uncheck everything" />
+            <Button layoutX="269.0" layoutY="605.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Check everything" />
+            <Button layoutX="319.0" layoutY="667.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="150.0" text="Create">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Button>
+            <TabPane layoutX="183.0" layoutY="346.0" prefHeight="251.0" prefWidth="423.0" tabClosingPolicy="UNAVAILABLE">
+               <tabs>
+                  <Tab text="Person">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView fx:id="PersonTable" prefHeight="292.0" prefWidth="423.0">
+                                 <columns>
+                                    <TableColumn prefWidth="159.0" text="First Name" />
+                                    <TableColumn prefWidth="130.0" sortable="false" text="Last Name" />
+                                 </columns>
+                              </TableView>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab text="Group">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TableView prefHeight="292.0" prefWidth="423.0">
+                                 <columns>
+                                    <TableColumn prefWidth="159.0" text="Name" />
+                                    <TableColumn prefWidth="121.0" text="#Members" />
+                                 </columns>
+                              </TableView>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+               </tabs>
+            </TabPane>
+            <GridPane layoutX="183.0" layoutY="84.0" prefHeight="47.0" prefWidth="423.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="44.0" minHeight="7.0" prefHeight="31.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="29.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label prefHeight="17.0" prefWidth="232.0" text="Group Name:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField prefHeight="9.0" prefWidth="423.0" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+            <GridPane layoutX="183.0" layoutY="140.0" prefHeight="161.0" prefWidth="423.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="76.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="131.0" minHeight="10.0" prefHeight="131.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label prefHeight="27.0" prefWidth="424.0" text="Group Description:">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+            <Label layoutX="182.0" layoutY="319.0" prefHeight="27.0" prefWidth="424.0" text="Invite to group:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
