@@ -9,6 +9,14 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * Activity is the class that is being initialized in the {@link Calendar} with an activity that certain
+ * people could be invited to. It relates to, either {@link Account} or a {@link Group}, via an {@link Invite}.
+ * The activity can push out a {@link Notification} to it's invited and/or attending subjects.
+ * 
+ * @author gruppe37
+ * @version %I%, %G%
+ */
 public class Activity {
 
 	//Final attributes

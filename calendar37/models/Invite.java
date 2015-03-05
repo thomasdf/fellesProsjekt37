@@ -3,6 +3,14 @@ package models;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * Invite is used as an invitation to a certain {@link Activity}. This invitation is sent to, either an {@link Account}
+ * or a {@link Group}. This class is necessary to keep track of the "status"-attribute. We need to know if a
+ * {@link Person} is going to attend or not.
+ * 
+ * @author gruppe37
+ * @version %I%, %G%
+ */
 public class Invite {
 
 	//Final attributes

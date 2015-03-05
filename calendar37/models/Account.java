@@ -5,6 +5,15 @@ import java.util.ArrayList;
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.Property;
 
+/**
+ * Account is the class that keeps a record of everything relating to the account of a {@link Person}.
+ * The password is encrypted.
+ * Account is always used as the reference when we want to get or to set something relating to a {@link Person},
+ * we never use {@link Person} itself.
+ * 
+ * @author gruppe37
+ * @version %I%, %G%
+ */
 public class Account {
 
 	//Final attributes
