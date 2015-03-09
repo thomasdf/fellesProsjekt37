@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.Property;
@@ -35,6 +36,10 @@ public class Calendar {
 	public Calendar(int calendar_id, String calendar_owner) {
 		this.calendar_id = calendar_id;
 		this.calendar_owner = calendar_owner;
+		
+		//TESTVALUES!!!
+		activitiesProperty.getValue().addAll(Arrays.asList(1, 5, 8, 15, 28));
+		//TESTVALUES!!!
 	}
 	
 	//Getters, Setters & Properties

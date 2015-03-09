@@ -49,8 +49,8 @@
 	-fx-font-weight: bold;
 }
 
-.month {
-	-fx-padding: 0 32 0 0;
+.month_year {
+	-fx-padding: 0 4 0 0;
 	-fx-font-size: 24;
 }
 
