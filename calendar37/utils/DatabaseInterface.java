@@ -1,9 +1,12 @@
 package utils;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
+import models.Activity;
+import models.Group;
 
 /**
  * 
@@ -36,7 +39,7 @@ public class DatabaseInterface	{
 	
 	private Connection connection;
 	private Statement statement;
-	private ResultSet resultset;
+	private ResultSet result;
 	
 	/**
 	 * Class constructor.
@@ -59,51 +62,24 @@ public class DatabaseInterface	{
 	 */ 
 	public ResultSet getQuery(String query)	{
 		try	{
-			this.resultset = this.statement.executeQuery(query);
+			this.connection = DriverManager.getConnection(DB_URL, USERNAME, PASSWORD);
+			this.statement = connection.createStatement();
+		    this.result = statement.executeQuery(query);
 		}	catch (SQLException e)	{
 			System.out.println("Error from DatabaseInterface: " + e.getLocalizedMessage());
 		}
-		return this.resultset;
-	}
-	
-	/**
-	 * Fetches all the rows and columns from a given table.
-	 * 
-	 * @param table_name the table to fetch from the database
-	 */
-	public ResultSet getWholeTable(String table_name)	{
-		try	{
-			this.resultset = this.statement.executeQuery("SELECT * FROM " + table_name);
-		}	catch (SQLException e)	{
-			System.out.println("Error from DatabaseInterface: " + e.getLocalizedMessage());
-		}
-		return this.resultset;
-	}
-	
-	/**
-	 * Fetches everything from the given table which agress with the given where constraint.
-	 * 
-	 * @param table_name name of the table you want to fetch from
-	 * @param where_constraint constraint of what you want to fetch from the given table, format : <table_column>=<Something>
-	 */
-	public ResultSet getTableWhere(String table_name, String where_constraint)	{
-		try	{
-			this.resultset = this.statement.executeQuery("SELECT * FROM " + table_name + " WHERE " + where_constraint);
-		}	catch (SQLException e)	{
-			System.out.println("Error from DatabaseInterface: " + e.getLocalizedMessage());
-		}
-		return this.resultset;
+		return this.result;
 	}
 	
 	
 	/**
 	 * Closes all connection to the database.
 	 */
-	private void closeItAll()	{
+	public void closeItAll()	{
 		
-		if(this.resultset!=null)	{
+		if(this.result!=null)	{
 			try	{
-				this.resultset.close();
+				this.result.close();
 			}	catch(SQLException e)	{
 				
 			}
@@ -122,6 +98,162 @@ public class DatabaseInterface	{
 				
 			}
 		}
+	}
+	
+	/**
+	 * Fetches the activity with the given id from the database. Throws
+	 * a SQLException if something goes wrong, then it returns an
+	 * Activity object with no fields set but the id.
+	 * 
+	 * @param id the identity of the activity in question
+	 * @return returns an Activity model object with the information required.
+	 */
+	public Activity getActivity(int id)	{
+		Activity act = new Activity(id);
+		try	{
+			ResultSet result = this.getQuery("select * from activity where activity.activity_id=" + id);		
+			act.setDescription(result.getString("description"));
+			act.setFrom(result.getTime("start_time").toLocalTime());
+			act.setTo(result.getTime("end_time").toLocalTime());
+			act.setDate(result.getDate("date").toLocalDate());
+			act.setDescription(result.getString("description"));
+			// participants og room kommer etter dette
+		}	catch(SQLException e)	{
+			e.printStackTrace();
+		}
+		return act;
+		
+	}
+	
+	
+	/**
+	 * Returns the description of the activity defined by the id.
+	 * 
+	 * @param id the identity of the activity in question
+	 * @return String variable which contains the description
+	 */
+	public String getActivityDesc(int id)	{
+		String s = "";
+		try	{
+			ResultSet result = this.getQuery("select description from activity where activity.activity_id=" + id);
+			
+			if(result.next())	{
+				s = result.getString("description");
+			}
+		}	catch (SQLException e)	{
+			e.printStackTrace();
+		}
+		return s;
+	}
+	
+	/**
+	 * Method to get the start and end time from the db of the
+	 * given activity
+	 * 
+	 * @param id the identity of the activity in question
+	 * @return ArrayList<LocalTime> with start_time and end_time
+	 */
+	public ArrayList<LocalTime>	getFromTo(int id)	{
+		ArrayList<LocalTime> time = new ArrayList<LocalTime>();
+		try	{
+			ResultSet result = this.getQuery("select start_time, end_time from activity where activity.activity_id="+id);
+			if(result.next())	{	
+				time.add(result.getTime("start_time").toLocalTime());
+				time.add(result.getTime("end_time").toLocalTime());
+			}
+		}	catch(SQLException e)	{
+			e.printStackTrace();
+		}
+		return time;
+	}
+	
+	/**
+	 * Fetched the calendar id of the given activity from the database.
+	 * Returns 0 if something goes wrong
+	 * 
+	 * @param id the identity of the activity in question
+	 * @return int calendar_id
+	 */
+	public int getCalendarId(int id)	{
+		int cal_id = 0;
+		
+		try	{
+			ResultSet result = this.getQuery("select calendar_id from activity where activity_id=" + id);
+			if(result.next())	{
+				cal_id = result.getInt("calendar_id");
+			}
+		}	catch(SQLException e)	{
+			e.printStackTrace();
+		}
+		return cal_id;
+	}
+	
+	/**
+	 * Fetches the id of the room that connects with the activity.
+	 * Returns an empty string if something goes wrong
+	 * 
+	 * @param id the identity of the activity in question
+	 * @return returns a String that is the primary key of the room 
+	 */
+	public String getRoomName(int id)	{
+		String room_name = "";
+		
+		try	{
+			ResultSet result = this.getQuery("select room.* from activity, room where activity.room_name= room.room_name and activity_id="+id);
+			if(result.next())	{
+				room_name = result.getString("room_name");
+			}
+		}	catch(SQLException e)	{
+			e.printStackTrace();
+		}
+		return room_name;
+	}
+	
+	/**
+	 * Fetches the group with this id from the database.
+	 * 
+	 * @param id the identity of the group in question
+	 * @return returns a group object
+	 */
+	public Group getGroup(int id)	{
+		Group group = null;
+		ArrayList<String> member = new ArrayList<String>();
+		try	{
+			ResultSet result = this.getQuery("select * from calendargroup where calendargroup.group_id="+id);
+			if(result.next())	{
+				group = new Group(id, result.getString("name"));
+			}
+			ResultSet members = this.getQuery("select account.user_name from account, calendargroup where account.group_id_id=calendargroup.group_id and calendargroup.group_id="+id);
+			int count = 0;
+			while(members.next())	{
+				member.add(members.getString(count));
+				count++;
+			}
+			group.setMembers(member);;
+		}	catch(SQLException e)	{
+			e.printStackTrace();
+		}
+		return group;
+	}
+	
+	/**
+	 * Fetches the user_name of the admin connected to the given group.
+	 * 
+	 * @param id the id for the group in question
+	 * @return returns a user name which is unique for that account
+	 */
+	public String getGroupAdmin(int id)	{
+		String admin_user_name = null;
+		
+		try	{
+			ResultSet result = this.getQuery("select account.user_name from calendargroup, account, ismember where account.user_name=ismember.username and ismember.group_id=calendargroup.group_id and calendargroup.group_id=" + id + " and ismember.role='admin'");
+			if(result.next())	{
+				admin_user_name = result.getString("user_name");
+			}
+		}	catch (SQLException e)	{
+			e.printStackTrace();
+		}
+		return admin_user_name;
 	}
 	
 }
