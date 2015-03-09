@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import models.*;
 /**
  * 
  * DatabaseInterface provides a connection to the database. This is based on the
@@ -209,20 +211,60 @@ public class DatabaseInterface	{
 	}
 	
 	/**
-	 * Returns an ID for the calendar related to a group
-	 * @param groupId the groupID which is the primary key for the group we want to find the calendar from.
-	 * @return a calendarId for the groupCalendar.
+	 * Returns the Account-object corresponding to a given user_name
+	 * @param user_name the user name which is the primary key for the account which we want returned.
+	 * @return the Account-object for the user_name.
 	 */
-	public int getCalendarId(int groupId) {
-		int calendarId = 0;
-		try	{
-			this.resultset = this.statement.executeQuery("select calendar.calendar_id from calendargroup, calendar, grouphascalendar where calendar.calendar_id = grouphascalendar.calendar_id and calendargroup.group_id = grouphascalendar.group_id and calendarGroup.group_id = " + groupId);
+	public Account getAccount(String user_name){
+		Account acc;
+		int employee_nr = getEmployeeNr(user_name);
+		String password = getPassword(user_name);
+		acc = new Account(user_name, employee_nr, password);
+		return acc;
+	}
+	
+	/**
+	 * Returns an ArrayList of all Activity-objects related to an Account
+	 * @param user_name the user name which is the primary key for the account
+	 * @return an ArrayList<Activity> with all Activity-objects related to an Account.
+	 */
+	public ArrayList<Activity> getAllActivities(String user_name) {
+		ArrayList<Activity> activityList = new ArrayList<Activity>();
+		try {
+			ResultSet result = this.statement.executeQuery("select activity.activity_id, activity.description, activity.start_time, activity.end_time, activity.activity_date, activity.end_date, activity.owner_user_name, activity.room_name from activity, account, calendar, hascalendar where activity.calendar_id = calendar.calendar_id and hascalendar.user_name = account.user_name and hascalendar.calendar_id = calendar.calendar_id and hascalendar.user_name = " + "\"" + user_name + "\"");
+			while(result.next()){
+			Activity act;
+			act = new Activity(result.getInt("activity_id"));
+			act.setDescription(result.getString("description"));
+			act.setFrom(result.getTime("start_time").toLocalTime());
+			act.setTo(result.getTime("end_time").toLocalTime());
+			act.setDate(result.getDate("date").toLocalDate());
+			act.setDescription(result.getString("description"));
+			// participants og room kommer etter dette
+			
+			activityList.add(act);
+			}
+		} catch (SQLException e) {
+			System.out.println("Error from DatabaseInterface: "
+					+ e.getLocalizedMessage());
+		}
+		return activityList;
+	}
+	
+	public Person getPerson(String user_name){
+		Person person = null;
+		try{
+			ResultSet result = this.statement.executeQuery("select * from account, person where account.employee_nr = person.employee_nr and user_name = " +"\"" + user_name + "\"");
 			resultset.next();
-			calendarId = this.resultset.getInt(1);
+			int employee_nr = result.getInt("employee_nr");
+			String first_name = result.getString("first_name");
+			String last_name = result.getString("last_name");
+			String mobile_nr = result.getString("mobile_nr");
+			String internal_nr = ""; //denne linjen skal fjernes når modellene oppdateres til å ikke lenger ha internal_nr
+			person = new Person(employee_nr, first_name, last_name, internal_nr, mobile_nr);
 		}	catch (SQLException e)	{
 			System.out.println("Error from DatabaseInterface: " + e.getLocalizedMessage());
 		}
-		return calendarId;
+		return person;
 	}
-	
 }
