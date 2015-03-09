@@ -92,3 +92,12 @@ foreign key(activity_id) references activity(activity_id),
 foreign key(user_name) references account(user_name)
 );
 
+create table alarm(
+user_name varchar(10) not null,
+activity_id int(5) not null,
+alarm_time time,
+primary key(user_name, activity_id),
+foreign key(user_name) references account(user_name),
+foreign key(activity_id) references activity(activity_id)
+);
+

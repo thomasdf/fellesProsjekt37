@@ -111,3 +111,12 @@ values
 (14141, 'Spidey', 'pleb'),
 (15151, 'Spidey', 'admin');
 
+insert into alarm
+values
+('manBats', 91919, '12:00:00'),
+('Lahey', 90909, '13:12:00');
+
+insert into invited
+values
+(90909, 'J-Roc', 'false'),
+(92929, 'Lahey', 'false');
