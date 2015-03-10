@@ -274,7 +274,7 @@ public class DatabaseInterface {
 	}
 
 	/**
-	 * Updates an account og creates a new account in the database if an account
+	 * Updates an account and creates a new account in the database if an account
 	 * with this user_name is not in the database
 	 * 
 	 * @param account
@@ -289,12 +289,12 @@ public class DatabaseInterface {
 					.executeQuery("select account.user_name from account where account.user_name = \""
 							+ user_name + "\"");
 			result.next();
-			if (result.getString(1) != null) {
+			if (result.getString(1) != null) {//check if account with same id already exists
 				statement.executeUpdate("update account set employee_nr="
 						+ employee_nr + ", user_password= " + "\"" + password
 						+ "\"" + " where user_name = " + "\"" + user_name
 						+ "\"");
-			} else {
+			} else {//account does not exist, and new row created
 				statement.executeUpdate("insert into account values ( \""
 						+ user_name + "\", " + "\"" + password + "\", "
 						+ employee_nr + ")");
@@ -359,5 +359,8 @@ public class DatabaseInterface {
 					+ e.getLocalizedMessage());
 		}
 		return person;
+	}
+	public void setSubGroup(Group supergroup, Group subgroup){
+		
 	}
 }
