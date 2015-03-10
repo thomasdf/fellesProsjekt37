@@ -39,8 +39,11 @@ public class DatabaseInterface {
 	 */
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/fellesprosjekt";
 	private static final String USERNAME = "daniel";
-	private static final String PASSWORD = "bringIt1";
+	//private static final String USERNAME = "thomas";
 
+	private static final String PASSWORD = "bringIt1";
+	//private static final String PASSWORD = "bringIt";
+	
 	private Connection connection;
 	private Statement statement;
 	private ResultSet result;
@@ -198,7 +201,7 @@ public class DatabaseInterface {
 						+ activity.getDate() + ", " + activity.getDate() + ", "
 						+ activity.getFrom() + ", " + activity.getTo() + ", "
 						+ activity.getOwner_user_name() + ", "
-						+ activity.getRoom());
+						+ activity.getRoom() + ")");
 				/*
 				 * // check if user name exists result =
 				 * this.getQuery("SELECT user_name FROM account WHERE user_name="
