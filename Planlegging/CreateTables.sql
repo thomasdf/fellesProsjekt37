@@ -21,7 +21,7 @@ foreign key(employee_nr) references person(employee_nr) #hasAccount
 );
 
 create table calendar(
-calendar_id int(5) not null unique primary key
+calendar_id int(5) not null unique primary key auto_increment
 );
 
 Create table room(
@@ -30,7 +30,7 @@ capacity int(3)
 );
 
 create table activity( #entity. includes isOwner-relation and activityRoom
-activity_id int(5) unique primary key,
+activity_id int(5) unique primary key auto_increment,
 calendar_id int(5) not null,
 description varchar(256),
 activity_date date,
@@ -45,7 +45,7 @@ foreign key(calendar_id) references calendar(calendar_id) #activityCalendar
 );
 
 Create table calendarGroup(
-group_id int(5) unique not null primary key,
+group_id int(5) unique not null primary key auto_increment,
 group_name varchar(20) not null
 );
 
