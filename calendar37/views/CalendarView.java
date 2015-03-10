@@ -146,10 +146,6 @@ public class CalendarView extends Application {
 		header.add(prev_month, 2, 0);
 		header.add(next_month, 3, 0);
 			//footer
-		profile.setPrefWidth(256);
-		profile.setPrefHeight(16);
-		tasks.setPrefWidth(256);
-		tasks.setPrefHeight(16);
 		footer.getChildren().addAll(profile, tasks);
 			//calendar
 			//the days
@@ -199,7 +195,7 @@ public class CalendarView extends Application {
 		act1.setTo(LocalTime.of(12, 30));
 			//activity
 		act2 = new Activity(1, 0, "admin");
-		act2.setDescription("Middag med den store familien min");
+		act2.setDescription("Middag med den altfor, altfor store familien min");
 		act2.setDate(LocalDate.of(2015, 3, 15));
 		act2.setFrom(LocalTime.of(16, 0));
 		act2.setTo(LocalTime.of(17, 30));
@@ -312,20 +308,36 @@ public class CalendarView extends Application {
 		for (int i = 0; i < days.size(); i++){
 			day_activities.get(i).getChildren().clear();
 		}
-		for (int act : model.getActivities()) {
+		for (int activity_id : model.getActivities()) {
 			try {
-				Activity cur_act = getActivity(act);
+				Activity cur_act = getActivity(activity_id);
 				if (cur_act.getDate().getYear() == cal.get(Calendar.YEAR) && cur_act.getDate().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
 					String formatted_act = getFormattedActivity(cur_act);
 					Button activity_btn = new Button(formatted_act);
 					activity_btn.getStyleClass().add("activity");
 					activity_btn.setFocusTraversable(false);
+					activity_btn.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent event) {
+							openActivity(activity_id);
+						}
+					});
 					day_activities.get(start_index + cur_act.getDate().getDayOfMonth() - 1).getChildren().add(activity_btn);
 				}
 			} catch (NullPointerException e) {
 				System.err.println("NullPointerException: " + e.getMessage());
 			}
 		}
+	}
+	
+	/**
+	 * Opens up the view for an {@link Activity} that is pressed in this {@link CalendarView},
+	 * and retains information about in what {@link models.Calendar} the {@link Activity} was pressed.
+	 * 
+	 * @param activity_id
+	 */
+	private void openActivity(int activity_id) {
+		//FILL IN LATER!
 	}
 	
 	private String getFormattedActivity(Activity act) {
