@@ -119,13 +119,14 @@ public class DatabaseInterface {
 	 * @return returns an Activity model object with the information required.
 	 */
 	public Activity getActivity(int id) {
-		Activity act = new Activity(id);
+		Activity act = null;
 		ArrayList<Integer> part = new ArrayList<Integer>();
 		try {
 			ResultSet result = this
 					.getQuery("select * from activity where activity.activity_id="
 							+ id);
 			if (result.next()) {
+				act = new Activity(result.getInt("activity_id"), result.getInt("calendar_id"), result.getString("owner_user_name"));
 				act.setDescription(result.getString("description"));
 				act.setFrom(result.getTime("start_time").toLocalTime());
 				act.setTo(result.getTime("end_time").toLocalTime());
