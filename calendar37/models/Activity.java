@@ -23,6 +23,7 @@ public class Activity {
 
 	//Final attributes
 	private final int activity_id;
+	private final int calendar_id;
 	private final String activity_owner;
 	
 	//Property-attributes
@@ -61,14 +62,18 @@ public class Activity {
 	private ObservableList<Integer> participantsList = FXCollections.observableList(new ArrayList<Integer>());
 	
 	//Constructor
-	public Activity(int activity_id, String activity_owner) {
+	public Activity(int activity_id, int calendar_id, String activity_owner) {
 		this.activity_id = activity_id;
+		this.calendar_id = calendar_id;
 		this.activity_owner = activity_owner;
 	}
 	
 	//Getters, Setters & Properties
 	public int getActivity_id() {
 		return activity_id;
+	}
+	public int getCalendar_id() {
+		return calendar_id;
 	}
 	
 	public String getActivity_owner() {
@@ -125,10 +130,13 @@ public class Activity {
 		return toProperty;
 	}
 	
-	public ObservableList<Integer> getActivities() {
+	public ObservableList<Integer> getParticipants() {
 		return participantsList;
 	}
-	public void setActivities(ObservableList<Integer> participants) {
-		participantsList = participants;
+	public void addParticipant(int participant_id) {
+		participantsList.add(participant_id);
+	}
+	public void setParticipants(ArrayList<Integer> participants) {
+		participantsList.setAll(participants);
 	}
 }
