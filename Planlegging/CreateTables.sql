@@ -4,24 +4,19 @@ drop schema fellesprosjekt;
 create schema fellesprosjekt;
 use fellesprosjekt;
 
-create table person( #entity. This is an entity to be created before creating an account for the person, all fields needs to be filled in.
-employee_nr int(5) unique not null primary key,
-first_name varchar(20) not null,
-last_name varchar(20) not null,
-mobile_nr varchar(8) not null
-);
-
 Create table account( #entity including hasAccount
 user_name varChar(10) unique primary key,
 user_password varChar(10) not null, #should be scrambled
 employee_nr int(5) unique not null,
+first_name varchar(20) not null,
+last_name varchar(20) not null,
+mobile_nr varchar(8)
 /*not null to assure that an account cannot exist without a relation to a person-entity.
 unique to ensure that there is 1 and only 1 person corresponding to 1 and only 1 account.*/
-foreign key(employee_nr) references person(employee_nr) #hasAccount
 );
 
 create table calendar(
-calendar_id int(5) not null unique primary key auto_increment
+calendar_id int(5) not null unique primary key
 );
 
 Create table room(
@@ -30,7 +25,7 @@ capacity int(3)
 );
 
 create table activity( #entity. includes isOwner-relation and activityRoom
-activity_id int(5) unique primary key auto_increment,
+activity_id int(5) unique primary key,
 calendar_id int(5) not null,
 description varchar(256),
 activity_date date,
@@ -45,7 +40,7 @@ foreign key(calendar_id) references calendar(calendar_id) #activityCalendar
 );
 
 Create table calendarGroup(
-group_id int(5) unique not null primary key auto_increment,
+group_id int(5) unique not null primary key,
 group_name varchar(20) not null
 );
 
@@ -76,7 +71,6 @@ create table isMember( #isMember-relation
 #this is the relationship, isMember, between calendarGroup and Account. The relationship entity has one field; "role"
 group_id int(5),
 user_name varchar(10),
-role varchar(10),
 primary key(group_id, user_name),
 foreign key(group_id) references calendarGroup(group_id) on delete cascade,
 foreign key(user_name) references account(user_name) on delete cascade
