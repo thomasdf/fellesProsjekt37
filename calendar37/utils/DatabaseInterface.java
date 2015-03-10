@@ -5,8 +5,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+import models.Account;
 import models.Activity;
 import models.Group;
+import models.Person;
 
 /**
  * 
@@ -37,8 +39,11 @@ public class DatabaseInterface {
 	 */
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/fellesprosjekt";
 	private static final String USERNAME = "daniel";
-	private static final String PASSWORD = "bringIt1";
+	//private static final String USERNAME = "thomas";
 
+	private static final String PASSWORD = "bringIt1";
+	//private static final String PASSWORD = "bringIt";
+	
 	private Connection connection;
 	private Statement statement;
 	private ResultSet result;
@@ -191,12 +196,17 @@ public class DatabaseInterface {
 				 */
 			} else {
 				result.close();
+				result = this.getQuery(
+						 "SELECT calendar_id FROM hasCalendar WHERE user_name=" +
+						  activity.getOwner_user_name());
+				result.next();
+				int calendar_id = result.getInt(1);
 				this.statement.execute("INSERT INTO activity VALUES ("
 						+ calendar_id + ", " + activity.getDescription() + ", "
 						+ activity.getDate() + ", " + activity.getDate() + ", "
 						+ activity.getFrom() + ", " + activity.getTo() + ", "
 						+ activity.getOwner_user_name() + ", "
-						+ activity.getRoom());
+						+ activity.getRoom() + ")");
 				/*
 				 * // check if user name exists result =
 				 * this.getQuery("SELECT user_name FROM account WHERE user_name="
@@ -389,4 +399,282 @@ public class DatabaseInterface {
 		return admin_user_name;
 	}
 
+	/**
+	 * Returns the employee-number registered in an account.
+	 * 
+	 * @param user_name
+	 *            the user name which is the primary key of the account we want
+	 *            to find the employee number from.
+	 * @return the employee-number for the account.
+	 */
+	public int getEmployeeNr(String user_name) {
+		int employeeNr = 0;
+		try {
+			this.result = this.statement
+					.executeQuery("select person.employee_nr from person, account where account.employee_nr = person.employee_nr and account.user_name = "
+							+ "\"" + user_name + "\"");
+			result.next();
+			employeeNr = this.result.getInt(1);
+		} catch (SQLException e) {
+			System.out.println("Error from DatabaseInterface: "
+					+ e.getLocalizedMessage());
+		}
+		return employeeNr;
+	}
+
+	/**
+	 * Returns the full name registered in an account.
+	 * 
+	 * @param user_name
+	 *            the user name which is the primary key of the account we want
+	 *            to find the full name from.
+	 * @return the full name for the account.
+	 */
+	public String getFullName(String user_name) {
+		String fullName = null;
+		try {
+			this.result = this.statement
+					.executeQuery("select person.first_name, person.last_name from person, account where account.employee_nr = person.employee_nr and account.user_name = "
+							+ "\"" + user_name + "\"");
+			result.next();
+			fullName = this.result.getString(1) + " "
+					+ this.result.getString(2);
+		} catch (SQLException e) {
+			System.out.println("Error from DatabaseInterface: "
+					+ e.getLocalizedMessage());
+		}
+		return fullName;
+	}
+
+	/**
+	 * Returns a mobile number registered in an account in the database.
+	 * 
+	 * @param user_name
+	 *            the user name which is the primary key of the account we want
+	 *            to find the mobile number from.
+	 * @return the mobile number for the account
+	 */
+	public String getMobile(String user_name) {
+		String mobile = null;
+		try {
+			this.result = this.statement
+					.executeQuery("select person.mobile_nr from person, account where account.employee_nr = person.employee_nr and account.user_name = "
+							+ "\"" + user_name + "\"");
+			result.next();
+			mobile = this.result.getString(1);
+		} catch (SQLException e) {
+			System.out.println("Error from DatabaseInterface: "
+					+ e.getLocalizedMessage());
+		}
+		return mobile;
+	}
+
+	/**
+	 * Returns a password registered in an account in the database.
+	 * 
+	 * @param user_name
+	 *            the user name which is the primary key of the account we want
+	 *            to find the password from.
+	 * @return the password for the account.
+	 */
+	public String getPassword(String user_name) { // this method is not a smart
+													// way to do things
+		String password = null;
+		try {
+			this.result = this.statement
+					.executeQuery("select account.user_password from account where account.user_name = "
+							+ "\"" + user_name + "\"");
+			result.next();
+			password = this.result.getString(1);
+		} catch (SQLException e) {
+			System.out.println("Error from DatabaseInterface: "
+					+ e.getLocalizedMessage());
+		}
+		return password;
+	}
+
+	/**
+	 * Returns an ID for the calendar related to an account
+	 * 
+	 * @param user_name
+	 *            the user name which is the primary key of the account we want
+	 *            to find the calendarID from.
+	 * @return the calendardId for the account.
+	 */
+	public int getCalendarId(String user_name) {
+		int calendarId = 0;
+		try {
+			this.result = this.statement
+					.executeQuery("select calendar.calendar_id from account, calendar, hascalendar where hascalendar.user_name = account.user_name and hascalendar.calendar_id = calendar.calendar_id and hascalendar.user_name = "
+							+ "\"" + user_name + "\"");
+			result.next();
+			calendarId = this.result.getInt(1);
+		} catch (SQLException e) {
+			System.out.println("Error from DatabaseInterface: "
+					+ e.getLocalizedMessage());
+		}
+		return calendarId;
+	}
+
+	/**
+	 * Returns the Account-object corresponding to a given user_name
+	 * 
+	 * @param user_name
+	 *            the user name which is the primary key for the account which
+	 *            we want returned.
+	 * @return the Account-object for the user_name.
+	 */
+	public Account getAccount(String user_name) {
+		Account acc;
+		int employee_nr = getEmployeeNr(user_name);
+		String password = getPassword(user_name);
+		acc = new Account(user_name, employee_nr, password);
+		return acc;
+	}
+
+	/**
+	 * Updates an account and creates a new account in the database if an
+	 * account with this user_name is not in the database
+	 * 
+	 * @param account
+	 *            the account we want to add to the database
+	 */
+	public void setAccount(Account account) {
+		String user_name = account.getUsername();
+		String password = account.getPassword();
+		int employee_nr = account.getAccount_owner();
+		try {
+			ResultSet result = statement
+					.executeQuery("select account.user_name from account where account.user_name = \""
+							+ user_name + "\"");
+			result.next();
+			if (result.getString(1) != null) {// check if account with same id
+												// already exists
+				statement.executeUpdate("update account set employee_nr="
+						+ employee_nr + ", user_password= " + "\"" + password
+						+ "\"" + " where user_name = " + "\"" + user_name
+						+ "\"");
+			} else {// account does not exist, and new row created
+				statement.executeUpdate("insert into account values ( \""
+						+ user_name + "\", " + "\"" + password + "\", "
+						+ employee_nr + ")");
+			}
+		} catch (SQLException e) {
+			System.out.println("Error from DatabaseInterface: "
+					+ e.getLocalizedMessage());
+		}
+	}
+
+	/**
+	 * Returns an ArrayList of all Activity-objects related to an Account
+	 * 
+	 * @param user_name
+	 *            the user name which is the primary key for the account
+	 * @return an ArrayList<Activity> with all Activity-objects related to an
+	 *         Account.
+	 */
+	public ArrayList<Activity> getAllActivities(String user_name) {
+		ArrayList<Activity> activityList = new ArrayList<Activity>();
+		try {
+			ResultSet result = this.statement
+					.executeQuery("select activity.activity_id, activity.description, activity.start_time, activity.end_time, activity.activity_date, activity.end_date, activity.owner_user_name, activity.room_name from activity, account, calendar, hascalendar where activity.calendar_id = calendar.calendar_id and hascalendar.user_name = account.user_name and hascalendar.calendar_id = calendar.calendar_id and hascalendar.user_name = "
+							+ "\"" + user_name + "\"");
+			while (result.next()) {
+				Activity act;
+				act = new Activity(result.getInt("activity_id"));
+				act.setDescription(result.getString("description"));
+				act.setFrom(result.getTime("start_time").toLocalTime());
+				act.setTo(result.getTime("end_time").toLocalTime());
+				act.setDate(result.getDate("date").toLocalDate());
+				act.setDescription(result.getString("description"));
+				// participants og room kommer etter dette
+
+				activityList.add(act);
+			}
+		} catch (SQLException e) {
+			System.out.println("Error from DatabaseInterface: "
+					+ e.getLocalizedMessage());
+		}
+		return activityList;
+	}
+
+	public Person getPerson(String user_name) {
+		Person person = null;
+		try {
+			ResultSet result = this.statement
+					.executeQuery("select * from account, person where account.employee_nr = person.employee_nr and user_name = "
+							+ "\"" + user_name + "\"");
+			result.next();
+			int employee_nr = result.getInt("employee_nr");
+			String first_name = result.getString("first_name");
+			String last_name = result.getString("last_name");
+			String mobile_nr = result.getString("mobile_nr");
+			String internal_nr = ""; // denne linjen skal fjernes n�r modellene
+										// oppdateres til � ikke lenger ha
+										// internal_nr
+			person = new Person(employee_nr, first_name, last_name,
+					internal_nr, mobile_nr);
+		} catch (SQLException e) {
+			System.out.println("Error from DatabaseInterface: "
+					+ e.getLocalizedMessage());
+		}
+		return person;
+	}
+
+	public void setSubGroup(Group supergroup, Group subgroup) {
+
+	}
+	
+	/**
+	 * Invites a user to the given activity
+	 *  
+	 * @param activity_id id of the activity in question
+	 * @param user_name user_name that should be invited
+	 */
+	public void inviteAccount(int activity_id, String user_name)	{
+		try	{
+			this.statement.executeUpdate("INSERT INTO invited VALUES("+ activity_id + ", '" + user_name + "', 'false')");
+		}	catch(SQLException e)	{
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Checks status to invitation on the given user to the given activity
+	 * 
+	 * @param activity_id the given activity's id
+	 * @param user_name the user_name of the user invited
+	 * @return boolean the status of the invitation
+	 */
+	public boolean isComing(int activity_id, String user_name)	{
+		try	{
+			ResultSet result = this.getQuery("SELECT invitation_status FROM invited WHERE activity_id=" + activity_id + " AND user_name='" + user_name + "'");
+			result.next();
+			boolean is_coming = result.getString(1).equals("true") ? false : true;			
+			result.close();
+			return is_coming;
+		}	catch(SQLException e)	{
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
+	 * Changes status of invite to the opposite of what it is
+	 * 
+	 * @param activity_id
+	 * @param user_name
+	 */
+	public void changeInvitedStatus(int activity_id, String user_name)	{
+		try	{
+			ResultSet result = this.getQuery("SELECT invitation_status FROM invited WHERE activity_id=" + activity_id + " AND user_name='" + user_name + "'");
+			result.next();
+			String status = result.getString(1).equals("true") ? "false" : "true";
+			result.close();
+			this.statement.executeUpdate("UPDATE invited SET invitation_status='"+ status + "' WHERE activity_id=" + activity_id + " AND user_name='" + user_name + "'");
+		}	catch(SQLException e)	{
+			e.printStackTrace();
+		}
+	}
+	
 }
