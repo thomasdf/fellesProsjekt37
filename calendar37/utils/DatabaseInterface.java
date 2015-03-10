@@ -360,10 +360,8 @@ public class DatabaseInterface {
 			ResultSet members = this
 					.getQuery("select account.user_name from account, isMember where account.user_name=isMember.user_name and isMember.group_id="
 							+ id);
-			int count = 1;
 			while (members.next()) {
 				member.add(members.getString(1));
-				count++;
 			}
 			group.setMembers(member);
 			members.close();
