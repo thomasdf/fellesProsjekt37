@@ -1,10 +1,14 @@
 package models;
 
+//TESTVALUES!!!
 import java.util.ArrayList;
 import java.util.Arrays;
+//TESTVALUES!!!
 
-import javafx.beans.property.ObjectPropertyBase;
-import javafx.beans.property.Property;
+import java.util.List;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * This class is the main class, and the basis of our application. It contains every {@link Activity} for a certain Calendar,
@@ -21,16 +25,8 @@ public class Calendar {
 	private final String calendar_owner;
 	
 	//Property-attributes
-	private Property<ArrayList<Integer>> activitiesProperty = new ObjectPropertyBase<ArrayList<Integer>>() {
-		@Override
-		public Object getBean() {
-			return this;
-		}
-		@Override
-		public String getName() {
-			return "activities";
-		}
-	};
+	private List<Integer> activities = new ArrayList<Integer>();
+	private ObservableList<Integer> activitiesList = FXCollections.observableList(activities);
 	
 	//Constructor
 	public Calendar(int calendar_id, String calendar_owner) {
@@ -38,7 +34,7 @@ public class Calendar {
 		this.calendar_owner = calendar_owner;
 		
 		//TESTVALUES!!!
-		activitiesProperty.getValue().addAll(Arrays.asList(1, 5, 8, 15, 28));
+		activitiesList.addAll(Arrays.asList(10, 10, 5, 8, 15, 28));
 		//TESTVALUES!!!
 	}
 	
@@ -51,13 +47,10 @@ public class Calendar {
 		return calendar_owner;
 	}
 	
-	public ArrayList<Integer> getActivities() {
-		return activitiesProperty.getValue();
+	public ObservableList<Integer> getActivities() {
+		return activitiesList;
 	}
-	public void setActivities(ArrayList<Integer> activities) {
-		activitiesProperty.setValue(activities);
-	}
-	public Property<ArrayList<Integer>> activitiesProperty() {
-		return activitiesProperty;
+	public void setActivities(ObservableList<Integer> activities) {
+		activitiesList = activities;
 	}
 }

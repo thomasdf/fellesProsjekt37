@@ -23,13 +23,16 @@
 	-fx-background-repeat: no-repeat;
 }
 
+.header .button:hover {
+	-fx-cursor: hand;
+}
+
 .left {
 	-fx-background-position: left;
 	-fx-background-image: url("http://i247.photobucket.com/albums/gg154/HvitrEbrithil/Private/left_zps3u8wfscx.png");
 }
 
 .right {
-	-fx-text-alignment: left;
 	-fx-background-position: right;
 	-fx-background-image: url("http://i247.photobucket.com/albums/gg154/HvitrEbrithil/Private/right_zpsro9ufpri.png");
 }
@@ -52,16 +55,21 @@
 .month_year {
 	-fx-padding: 0 4 0 0;
 	-fx-font-size: 24;
+	-fx-pref-width: 200;
+	-fx-alignment: center-right;
 }
 
 .weekday {
+	-fx-pref-width: 256;
 	-fx-padding: 0 0 0 8;
 	-fx-font-size: 16;
 	-fx-font-weight: bold;
+	-fx-border-width: 2;
+	-fx-border-color: transparent transparent #ccc transparent;
 }
 
 .date {
-	-fx-font-size: 11;
+	-fx-font-size: 12;
 }
 
 .day {
@@ -70,13 +78,17 @@
 	-fx-padding: 2;
 }
 
-.day .button {
+.activity {
 	-fx-pref-width: 9999;
 	-fx-border-color: #9fc6e7;
 	-fx-border-width: 1;
 	-fx-background-color: #e4eff8;
 	-fx-padding: 1;
 	-fx-alignment: center-left;
+}
+
+.activity:hover {
+	-fx-cursor: hand;
 }
 
 

@@ -1,14 +1,13 @@
 package views;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
@@ -18,76 +17,85 @@ import javafx.scene.layout.*;
 
 public class CalendarView extends Application {
 
-	String viewName = "Calendar";
+	private String viewName = "Calendar";
 	
 	//The model for this view
-	models.Calendar model;
+	private models.Calendar model;
 	
 	//Variables we need defined outside the "start"-function
 		//View-elements
-	GridPane calendar = new GridPane();
-	HBox header = new HBox();
-	Label cal_title = new Label("<kalendernavn>");
-	Label cur_month = new Label("<måned>");
-	Label cur_year = new Label("<år>");
-	Button prev_month = new Button("Forrige");
-	Button next_month = new Button("Neste");
-	HBox footer = new HBox();
-	Button profile = new Button("Min profil");
-	Button tasks = new Button("Aktivitets-agenda");
+	private GridPane calendar = new GridPane();
+	private HBox header = new HBox();
+	private Label cal_title = new Label("<kalendernavn>");
+	private Label cur_month_year = new Label("<måned år>");
+	private Button prev_month = new Button("Forrige");
+	private Button next_month = new Button("Neste");
+	private HBox footer = new HBox();
+	private Button profile = new Button("Min profil");
+	private Button tasks = new Button("Aktivitets-agenda");
 	
 		//Lists containing current days and activities
-	ArrayList<Label> days = new ArrayList<Label>();
-	ArrayList<VBox> day_activities = new ArrayList<VBox>();
+	private ArrayList<Label> days = new ArrayList<Label>();
+	private ArrayList<VBox> day_activities = new ArrayList<VBox>();
 	
 		//Useful final variables
-	final List<String> months = Arrays.asList("Januar", "Februar", "Mars", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Desember");
-	final List<String> weekdays = Arrays.asList("Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag");
+	private final List<String> months = Arrays.asList("Januar", "Februar", "Mars", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Desember");
+	private final List<String> weekdays = Arrays.asList("Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag");
 	
 	//Set the values for THIS view, updateable:
 	Calendar cal = Calendar.getInstance();
-	int year = cal.get(Calendar.YEAR);
-	int month = cal.get(Calendar.MONTH);
-	int days_in_month = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
-	int first_day_in_month = getFirstDayInMonth();
-	int start_index = first_day_in_month != 1 ? first_day_in_month - 2 : 6;
-	int end_index = start_index + days_in_month - 1;
+	int start_index = getFirstDayInMonth(cal.get(Calendar.YEAR)
+			, cal.get(Calendar.MONTH)) != 1 ? getFirstDayInMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)) - 2 : 6;
+	int end_index = start_index + cal.getActualMaximum(Calendar.DAY_OF_MONTH) - 1;
+	
+	Calendar prev_cal = new GregorianCalendar((cal.get(Calendar.MONTH) - 1)%12 == 0 ? cal.get(Calendar.YEAR) - 1 : cal.get(Calendar.YEAR)
+			, (cal.get(Calendar.MONTH) - 1)%12, 1);
+	
+	Calendar next_cal = new GregorianCalendar((cal.get(Calendar.MONTH) + 1)%12 == 0 ? cal.get(Calendar.YEAR) + 1 : cal.get(Calendar.YEAR)
+			, (cal.get(Calendar.MONTH) + 1)%12, 1);
+	
+	private void setMonth(int diff) {
+		cal.set((cal.get(Calendar.MONTH) + diff)%12 == 0 && cal.get(Calendar.MONTH) != 1 ? cal.get(Calendar.YEAR) + diff : cal.get(Calendar.YEAR)
+				, (cal.get(Calendar.MONTH) + diff)%12, 1);
+		start_index = getFirstDayInMonth(cal.get(Calendar.YEAR)
+				, cal.get(Calendar.MONTH)) != 1 ? getFirstDayInMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)) - 2 : 6;
+		end_index = start_index + cal.getActualMaximum(Calendar.DAY_OF_MONTH) - 1;
+		
+		prev_cal.set((cal.get(Calendar.MONTH) - 1)%12 == 0 ? cal.get(Calendar.YEAR) - 1 : cal.get(Calendar.YEAR)
+				, (cal.get(Calendar.MONTH) - 1)%12, 1);
+		
+		next_cal.set((cal.get(Calendar.MONTH) + 1)%12 == 0 ? cal.get(Calendar.YEAR) + 1 : cal.get(Calendar.YEAR)
+				, (cal.get(Calendar.MONTH) + 1)%12, 1);
+	}
 	
 	@Override public void start(Stage primaryStage) throws Exception {
-		//TESTPRINTING
-		System.out.println("year=" + year
-				+ "\nmonth=" + month + "=" + getMonth(month)
-				+ "\ndays_in_month=" + days_in_month
-				+ "\nfirst_day_in_month=" + first_day_in_month + "=" + getWeekday(first_day_in_month)
-				+ "\nstart_index=" + start_index
-				+ "\nend_index=" + end_index
-		);
-		//TESTPRINTING
-		
 		//Sets the root
 		AnchorPane root = new AnchorPane();
 		
-		
-		//Add style classes
+		//Add style classes and id
 		header.getStyleClass().add("header");
 		cal_title.getStyleClass().add("title");
-		cur_month.getStyleClass().add("month_year");
-		cur_year.getStyleClass().add("month_year");
+		cur_month_year.getStyleClass().add("month_year");
 		prev_month.getStyleClass().add("left");
 		next_month.getStyleClass().add("right");
 		footer.getStyleClass().add("footer");
+		calendar.setId("calendar");
 		
 		//Add actions
 		prev_month.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				updateActivities();
+				setMonth(-1);
+				fillCalendar();
+				updateActivitiesView();
 			}
 		});
 		next_month.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				updateActivities();
+				setMonth(1);
+				fillCalendar();
+				updateActivitiesView();
 			}
 		});
 		
@@ -100,7 +108,7 @@ public class CalendarView extends Application {
 		AnchorPane.setBottomAnchor(footer, 0.0);
 		AnchorPane.setLeftAnchor(footer, 0.0);
 			//header
-		header.getChildren().addAll(cal_title, cur_month, cur_year, prev_month, next_month);
+		header.getChildren().addAll(cal_title, cur_month_year, prev_month, next_month);
 			//footer
 		profile.setPrefWidth(256);
 		profile.setPrefHeight(16);
@@ -108,7 +116,6 @@ public class CalendarView extends Application {
 		tasks.setPrefHeight(16);
 		footer.getChildren().addAll(profile, tasks);
 			//calendar
-		calendar.setId("calendar");
 			//the days
 		for (int i = 0; i < weekdays.size(); i++) {
 			Label weekday = new Label(weekdays.get(i));
@@ -132,93 +139,98 @@ public class CalendarView extends Application {
 			}
 		}
 		
-		
-		//TESTVALUES:
-		String t_year = "2015";
-		String t_month = "Mars";
-		String t_next_month = "April";
-		
-		cal_title.setText("Gruppe 37s kalender");
-		cur_month.setText(t_month + " " + t_year);
-		for (int i = 0; i < days.size(); i++){
-			int index = i + 25;
-			Label title = days.get(i);
-			String filler = "";
-			if (index == 31){
-				filler += t_month.substring(0, 3) + " ";
-			} else if (index == 62){
-				filler += t_next_month.substring(0, 3) + " ";
-			}
-			filler += Integer.toString(index%31 + 1);
-			title.setText(filler);
-			if (index < 31 || index > 61){
-				title.setOpacity(0.5);
-				day_activities.get(i).setOpacity(0.5);
-			}
-		}
-		VBox container = day_activities.get(4);
-		Button t_act1 = new Button("16:00 - Møte med sjefen");
-		Button t_act2 = new Button("20:00 - Middag med kona");
-		container.getChildren().addAll(t_act1, t_act2);
-		container = day_activities.get(16);
-		t_act1 = new Button("Besøk av tante");
-		t_act2 = new Button("10:30 - Uksemøte");
-		container.getChildren().addAll(t_act1, t_act2);
-		container = day_activities.get(40);
-		t_act1 = new Button("Fest med undassene");
-		t_act2 = new Button("Nach med faglærer");
-		container.getChildren().addAll(t_act1, t_act2);
-		
-		
-		//Add all nodes and init the scene
+		//Add all nodes and init the scene and add css
 		root.getChildren().addAll(header, calendar, footer);
 		Scene scene = new Scene(root, 1600, 1024);
-		
-		//Adds a css-stylesheet to the scene
 		scene.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
-		
 		//Initializes the stage and shows it
 		primaryStage.setTitle(viewName);
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		//Sets the model for this view and updates the view according to it
+		model = new models.Calendar(0, "admin");
+		setModel(model);
 	}
 	
 	//Set up bindings and listeners:
-	ChangeListener<ArrayList<Integer>> activitiesChangeListener = (property, oldValue, newValue) -> { updateActivities(); };
+	private ListChangeListener<Integer> activitiesChangeListener = new ListChangeListener<Integer>() {
+	        @SuppressWarnings("rawtypes")
+			public void onChanged(ListChangeListener.Change change) {
+	        	updateActivitiesView();
+	        }
+		};
 	
 	public void setModel(models.Calendar model) {
 		if (this.model != null) {
-			model.activitiesProperty().removeListener(activitiesChangeListener);
+			model.getActivities().removeListener(activitiesChangeListener);
+		}
+		if (this.model != null) {
+			model.getActivities().addListener(activitiesChangeListener);
 		}
 		this.model = model;
-		updateActivities();
-		if (this.model != null) {
-			model.activitiesProperty().addListener(activitiesChangeListener);
-		}
+		fillCalendar();
+		updateActivitiesView();
 	}
 	
 	private void fillCalendar() {
+		//Titler
+		cal_title.setText("Gruppe 37s kalender");
+		cur_month_year.setText(getMonth(cal.get(Calendar.MONTH)) + " " + Integer.toString(cal.get(Calendar.YEAR)));
 		
+		//Forrige måned
+		int start_prev_month = prev_cal.getActualMaximum(Calendar.DAY_OF_MONTH) - start_index + 1;
+		for (int i = 0; i < start_index; i++) {
+			days.get(i).setText(Integer.toString(start_prev_month));
+			days.get(i).setOpacity(0.25);
+			start_prev_month++;
+		}
+		
+		//Gjeldende måned
+		int date = 1;
+		for (int i = start_index; i <= end_index; i++) {
+			if (date == 1) {
+				days.get(i).setText(getMonth(cal.get(Calendar.MONTH)).substring(0, 3) + " " + Integer.toString(date));
+			} else {
+				days.get(i).setText(Integer.toString(date));
+			}
+			days.get(i).setOpacity(1);
+			date++;
+		}
+		
+		//Neste måned
+		date = 1;
+		for (int i = end_index + 1; i < days.size(); i++) {
+			if (date == 1) {
+				days.get(i).setText(getMonth(next_cal.get(Calendar.MONTH)).substring(0, 3) + " " + Integer.toString(date));
+			} else {
+				days.get(i).setText(Integer.toString(date));
+			}
+			days.get(i).setOpacity(0.25);
+			date++;
+		}
 	}
 	
-	private void updateActivities() {
+	private void updateActivitiesView() {
 		for (int i = 0; i < days.size(); i++){
 			day_activities.get(i).getChildren().clear();
 		}
+		for (int act : model.getActivities()) {
+			if (cal.get(Calendar.MONTH) == 2){
+				Button activity = new Button("Ny aktivitet");
+				activity.getStyleClass().add("activity");
+				day_activities.get(act).getChildren().add(activity);
+			}
+		}
 	}
 
-	private int getFirstDayInMonth() {
+	private int getFirstDayInMonth(int year, int month) {
 		Calendar c = Calendar.getInstance();
-		c.set(Calendar.DAY_OF_MONTH, 1);
+		c.set(year, month, 1);
 		return c.get(Calendar.DAY_OF_WEEK);
 	}
 	
 	private String getMonth(int i){
 		return months.get(i);
-	}
-	
-	private String getWeekday(int i){
-		return weekdays.get(i - 1);
 	}
 	
 	public static void main(String[] args) {
