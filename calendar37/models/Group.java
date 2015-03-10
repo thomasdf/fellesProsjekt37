@@ -2,12 +2,12 @@ package models;
 
 import java.util.ArrayList;
 
-import javafx.beans.property.ObjectPropertyBase;
-import javafx.beans.property.Property;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * A Group-class acts in very much the same way as an {@link Account}-class, although the Group-class will
- * ""belong"" to more than one {@link Person}, which will lead to more than one {@link Person} being able
+ * ""belong"" to more than one user, which will lead to more than one user being able
  * to see, edit and in other ways modify the {@link Calendar} it's linked to.
  * 
  * @author gruppe37
@@ -20,36 +20,9 @@ public class Group {
 	private final String group_name;
 	
 	//Property-attributes
-	private Property<ArrayList<String>> membersProperty = new ObjectPropertyBase<ArrayList<String>>() {
-		@Override
-		public Object getBean() {
-			return this;
-		}
-		@Override
-		public String getName() {
-			return "members";
-		}
-	};
-	private Property<ArrayList<Integer>> member_ofProperty = new ObjectPropertyBase<ArrayList<Integer>>() {
-		@Override
-		public Object getBean() {
-			return this;
-		}
-		@Override
-		public String getName() {
-			return "member_of";
-		}
-	};
-	private Property<ArrayList<Integer>> subgroupsProperty = new ObjectPropertyBase<ArrayList<Integer>>() {
-		@Override
-		public Object getBean() {
-			return this;
-		}
-		@Override
-		public String getName() {
-			return "subgroups";
-		}
-	};
+	private ObservableList<String> membersList = FXCollections.observableList(new ArrayList<String>());
+	private ObservableList<Integer> in_groupsList = FXCollections.observableList(new ArrayList<Integer>());
+	private ObservableList<Integer> subgroupsList = FXCollections.observableList(new ArrayList<Integer>());
 	
 	//Constructor
 	public Group(int group_id, String group_name) {
@@ -66,33 +39,33 @@ public class Group {
 		return group_name;
 	}
 	
-	public ArrayList<String> getMembers() {
-		return membersProperty.getValue();
+	public ObservableList<String> getMembers() {
+		return membersList;
+	}
+	public void addMember(String member_id) {
+		membersList.add(member_id);
 	}
 	public void setMembers(ArrayList<String> members) {
-		membersProperty.setValue(members);
-	}
-	public Property<ArrayList<String>> membersProperty() {
-		return membersProperty;
+		membersList.addAll(members);
 	}
 	
-	public ArrayList<Integer> getMember_of() {
-		return member_ofProperty.getValue();
+	public ObservableList<Integer> getIn_groups() {
+		return in_groupsList;
 	}
-	public void setMember_of(ArrayList<Integer> member_of) {
-		member_ofProperty.setValue(member_of);
+	public void addIn_group(int group_id) {
+		in_groupsList.add(group_id);
 	}
-	public Property<ArrayList<Integer>> member_ofProperty() {
-		return member_ofProperty;
+	public void setIn_groups(ArrayList<Integer> in_groups) {
+		in_groupsList.addAll(in_groups);
 	}
 	
-	public ArrayList<Integer> getSubgroups() {
-		return subgroupsProperty.getValue();
+	public ObservableList<Integer> getSubgroups() {
+		return subgroupsList;
+	}
+	public void addSubgroup(int group_id) {
+		subgroupsList.add(group_id);
 	}
 	public void setSubgroups(ArrayList<Integer> subgroups) {
-		subgroupsProperty.setValue(subgroups);
-	}
-	public Property<ArrayList<Integer>> subgroupsProperty() {
-		return subgroupsProperty;
+		subgroupsList.addAll(subgroups);
 	}
 }

@@ -40,7 +40,10 @@ public class Calendar {
 	public ObservableList<Integer> getActivities() {
 		return activitiesList;
 	}
-	public void setActivities(ObservableList<Integer> activities) {
-		activitiesList = activities;
+	public void addActivity(int activity_id) {
+		activitiesList.add(activity_id);
+	}
+	public void setActivities(ArrayList<Integer> activities) {
+		activitiesList.addAll(activities);
 	}
 }

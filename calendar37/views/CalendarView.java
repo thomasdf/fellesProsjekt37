@@ -192,47 +192,47 @@ public class CalendarView extends Application {
 		
 		//TESTVALUES
 			//activity
-		act1 = new Activity(0, "admin");
+		act1 = new Activity(0, 0, "admin");
 		act1.setDescription("Møte undass");
 		act1.setDate(LocalDate.of(2015, 3, 13));
 		act1.setFrom(LocalTime.of(12, 0));
 		act1.setTo(LocalTime.of(12, 30));
 			//activity
-		act2 = new Activity(1, "admin");
+		act2 = new Activity(1, 0, "admin");
 		act2.setDescription("Middag med den store familien min");
 		act2.setDate(LocalDate.of(2015, 3, 15));
 		act2.setFrom(LocalTime.of(16, 0));
 		act2.setTo(LocalTime.of(17, 30));
 			//activity
-		act3 = new Activity(2, "admin");
+		act3 = new Activity(2, 0, "admin");
 		act3.setDescription("Gruppearbeid");
 		act3.setDate(LocalDate.of(2015, 4, 24));
 			//activity
-		act4 = new Activity(3, "admin");
+		act4 = new Activity(3, 0, "admin");
 		act4.setDescription("Travel dag!");
 		act4.setDate(LocalDate.of(2015, 4, 24));
 		//activity
-		act5 = new Activity(4, "admin");
+		act5 = new Activity(4, 0, "admin");
 		act5.setDescription("Travel dag!");
 		act5.setDate(LocalDate.of(2015, 4, 24));
 		//activity
-		act6 = new Activity(5, "admin");
+		act6 = new Activity(5, 0, "admin");
 		act6.setDescription("Travel dag!");
 		act6.setDate(LocalDate.of(2015, 4, 24));
 		//activity
-		act7 = new Activity(6, "admin");
+		act7 = new Activity(6, 0, "admin");
 		act7.setDescription("Travel dag!");
 		act7.setDate(LocalDate.of(2015, 4, 24));
 		//activity
-		act8 = new Activity(7, "admin");
+		act8 = new Activity(7, 0, "admin");
 		act8.setDescription("Travel dag!");
 		act8.setDate(LocalDate.of(2015, 4, 24));
 		//activity
-		act9 = new Activity(8, "admin");
+		act9 = new Activity(8, 0, "admin");
 		act9.setDescription("Travel dag!");
 		act9.setDate(LocalDate.of(2015, 4, 24));
 		//activity
-		act10 = new Activity(9, "admin");
+		act10 = new Activity(9, 0, "admin");
 		act10.setDescription("Travel dag!");
 		act10.setDate(LocalDate.of(2015, 4, 24));
 			//the calendar-model
