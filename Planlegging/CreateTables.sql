@@ -7,7 +7,6 @@ use fellesprosjekt;
 Create table account( #entity including hasAccount
 user_name varChar(10) unique primary key,
 user_password varChar(10) not null, #should be scrambled
-employee_nr int(5) unique not null,
 first_name varchar(20) not null,
 last_name varchar(20) not null,
 mobile_nr varchar(8)
