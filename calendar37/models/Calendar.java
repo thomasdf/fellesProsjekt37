@@ -1,11 +1,6 @@
 package models;
 
-//TESTVALUES!!!
 import java.util.ArrayList;
-import java.util.Arrays;
-//TESTVALUES!!!
-
-import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,17 +20,12 @@ public class Calendar {
 	private final String calendar_owner;
 	
 	//Property-attributes
-	private List<Integer> activities = new ArrayList<Integer>();
-	private ObservableList<Integer> activitiesList = FXCollections.observableList(activities);
+	private ObservableList<Integer> activitiesList = FXCollections.observableList(new ArrayList<Integer>());
 	
 	//Constructor
 	public Calendar(int calendar_id, String calendar_owner) {
 		this.calendar_id = calendar_id;
 		this.calendar_owner = calendar_owner;
-		
-		//TESTVALUES!!!
-		activitiesList.addAll(Arrays.asList(10, 10, 5, 8, 15, 28));
-		//TESTVALUES!!!
 	}
 	
 	//Getters, Setters & Properties
