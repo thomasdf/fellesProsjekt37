@@ -8,6 +8,8 @@ import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * Activity is the class that is being initialized in the {@link Calendar} with an activity that certain
@@ -21,6 +23,7 @@ public class Activity {
 
 	//Final attributes
 	private final int activity_id;
+	private final String activity_owner;
 	
 	//Property-attributes
 	private StringProperty descriptionProperty = new SimpleStringProperty();
@@ -55,25 +58,21 @@ public class Activity {
 			return "to";
 		}
 	};
-	private Property<ArrayList<Integer>> participantsProperty = new ObjectPropertyBase<ArrayList<Integer>>() {
-		@Override
-		public Object getBean() {
-			return this;
-		}
-		@Override
-		public String getName() {
-			return "participants";
-		}
-	};
+	private ObservableList<Integer> participantsList = FXCollections.observableList(new ArrayList<Integer>());
 	
 	//Constructor
-	public Activity(int activity_id) {
+	public Activity(int activity_id, String activity_owner) {
 		this.activity_id = activity_id;
+		this.activity_owner = activity_owner;
 	}
 	
 	//Getters, Setters & Properties
 	public int getActivity_id() {
 		return activity_id;
+	}
+	
+	public String getActivity_owner() {
+		return activity_owner;
 	}
 	
 	public String getDescription() {
@@ -126,13 +125,10 @@ public class Activity {
 		return toProperty;
 	}
 	
-	public ArrayList<Integer> getParticipants() {
-		return participantsProperty.getValue();
+	public ObservableList<Integer> getActivities() {
+		return participantsList;
 	}
-	public void setParticipants(ArrayList<Integer> participants) {
-		participantsProperty.setValue(participants);
-	}
-	public Property<ArrayList<Integer>> participantsProperty() {
-		return participantsProperty;
+	public void setActivities(ObservableList<Integer> participants) {
+		participantsList = participants;
 	}
 }
