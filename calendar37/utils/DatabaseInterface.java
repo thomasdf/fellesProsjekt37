@@ -177,13 +177,18 @@ public class DatabaseInterface {
 			result.next();
 			if (result.getString(1) != null) {
 				result.close();
+				result = this.getQuery(
+						 "SELECT calendar_id FROM hasCalendar WHERE user_name=" +
+								  activity.getActivity_owner());
+						result.next();
+						int calendar_id = result.getInt(1);
 				this.statement.execute("UPDATE activity SET calendar_id="
-						+ activity.getCalendar_id() + ", description="
+						+ calendar_id + ", description="
 						+ activity.getDescription() + ", activity_date="
 						+ activity.getDate() + ", end_date="
 						+ activity.getDate() + ", start_time="
 						+ activity.getFrom() + ", end_time=" + activity.getTo()
-						+ ", owner_user_name=" + activity.getOwner_user_name()
+						+ ", owner_user_name=" + activity.getActivity_owner()
 						+ ", room_name=" + activity.getRoom());
 				/*
 				 * if(activity.getRoom() != null) { result =
@@ -198,14 +203,14 @@ public class DatabaseInterface {
 				result.close();
 				result = this.getQuery(
 						 "SELECT calendar_id FROM hasCalendar WHERE user_name=" +
-						  activity.getOwner_user_name());
+						  activity.getActivity_owner());
 				result.next();
 				int calendar_id = result.getInt(1);
 				this.statement.execute("INSERT INTO activity VALUES ("
 						+ calendar_id + ", " + activity.getDescription() + ", "
 						+ activity.getDate() + ", " + activity.getDate() + ", "
 						+ activity.getFrom() + ", " + activity.getTo() + ", "
-						+ activity.getOwner_user_name() + ", "
+						+ activity.getActivity_id() + ", "
 						+ activity.getRoom() + ")");
 				/*
 				 * // check if user name exists result =
