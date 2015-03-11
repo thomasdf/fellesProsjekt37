@@ -5,13 +5,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -29,7 +31,7 @@ public class AgendaView extends Application {
 	//Variables we need defined outside the "start"-function
 		//View-elements
 	private Label ag_title = new Label("<min agenda>");
-	private ChoiceBox<String> timespan = new ChoiceBox<String>();
+	private ChoiceBox<String> timeframe = new ChoiceBox<String>();
 	private GridPane header = new GridPane();
 	private VBox agenda_body = new VBox();
 	private ScrollPane agenda = new ScrollPane(agenda_body);
@@ -68,19 +70,25 @@ public class AgendaView extends Application {
 		GridPane.setVgrow(agenda, Priority.ALWAYS);
 		GridPane.setHgrow(footer, Priority.ALWAYS);
 		GridPane.setHgrow(ag_title, Priority.ALWAYS);
-//		AnchorPane.setTopAnchor(ag_title, 0.0);
-//		AnchorPane.setLeftAnchor(ag_title, 0.0);
-//		AnchorPane.setRightAnchor(timespan, 0.0);
-//		AnchorPane.setBottomAnchor(timespan, 0.0);
 			//header
 		header.add(ag_title, 0, 0);
-		header.add(timespan, 1, 0);
+		header.add(timeframe, 1, 0);
 			//agenda
+		timeframe.setItems(FXCollections.observableArrayList("1 Dag","1 Uke","1 Måned", "1 År", "All tid"));
+		timeframe.setValue("1 Måned");
 			//footer
 		footer.getChildren().addAll(close, profile);
+			//managing timeframes
+		timeframe.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable,
+					Number oldValue, Number newValue) {
+						int index = timeframe.getSelectionModel().getSelectedIndex();
+						changeTimeframe(index);
+			}
+		});
 		
-		
-		//Add all nodes and init the scene and add css
+		//Add all nodes, init the scene and add css
 		root.add(header, 0, 0);
 		root.add(agenda, 0, 1);
 		root.add(footer, 0, 2);
@@ -93,6 +101,10 @@ public class AgendaView extends Application {
 		
 		//Sets focus to the profile-button
 		profile.requestFocus();
+	}
+	
+	private void changeTimeframe(int index) {
+		//FILL IN LATER
 	}
 	
 	public static void main(String[] args) {

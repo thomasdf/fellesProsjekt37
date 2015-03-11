@@ -17,15 +17,27 @@ public class Calendar {
 
 	//Final attributes
 	private final int calendar_id;
-	private final String calendar_owner;
+	private final String calendar_owner_user;
+	private final int calendar_owner_group;
+	private final boolean is_group_cal;
 	
 	//Property-attributes
 	private ObservableList<Integer> activitiesList = FXCollections.observableList(new ArrayList<Integer>());
 	
 	//Constructor
-	public Calendar(int calendar_id, String calendar_owner) {
+		//For user-owner
+	public Calendar(int calendar_id, String user_name) {
 		this.calendar_id = calendar_id;
-		this.calendar_owner = calendar_owner;
+		this.calendar_owner_user = user_name;
+		this.calendar_owner_group = 0;
+		this.is_group_cal = false;
+	}
+		//For group-owner
+	public Calendar(int calendar_id, int group_id) {
+		this.calendar_id = calendar_id;
+		this.calendar_owner_group = group_id;
+		this.calendar_owner_user = null;
+		this.is_group_cal = false;
 	}
 	
 	//Getters, Setters & Properties
@@ -33,8 +45,15 @@ public class Calendar {
 		return calendar_id;
 	}
 	
-	public String getCalendar_owner() {
-		return calendar_owner;
+	public String getCalendar_owner_user() {
+		return calendar_owner_user;
+	}
+	public int getCalendar_owner_group() {
+		return calendar_owner_group;
+	}
+	
+	public boolean getIs_group_cal() {
+		return is_group_cal;
 	}
 	
 	public ObservableList<Integer> getActivities() {
