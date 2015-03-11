@@ -9,6 +9,7 @@ import models.Account;
 import models.Activity;
 import models.Calendar;
 import models.Group;
+import models.Invite;
 
 /**
  * 
@@ -39,10 +40,10 @@ public class DatabaseInterface {
 	 */
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/fellesprosjekt";
 	private static final String USERNAME = "daniel";
-	//private static final String USERNAME = "thomas";
+	// private static final String USERNAME = "thomas";
 
 	private static final String PASSWORD = "bringIt1";
-	//private static final String PASSWORD = "bringIt";
+	// private static final String PASSWORD = "bringIt";
 
 	private Connection connection;
 	private Statement statement;
@@ -278,7 +279,7 @@ public class DatabaseInterface {
 		try {
 			ResultSet result = this
 					.getQuery("select start_time, end_time from activity where activity.activity_id="
-							+ id);
+							+ activity_id);
 			if (result.next()) {
 				time.add(result.getTime("start_time").toLocalTime());
 				time.add(result.getTime("end_time").toLocalTime());
@@ -314,11 +315,48 @@ public class DatabaseInterface {
 		}
 		return cal_id;
 	}
-	
-	public Calendar getCalendar(int calendar_id){
+
+	/**
+	 * Creates a calendar-object from the database. The calendar-object is
+	 * created as either a personal calendar or a group calendar depending on
+	 * the returned values from the database.
+	 * 
+	 * @param calendar_id
+	 *            the id for the calendar we want returned
+	 * @return a Calendar-object from the database.
+	 */
+	public Calendar getCalendar(int calendar_id) {
 		Calendar cal;
-		try{
-			
+		try {
+			ResultSet result = this.statement
+					.executeQuery("select hascalendar.user_name from hascalendar where hascalendar.calendar_id = "
+							+ calendar_id);
+			result.next();
+			if (result.getString("user_name").equals(null)) { // check user name
+																// is null
+				result = this.statement
+						.executeQuery("select grouphascalendar.group_id from grouphascalendar where grouphascalendar.calendar_id = "
+								+ calendar_id);
+				result.next();
+				if (result.getString("group_id").equals(null)) { // check
+																	// group_id
+																	// null -
+																	// throw
+																	// exception
+					throw new SQLException(
+							"Database inconsistency. This Calendar does not have a registered owner. Neither a group nor an account");
+				} else {// group_id not null, create calendar
+					int group_id = result.getInt("group_id");
+					acc = new Account(calendar_id, group_id);
+					return acc;
+				}
+			} else {// user_name not null, create calendar
+				String user_name = result.getString("user_name");
+				cal = new Calendar(calendar_id, user_name);
+				return cal;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -539,7 +577,8 @@ public class DatabaseInterface {
 		ArrayList<String> fullname = getFullName(user_name);
 		String password = getPassword(user_name);
 		String mobile_nr = getMobile(user_name);
-		acc = new Account(user_name, password, fullname.get(0), fullname.get(1), mobile_nr);
+		acc = new Account(user_name, password, fullname.get(0),
+				fullname.get(1), mobile_nr);
 		return acc;
 	}
 
@@ -654,6 +693,25 @@ public class DatabaseInterface {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Returns an invite-object between an activity and an account. This is used to get information about one invite when we know both the activity and the user_name
+	 * @param activity_id the id for the activity in the relation
+	 * @param user_name the user_name for the account in the relation
+	 * @return One Invite-object
+	 */
+	public Invite getInvite(int activity_id, String user_name) {
+		
+	}
+	
+	/**
+	 * Returns a list of Invite-objects that are related to an activity in the database.
+	 * @param activity_id the id for the activity we want to get all invites related to.
+	 * @return an ArrayList of invite-objects
+	 */
+	public ArrayList<Invite> getAllInvites(int activity_id){
+		
 	}
 
 	/**
