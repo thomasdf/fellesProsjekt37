@@ -13,7 +13,7 @@ mobile_nr varchar(8)
 );
 
 create table calendar(
-calendar_id int(5) not null unique primary key
+calendar_id int(5) auto_increment not null unique primary key
 );
 
 Create table room(
@@ -22,7 +22,7 @@ capacity int(3)
 );
 
 create table activity( #entity. includes isOwner-relation and activityRoom
-activity_id int(5) unique primary key,
+activity_id int(5) auto_increment unique primary key,
 calendar_id int(5) not null,
 description varchar(256),
 activity_date date,
@@ -37,7 +37,7 @@ foreign key(calendar_id) references calendar(calendar_id) #activityCalendar
 );
 
 Create table calendarGroup(
-group_id int(5) unique not null primary key,
+group_id int(5) auto_increment unique not null primary key,
 group_name varchar(20) not null
 );
 
@@ -51,15 +51,17 @@ foreign key(supergroup_id) references calendarGroup(group_id) on delete cascade
 );
 
 create table hasCalendar(
-user_name varchar(10) unique not null primary key,
+user_name varchar(10) unique not null,
 calendar_id int(5) unique not null,
+primary key(user_name, calendar_id),
 foreign key(user_name) references account(user_name) on delete cascade,
 foreign key(calendar_id) references calendar(calendar_id) on delete cascade
 );
 
 create table groupHasCalendar(
-calendar_id int(5) primary key not null,
+calendar_id int(5) not null,
 group_id int (5) not null,
+primary key(calendar_id, group_id),
 foreign key(calendar_id) references calendar(calendar_id) on delete cascade,
 foreign key(group_id) references calendarGroup(group_id) on delete cascade
 );
