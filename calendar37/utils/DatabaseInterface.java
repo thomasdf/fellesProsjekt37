@@ -442,11 +442,11 @@ public class DatabaseInterface {
 		String fullName = null;
 		try {
 			this.result = this.statement
-					.executeQuery("select person.first_name, person.last_name from person, account where account.employee_nr = person.employee_nr and account.user_name = "
+					.executeQuery("select account.first_name, account.last_name from account where account.user_name = "
 							+ "\"" + user_name + "\"");
 			result.next();
-			fullName = this.result.getString(1) + " "
-					+ this.result.getString(2);
+			fullName = this.result.getString("first_name") + " "
+					+ this.result.getString("last_name");
 		} catch (SQLException e) {
 			System.out.println("Error from DatabaseInterface: "
 					+ e.getLocalizedMessage());
