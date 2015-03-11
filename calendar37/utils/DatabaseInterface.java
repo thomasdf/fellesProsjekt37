@@ -703,6 +703,17 @@ public class DatabaseInterface {
 	 */
 	public Invite getInvite(int activity_id, String user_name) {
 		
+		Invite invite = null;
+		
+		try	{
+			ResultSet result = this.getQuery("SELECT invited.activity_id, invited.user_name, invited.invitation_status, activity.owner_user_name FROM activity, invited WHERE activity.activity_id =" + activity_id + " AND invited.activity_id=" + activity_id + " AND invited.user_name='" + user_name + "'");
+			result.next();
+			invite = new Invite(result.getString("owner_user_name"), result.getString("user_name"), result.getInt("activity_id"));
+			invite.setStatus(result.getString("invitation_status"));
+		}	catch(SQLException e)	{
+			e.printStackTrace();
+		}
+		return invite;
 	}
 	
 	/**
@@ -711,7 +722,24 @@ public class DatabaseInterface {
 	 * @return an ArrayList of invite-objects
 	 */
 	public ArrayList<Invite> getAllInvites(int activity_id){
-		
+		ArrayList<Invite> invites = new ArrayList<Invite>();
+		try	{
+			// first get owner
+			ResultSet result = this.getQuery("SELECT owner_user_name FROM activity WHERE activity_id=" + activity_id);
+			result.next();
+			String owner_user_name = result.getString("owner_user_name");
+			result.close();
+			// then get all the invited people
+			result = this.getQuery("SELECT * FROM invited WHERE activity_id=" + activity_id);
+			while(result.next())	{
+				Invite invite = new Invite(owner_user_name, result.getString("user_name"), activity_id);
+				invite.setStatus(result.getString("invitation_status"));
+				invites.add(invite);
+			}
+		}	catch(SQLException e)	{
+			e.printStackTrace();
+		}
+		return invites;
 	}
 
 	/**
