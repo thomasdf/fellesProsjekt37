@@ -8,11 +8,23 @@ import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
+/**
+ * Activity is the class that is being initialized in the {@link Calendar} with an activity that certain
+ * people could be invited to. It relates to, either {@link Account} or a {@link Group}, via an {@link Invite}.
+ * The activity can push out a {@link Notification} to it's invited and/or attending subjects.
+ * 
+ * @author gruppe37
+ * @version %I%, %G%
+ */
 public class Activity {
 
 	//Final attributes
 	private final int activity_id;
+	private final int calendar_id;
+	private final String activity_owner;
 	
 	//Property-attributes
 	private StringProperty descriptionProperty = new SimpleStringProperty();
@@ -47,25 +59,25 @@ public class Activity {
 			return "to";
 		}
 	};
-	private Property<ArrayList<Integer>> participantsProperty = new ObjectPropertyBase<ArrayList<Integer>>() {
-		@Override
-		public Object getBean() {
-			return this;
-		}
-		@Override
-		public String getName() {
-			return "participants";
-		}
-	};
+	private ObservableList<Integer> participantsList = FXCollections.observableList(new ArrayList<Integer>());
 	
 	//Constructor
-	public Activity(int activity_id) {
+	public Activity(int activity_id, int calendar_id, String activity_owner) {
 		this.activity_id = activity_id;
+		this.calendar_id = calendar_id;
+		this.activity_owner = activity_owner;
 	}
 	
 	//Getters, Setters & Properties
 	public int getActivity_id() {
 		return activity_id;
+	}
+	public int getCalendar_id() {
+		return calendar_id;
+	}
+	
+	public String getActivity_owner() {
+		return activity_owner;
 	}
 	
 	public String getDescription() {
@@ -118,13 +130,13 @@ public class Activity {
 		return toProperty;
 	}
 	
-	public ArrayList<Integer> getParticipants() {
-		return participantsProperty.getValue();
+	public ObservableList<Integer> getParticipants() {
+		return participantsList;
+	}
+	public void addParticipant(int participant_id) {
+		participantsList.add(participant_id);
 	}
 	public void setParticipants(ArrayList<Integer> participants) {
-		participantsProperty.setValue(participants);
-	}
-	public Property<ArrayList<Integer>> participantsProperty() {
-		return participantsProperty;
+		participantsList.setAll(participants);
 	}
 }

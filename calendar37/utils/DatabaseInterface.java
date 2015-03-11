@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import models.Account;
 import models.Activity;
 import models.Group;
-import models.Person;
 
 /**
  * 
@@ -211,7 +210,7 @@ public class DatabaseInterface {
 						+ calendar_id + ", " + activity.getDescription() + ", "
 						+ activity.getDate() + ", " + activity.getDate() + ", "
 						+ activity.getFrom() + ", " + activity.getTo() + ", "
-						+ activity.getActivity_id() + ", "
+						+ activity.getOwner_user_name() + ", "
 						+ activity.getRoom() + ")");
 				/*
 				 * // check if user name exists result =
@@ -601,6 +600,8 @@ public class DatabaseInterface {
 		}
 		return activityList;
 	}
+	
+	/*
 
 	public Person getPerson(String user_name) {
 		Person person = null;
@@ -624,6 +625,8 @@ public class DatabaseInterface {
 		}
 		return person;
 	}
+	
+	*/
 
 	public void setSubGroup(Group supergroup, Group subgroup) {
 

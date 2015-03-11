@@ -2,9 +2,17 @@ package models;
 
 import java.util.ArrayList;
 
-import javafx.beans.property.ObjectPropertyBase;
-import javafx.beans.property.Property;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
+/**
+ * This class is the main class, and the basis of our application. It contains every {@link Activity} for a certain Calendar,
+ * and shows the correct {@link Activity} to the correct {@link Account}. A Calendar can either belong to a {@link Group} or
+ * an {@link Account}, which leads to it showing for certain people in our user-database.
+ * 
+ * @author gruppe37
+ * @version %I%, %G%
+ */
 public class Calendar {
 
 	//Final attributes
@@ -12,16 +20,7 @@ public class Calendar {
 	private final String calendar_owner;
 	
 	//Property-attributes
-	private Property<ArrayList<Integer>> activitiesProperty = new ObjectPropertyBase<ArrayList<Integer>>() {
-		@Override
-		public Object getBean() {
-			return this;
-		}
-		@Override
-		public String getName() {
-			return "activities";
-		}
-	};
+	private ObservableList<Integer> activitiesList = FXCollections.observableList(new ArrayList<Integer>());
 	
 	//Constructor
 	public Calendar(int calendar_id, String calendar_owner) {
@@ -38,13 +37,13 @@ public class Calendar {
 		return calendar_owner;
 	}
 	
-	public ArrayList<Integer> getActivities() {
-		return activitiesProperty.getValue();
+	public ObservableList<Integer> getActivities() {
+		return activitiesList;
+	}
+	public void addActivity(int activity_id) {
+		activitiesList.add(activity_id);
 	}
 	public void setActivities(ArrayList<Integer> activities) {
-		activitiesProperty.setValue(activities);
-	}
-	public Property<ArrayList<Integer>> activitiesProperty() {
-		return activitiesProperty;
+		activitiesList.addAll(activities);
 	}
 }
