@@ -19,10 +19,6 @@
 	-fx-background-repeat: no-repeat;
 }
 
-.header .button:hover {
-	-fx-cursor: hand;
-}
-
 .left {
 	-fx-background-position: left;
 	-fx-background-image: url("http://i247.photobucket.com/albums/gg154/HvitrEbrithil/Private/left_zps3u8wfscx.png");
@@ -44,6 +40,18 @@
 	-fx-padding: 0 0 0 32;
 }
 
+.footer .button {
+	-fx-pref-width: 256;
+	-fx-pref-height: 16;
+}
+
+.button {
+}
+
+.button:hover {
+	-fx-cursor: hand;
+}
+
 .title {
 	-fx-font-size: 32;
 	-fx-font-weight: bold;
@@ -57,7 +65,7 @@
 }
 
 .weekday {
-	-fx-pref-width: 256;
+	-fx-pref-width: 9999;
 	-fx-padding: 0 0 0 8;
 	-fx-font-size: 16;
 	-fx-font-weight: bold;
@@ -91,7 +99,7 @@
 }
 
 .activity:hover {
-	-fx-cursor: hand;
+	-fx-background-color: #ebf6ff;
 }
 
 
