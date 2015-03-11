@@ -37,11 +37,11 @@ public class DatabaseInterface {
 	 * the constructor instead of making it a static final field.
 	 */
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/fellesprosjekt";
-	private static final String USERNAME = "daniel";
-	//private static final String USERNAME = "thomas";
+	//private static final String USERNAME = "daniel";
+	private static final String USERNAME = "thomas";
 
-	private static final String PASSWORD = "bringIt1";
-	//private static final String PASSWORD = "bringIt";
+	//private static final String PASSWORD = "bringIt1";
+	private static final String PASSWORD = "bringIt";
 	
 	private Connection connection;
 	private Statement statement;
@@ -583,16 +583,10 @@ public class DatabaseInterface {
 					.executeQuery("select activity.activity_id, activity.description, activity.start_time, activity.end_time, activity.activity_date, activity.end_date, activity.owner_user_name, activity.room_name from activity, account, calendar, hascalendar where activity.calendar_id = calendar.calendar_id and hascalendar.user_name = account.user_name and hascalendar.calendar_id = calendar.calendar_id and hascalendar.user_name = "
 							+ "\"" + user_name + "\"");
 			while (result.next()) {
-				Activity act;
-				act = new Activity(result.getInt("activity_id"));
-				act.setDescription(result.getString("description"));
-				act.setFrom(result.getTime("start_time").toLocalTime());
-				act.setTo(result.getTime("end_time").toLocalTime());
-				act.setDate(result.getDate("date").toLocalDate());
-				act.setDescription(result.getString("description"));
-				// participants og room kommer etter dette
-
-				activityList.add(act);
+				Activity act = getActivity(result.getInt("activity_id"));
+				if(act != null){
+					activityList.add(act);
+				}
 			}
 		} catch (SQLException e) {
 			System.out.println("Error from DatabaseInterface: "
