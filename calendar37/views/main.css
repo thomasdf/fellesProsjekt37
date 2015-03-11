@@ -34,15 +34,14 @@
 }
 
 .footer {
-	-fx-pref-height: 32;
 	-fx-spacing: 32;
-	-fx-alignment: center-left;
-	-fx-padding: 0 0 0 32;
+	-fx-alignment: center-right;
+	-fx-padding: 0 32 16 32;
 }
 
 .footer .button {
 	-fx-pref-width: 256;
-	-fx-pref-height: 16;
+	-fx-pref-height: 32;
 }
 
 .button {
@@ -101,6 +100,11 @@
 .activity:hover {
 	-fx-background-color: #ebf6ff;
 }
+
+.activity:pressed {
+	-fx-background-color: #d8e2eb;
+}
+
 
 
 

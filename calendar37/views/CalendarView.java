@@ -44,6 +44,8 @@ public class CalendarView extends Application {
 	
 	//The screen-size currently used
 	Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+	double primWidth = primaryScreenBounds.getWidth() - 32;
+	double primHeight = primaryScreenBounds.getHeight() - 155;
 	
 	//Variables we need defined outside the "start"-function
 		//View-elements
@@ -102,16 +104,16 @@ public class CalendarView extends Application {
 		//Add style classes, id and set size to screen
 		root.styleProperty().set("-fx-background-color: #eeeefa");
 		header.getStyleClass().add("header");
-		header.setPrefWidth(primaryScreenBounds.getWidth());
+		header.setPrefWidth(primWidth);
 		cal_title.getStyleClass().add("title");
 		cur_month_year.getStyleClass().add("month_year");
 		prev_month.getStyleClass().add("left");
 		next_month.getStyleClass().add("right");
 		calendar.setId("calendar");
-		calendar.setMaxSize(primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight() - 123);
-		calendar.setMinSize(primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight() - 123);
+		calendar.setMaxSize(primWidth, primHeight);
+		calendar.setMinSize(primWidth, primHeight);
 		footer.getStyleClass().add("footer");
-		footer.setPrefWidth(primaryScreenBounds.getWidth());
+		footer.setPrefWidth(primWidth);
 		
 		//Add actions
 		prev_month.setOnAction(new EventHandler<ActionEvent>() {
@@ -179,7 +181,7 @@ public class CalendarView extends Application {
 		
 		//Add all nodes and init the scene and add css
 		root.getChildren().addAll(header, calendar, footer);
-		Scene scene = new Scene(root, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
+		Scene scene = new Scene(root, primWidth, primHeight + 123);
 		scene.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
 		//Initializes the stage and shows it
 		primaryStage.setTitle(viewName);
