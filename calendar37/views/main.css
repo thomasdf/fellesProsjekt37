@@ -6,20 +6,24 @@
 .header {
 	-fx-pref-height: 64;
 	-fx-hgap: 4;
-	-fx-alignment: center-left;
+	-fx-alignment: center;
 	-fx-padding: 0 32 0 32;
 }
 
-.header .button {
+.header .button, .header .choice-box {
 	-fx-font-size: 16;
 	-fx-font-weight: bold;
 	-fx-pref-width: 128;
-	-fx-pref-height: 48;
 	-fx-background-size: 50%;
 	-fx-background-repeat: no-repeat;
 }
 
+.header .choice-box {
+	-fx-alignment: center-right;
+}
+
 .left {
+	-fx-pref-height: 48;
 	-fx-background-position: left;
 	-fx-background-image: url("http://i247.photobucket.com/albums/gg154/HvitrEbrithil/Private/left_zps3u8wfscx.png");
 	-fx-alignment: center-right;
@@ -27,6 +31,7 @@
 }
 
 .right {
+	-fx-pref-height: 48;
 	-fx-background-position: right;
 	-fx-background-image: url("http://i247.photobucket.com/albums/gg154/HvitrEbrithil/Private/right_zpsro9ufpri.png");
 	-fx-alignment: center-left;
@@ -34,13 +39,14 @@
 }
 
 .footer {
+	-fx-pref-height: 64;
 	-fx-spacing: 32;
 	-fx-alignment: center-right;
-	-fx-padding: 0 32 16 32;
+	-fx-padding: 0 32 0 32;
 }
 
 .footer .button {
-	-fx-pref-width: 256;
+	-fx-pref-width: 128;
 	-fx-pref-height: 32;
 }
 
@@ -125,10 +131,10 @@
 
 
 .agenda {
+	-fx-background-color: #eeeefa;
 }
 
 .agenda-head {
-	-fx-background-color: #eeeefa;
 }
 
 .agenda-list {
@@ -140,6 +146,17 @@
 	-fx-border-color: #ccc;
 }
 
-.day-acts .label {
-	-fx-font-color: #0bbcb2;
+.day-acts .button {
+	-fx-text-fill: #0bbcb2;
+	-fx-border-color: transparent;
+	-fx-border-width: 0;
+	-fx-background-color: transparent;
+}
+
+.day-acts .button:hover {
+	-fx-text-fill: #0cccc2;
+}
+
+.day-acts .button:pressed {
+	-fx-text-fill: #0aada5;
 }

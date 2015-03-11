@@ -17,7 +17,6 @@ public class Account {
 
 	//Final attributes
 	private final String username;
-	private final int account_owner;
 	private final String password;
 	private final String first_name;
 	private final String last_name;
@@ -28,9 +27,8 @@ public class Account {
 	private ObservableList<Integer> calendarsList = FXCollections.observableList(new ArrayList<Integer>());
 	
 	//Constructor
-	public Account(String username, int account_owner, String password, String first_name, String last_name, String mobile_nr) {
+	public Account(String username, String password, String first_name, String last_name, String mobile_nr) {
 		this.username = username;
-		this.account_owner = account_owner;
 		this.password = password;
 		this.first_name = first_name;
 		this.last_name = last_name;
@@ -40,10 +38,6 @@ public class Account {
 	//Getters, Setters & Properties
 	public String getUsername() {
 		return username;
-	}
-	
-	public int getAccount_owner() {
-		return account_owner;
 	}
 	
 	public String getPassword() {

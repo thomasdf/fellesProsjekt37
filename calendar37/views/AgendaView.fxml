@@ -15,6 +15,7 @@
    <rowConstraints>
       <RowConstraints minHeight="10.0" prefHeight="48.0" vgrow="NEVER" />
       <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+      <RowConstraints minHeight="10.0" prefHeight="64.0" vgrow="NEVER" />
    </rowConstraints>
    <children>
       <AnchorPane styleClass="agenda-head">
@@ -41,8 +42,8 @@
                   </Label>
                   <VBox spacing="4.0" styleClass="day-acts">
                      <children>
-                        <Label text="16:00 - Møte med sjefen" textFill="#0bbcb2" />
-                        <Label layoutX="10.0" layoutY="10.0" text="20:00 - Middag med kona" textFill="#0bbcb2" />
+                        <Button text="16:00 - Møte med sjefen" textFill="#0bbcb2" />
+                        <Button layoutX="10.0" layoutY="10.0" text="20:00 - Middag med kona" textFill="#0bbcb2" />
                      </children>
                   </VBox>
                </children>
@@ -68,9 +69,9 @@
                   </Label>
                   <VBox spacing="4.0" styleClass="day-acts">
                      <children>
-                        <Label text="16:00 - Møte med sjefen" textFill="#0bbcb2" />
-                        <Label layoutX="10.0" layoutY="10.0" text="20:00 - Middag med kona" textFill="#0bbcb2" />
-                        <Label layoutX="10.0" layoutY="31.0" text="23:59 - Levere øving!" textFill="#0bbcb2" />
+                        <Button text="16:00 - Møte med sjefen" textFill="#0bbcb2" />
+                        <Button layoutX="10.0" layoutY="10.0" text="20:00 - Middag med kona" textFill="#0bbcb2" />
+                        <Button layoutX="10.0" layoutY="31.0" text="23:59 - Levere øving!" textFill="#0bbcb2" />
                      </children>
                   </VBox>
                </children>
@@ -93,7 +94,7 @@
                   </Label>
                   <VBox spacing="4.0" styleClass="day-acts">
                      <children>
-                        <Label layoutX="10.0" layoutY="10.0" text="18:00 - Middag med kona" textFill="#0bbcb2" />
+                        <Button layoutX="10.0" layoutY="10.0" text="18:00 - Middag med kona" textFill="#0bbcb2" />
                      </children>
                   </VBox>
                </children>
@@ -116,9 +117,9 @@
                   </Label>
                   <VBox spacing="4.0" styleClass="day-acts">
                      <children>
-                        <Label layoutX="10.0" layoutY="10.0" text="Passe på naboungen" textFill="#0bbcb2" />
-                        <Label layoutX="10.0" layoutY="10.0" text="14:00 - Hente Sofie i barnehagen" textFill="#0bbcb2" />
-                        <Label layoutX="10.0" layoutY="10.0" text="20:00 - Middag med kona" textFill="#0bbcb2" />
+                        <Button layoutX="10.0" layoutY="10.0" text="Passe på naboungen" textFill="#0bbcb2" />
+                        <Button layoutX="10.0" layoutY="10.0" text="14:00 - Hente Sofie i barnehagen" textFill="#0bbcb2" />
+                        <Button layoutX="10.0" layoutY="10.0" text="20:00 - Middag med kona" textFill="#0bbcb2" />
                      </children>
                   </VBox>
                </children>
@@ -141,8 +142,8 @@
                   </Label>
                   <VBox spacing="4.0" styleClass="day-acts">
                      <children>
-                        <Label layoutX="10.0" layoutY="10.0" text="20:00 - Middag med kona" textFill="#0bbcb2" />
-                        <Label layoutX="10.0" layoutY="31.0" text="23:59 - Levere øving!" textFill="#0bbcb2" />
+                        <Button layoutX="10.0" layoutY="10.0" text="20:00 - Middag med kona" textFill="#0bbcb2" />
+                        <Button layoutX="10.0" layoutY="31.0" text="23:59 - Levere øving!" textFill="#0bbcb2" />
                      </children>
                   </VBox>
                </children>
