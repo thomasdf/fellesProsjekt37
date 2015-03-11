@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import models.Account;
 import models.Activity;
 import models.Group;
-import models.Person;
 
 /**
  * 
@@ -119,13 +118,14 @@ public class DatabaseInterface {
 	 * @return returns an Activity model object with the information required.
 	 */
 	public Activity getActivity(int id) {
-		Activity act = new Activity(id);
+		Activity act = null;
 		ArrayList<Integer> part = new ArrayList<Integer>();
 		try {
 			ResultSet result = this
 					.getQuery("select * from activity where activity.activity_id="
 							+ id);
 			if (result.next()) {
+				act = new Activity(result.getInt("activity_id"), result.getInt("calendar_id"), result.getString("owner_user_name"));
 				act.setDescription(result.getString("description"));
 				act.setFrom(result.getTime("start_time").toLocalTime());
 				act.setTo(result.getTime("end_time").toLocalTime());
@@ -177,13 +177,18 @@ public class DatabaseInterface {
 			result.next();
 			if (result.getString(1) != null) {
 				result.close();
+				result = this.getQuery(
+						 "SELECT calendar_id FROM hasCalendar WHERE user_name=" +
+								  activity.getActivity_owner());
+						result.next();
+						int calendar_id = result.getInt(1);
 				this.statement.execute("UPDATE activity SET calendar_id="
-						+ activity.getCalendar_id() + ", description="
+						+ calendar_id + ", description="
 						+ activity.getDescription() + ", activity_date="
 						+ activity.getDate() + ", end_date="
 						+ activity.getDate() + ", start_time="
 						+ activity.getFrom() + ", end_time=" + activity.getTo()
-						+ ", owner_user_name=" + activity.getOwner_user_name()
+						+ ", owner_user_name=" + activity.getActivity_owner()
 						+ ", room_name=" + activity.getRoom());
 				/*
 				 * if(activity.getRoom() != null) { result =
@@ -196,6 +201,11 @@ public class DatabaseInterface {
 				 */
 			} else {
 				result.close();
+				result = this.getQuery(
+						 "SELECT calendar_id FROM hasCalendar WHERE user_name=" +
+						  activity.getActivity_owner());
+				result.next();
+				int calendar_id = result.getInt(1);
 				this.statement.execute("INSERT INTO activity VALUES ("
 						+ calendar_id + ", " + activity.getDescription() + ", "
 						+ activity.getDate() + ", " + activity.getDate() + ", "
@@ -349,10 +359,8 @@ public class DatabaseInterface {
 			ResultSet members = this
 					.getQuery("select account.user_name from account, isMember where account.user_name=isMember.user_name and isMember.group_id="
 							+ id);
-			int count = 1;
 			while (members.next()) {
 				member.add(members.getString(1));
-				count++;
 			}
 			group.setMembers(member);
 			members.close();
@@ -592,6 +600,8 @@ public class DatabaseInterface {
 		}
 		return activityList;
 	}
+	
+	/*
 
 	public Person getPerson(String user_name) {
 		Person person = null;
@@ -604,8 +614,8 @@ public class DatabaseInterface {
 			String first_name = result.getString("first_name");
 			String last_name = result.getString("last_name");
 			String mobile_nr = result.getString("mobile_nr");
-			String internal_nr = ""; // denne linjen skal fjernes når modellene
-										// oppdateres til å ikke lenger ha
+			String internal_nr = ""; // denne linjen skal fjernes nï¿½r modellene
+										// oppdateres til ï¿½ ikke lenger ha
 										// internal_nr
 			person = new Person(employee_nr, first_name, last_name,
 					internal_nr, mobile_nr);
@@ -615,9 +625,62 @@ public class DatabaseInterface {
 		}
 		return person;
 	}
+	
+	*/
 
 	public void setSubGroup(Group supergroup, Group subgroup) {
 
 	}
-
+	
+	/**
+	 * Invites a user to the given activity
+	 *  
+	 * @param activity_id id of the activity in question
+	 * @param user_name user_name that should be invited
+	 */
+	public void inviteAccount(int activity_id, String user_name)	{
+		try	{
+			this.statement.executeUpdate("INSERT INTO invited VALUES("+ activity_id + ", '" + user_name + "', 'false')");
+		}	catch(SQLException e)	{
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Checks status to invitation on the given user to the given activity
+	 * 
+	 * @param activity_id the given activity's id
+	 * @param user_name the user_name of the user invited
+	 * @return boolean the status of the invitation
+	 */
+	public boolean isComing(int activity_id, String user_name)	{
+		try	{
+			ResultSet result = this.getQuery("SELECT invitation_status FROM invited WHERE activity_id=" + activity_id + " AND user_name='" + user_name + "'");
+			result.next();
+			boolean is_coming = result.getString(1).equals("true") ? false : true;			
+			result.close();
+			return is_coming;
+		}	catch(SQLException e)	{
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
+	 * Changes status of invite to the opposite of what it is
+	 * 
+	 * @param activity_id
+	 * @param user_name
+	 */
+	public void changeInvitedStatus(int activity_id, String user_name)	{
+		try	{
+			ResultSet result = this.getQuery("SELECT invitation_status FROM invited WHERE activity_id=" + activity_id + " AND user_name='" + user_name + "'");
+			result.next();
+			String status = result.getString(1).equals("true") ? "false" : "true";
+			result.close();
+			this.statement.executeUpdate("UPDATE invited SET invitation_status='"+ status + "' WHERE activity_id=" + activity_id + " AND user_name='" + user_name + "'");
+		}	catch(SQLException e)	{
+			e.printStackTrace();
+		}
+	}
 }
