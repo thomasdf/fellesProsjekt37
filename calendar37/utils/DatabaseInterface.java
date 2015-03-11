@@ -402,6 +402,8 @@ public class DatabaseInterface {
 		return admin_user_name;
 	}
 
+/*	
+
 	/**
 	 * Returns the employee-number registered in an account.
 	 * 
@@ -410,6 +412,8 @@ public class DatabaseInterface {
 	 *            to find the employee number from.
 	 * @return the employee-number for the account.
 	 */
+	
+	/*
 	public int getEmployeeNr(String user_name) {
 		int employeeNr = 0;
 		try {
@@ -424,6 +428,7 @@ public class DatabaseInterface {
 		}
 		return employeeNr;
 	}
+	*/
 
 	/**
 	 * Returns the full name registered in an account.
@@ -622,8 +627,17 @@ public class DatabaseInterface {
 	
 	*/
 
-	public void setSubGroup(Group supergroup, Group subgroup) {
-
+	/**
+	 * Creates a supgroup-supergroup relation between groups
+	 * @param supergroup_id the id for the group that is going to be the parent in the relationship
+	 * @param subgroup_id the id for the group that is going to be the child in the relationship
+	 */
+	public void setSubGroup(int supergroup_id, int subgroup_id) {
+		try{
+			this.statement.executeUpdate("insert into subgroup values(" + subgroup_id + ", " + supergroup_id + ")");
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
 	}
 	
 	/**
