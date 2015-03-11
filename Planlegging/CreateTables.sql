@@ -10,8 +10,6 @@ user_password varChar(10) not null, #should be scrambled
 first_name varchar(20) not null,
 last_name varchar(20) not null,
 mobile_nr varchar(8)
-/*not null to assure that an account cannot exist without a relation to a person-entity.
-unique to ensure that there is 1 and only 1 person corresponding to 1 and only 1 account.*/
 );
 
 create table calendar(
@@ -33,8 +31,8 @@ start_time time,
 end_time time,
 owner_user_name varchar(10) not null, # ensures 1 owner per activity
 room_name varchar(20),
-foreign key(owner_user_name) references account(user_name), #owner is a reserved word, and owner_user_name is used instead.
-foreign key(room_name) references room(room_name),
+foreign key(owner_user_name) references account(user_name), #en bruker som er admin for en aktivitet skal ikke kunne slettes.
+foreign key(room_name) references room(room_name) on delete set null, #dersom et rom slettes vil room_name-feltet settes til null.
 foreign key(calendar_id) references calendar(calendar_id) #activityCalendar
 );
 
@@ -48,31 +46,31 @@ create table subGroup( #subgroup-Relation
 subgroup_id int,
 supergroup_id int,
 primary key(supergroup_id, subgroup_id),
-foreign key(subgroup_id) references calendarGroup(group_id),
-foreign key(supergroup_id) references calendarGroup(group_id)
+foreign key(subgroup_id) references calendarGroup(group_id) on delete cascade,
+foreign key(supergroup_id) references calendarGroup(group_id) on delete cascade
 );
 
 create table hasCalendar(
 user_name varchar(10) unique not null primary key,
 calendar_id int(5) unique not null,
-foreign key(user_name) references account(user_name),
-foreign key(calendar_id) references calendar(calendar_id)
+foreign key(user_name) references account(user_name) on delete cascade,
+foreign key(calendar_id) references calendar(calendar_id) on delete cascade
 );
 
 create table groupHasCalendar(
 calendar_id int(5) primary key not null,
 group_id int (5) not null,
-foreign key(calendar_id) references calendar(calendar_id),
-foreign key(group_id) references calendarGroup(group_id)
+foreign key(calendar_id) references calendar(calendar_id) on delete cascade,
+foreign key(group_id) references calendarGroup(group_id) on delete cascade
 );
 
 create table isMember( #isMember-relation
-#this is the relationship, isMember, between calendarGroup and Account. The relationship entity has one field; "role"
+#this is the relationship, isMember, between calendarGroup and Account.
 group_id int(5),
 user_name varchar(10),
 primary key(group_id, user_name),
-foreign key(group_id) references calendarGroup(group_id) on delete cascade,
-foreign key(user_name) references account(user_name) on delete cascade
+foreign key(group_id) references calendarGroup(group_id) on delete cascade, #hvis en calendardGroup slettes, slettes alle isMember-entiteter tilknyttet denne gruppen
+foreign key(user_name) references account(user_name) on delete cascade #hvis en bruker slettes hans medlemsskap fra alle grupper.
 #delete on cascade is used to assure that the relation is deleted if either the corresponding account or group is deleted
 );
 
@@ -81,16 +79,17 @@ activity_id int(5) not null,
 user_name varchar(10) not null,
 invitation_status varchar(5),
 primary key(activity_id, user_name),
-foreign key(activity_id) references activity(activity_id),
-foreign key(user_name) references account(user_name)
+foreign key(activity_id) references activity(activity_id) on delete cascade, #hvis en aktivitet slettes, slettes alle invitasjoner til aktiviteten
+foreign key(user_name) references account(user_name) on delete cascade #hvis en account slettes, slettes alle invitasjoner tilknyttet denne accounten
 );
 
 create table alarm(
 user_name varchar(10) not null,
 activity_id int(5) not null,
 alarm_time time,
+description varchar(255),
 primary key(user_name, activity_id),
-foreign key(user_name) references account(user_name),
-foreign key(activity_id) references activity(activity_id)
+foreign key(user_name) references account(user_name) on delete cascade, #hvis en account slettes, slettes alle alarmer knyttet til accounten, siden alle accounts kan velge sine egne alarmer.
+foreign key(activity_id) references activity(activity_id) on delete cascade #hvis en aktivitet slettes slettes alle alarmer tilknyttet aktiviteten.
 );
 
