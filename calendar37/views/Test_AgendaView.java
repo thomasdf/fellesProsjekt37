@@ -1,6 +1,7 @@
 package views;
 
 
+import models.Person_Test;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -10,8 +11,9 @@ import javafx.fxml.FXMLLoader;
 public class Test_AgendaView extends Application {
 
 //	String viewName = "Calendar";
-	String viewName = "Agenda";
+//	String viewName = "Agenda";
 //	String viewName = "Dialogue";
+	String viewName = "Invite";
 	
 	@Override public void start(Stage primaryStage) throws Exception{
 		
