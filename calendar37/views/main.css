@@ -4,6 +4,7 @@
 }
 
 .header {
+	-fx-min-height: 64;
 	-fx-pref-height: 64;
 	-fx-hgap: 4;
 	-fx-alignment: center;
@@ -39,6 +40,7 @@
 }
 
 .footer {
+	-fx-min-height: 64;
 	-fx-pref-height: 64;
 	-fx-spacing: 32;
 	-fx-alignment: center-right;
@@ -46,7 +48,7 @@
 }
 
 .footer .button {
-	-fx-pref-width: 128;
+	-fx-pref-width: 200;
 	-fx-pref-height: 32;
 }
 
@@ -141,22 +143,34 @@
 	-fx-background-color: #fff;
 }
 
-.agenda-list .hbox {
+.agenda-list .date {
 	-fx-border-width: 0 0 1 0;
 	-fx-border-color: #ccc;
+	-fx-padding: 8 0 8 16;
 }
 
-.day-acts .button {
+.agenda-list .date .label {
+	-fx-min-width: 128;
+	-fx-pref-width: 128;
+	-fx-text-fill: #241b80;
+	-fx-font-weight: bold;
+}
+
+.date-acts {
+	-fx-spacing: 4;
+}
+
+.date-acts .button {
 	-fx-text-fill: #0bbcb2;
 	-fx-border-color: transparent;
 	-fx-border-width: 0;
 	-fx-background-color: transparent;
 }
 
-.day-acts .button:hover {
+.date-acts .button:hover {
 	-fx-text-fill: #0cccc2;
 }
 
-.day-acts .button:pressed {
+.date-acts .button:pressed {
 	-fx-text-fill: #0aada5;
 }

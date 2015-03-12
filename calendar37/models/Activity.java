@@ -27,16 +27,27 @@ public class Activity {
 	private final String activity_owner;
 	
 	//Property-attributes
+	private StringProperty titleProperty = new SimpleStringProperty();
 	private StringProperty descriptionProperty = new SimpleStringProperty();
 	private StringProperty roomProperty = new SimpleStringProperty();
-	private Property<LocalDate> dateProperty = new ObjectPropertyBase<LocalDate>(null) {
+	private Property<LocalDate> start_dateProperty = new ObjectPropertyBase<LocalDate>(null) {
 		@Override
 		public Object getBean() {
 			return this;
 		}
 		@Override
 		public String getName() {
-			return "date";
+			return "start_date";
+		}
+	};
+	private Property<LocalDate> end_dateProperty = new ObjectPropertyBase<LocalDate>(null) {
+		@Override
+		public Object getBean() {
+			return this;
+		}
+		@Override
+		public String getName() {
+			return "end_date";
 		}
 	};
 	private Property<LocalTime> fromProperty = new ObjectPropertyBase<LocalTime>(null) {
@@ -80,6 +91,16 @@ public class Activity {
 		return activity_owner;
 	}
 	
+	public String getTitle() {
+		return titleProperty.getValue();
+	}
+	public void setTitle(String title) {
+		titleProperty.setValue(title);
+	}
+	public StringProperty titleProperty() {
+		return titleProperty;
+	}
+	
 	public String getDescription() {
 		return descriptionProperty.getValue();
 	}
@@ -100,14 +121,24 @@ public class Activity {
 		return roomProperty;
 	}
 	
-	public LocalDate getDate() {
-		return dateProperty.getValue();
+	public LocalDate getStart_date() {
+		return start_dateProperty.getValue();
 	}
-	public void setDate(LocalDate date) {
-		dateProperty.setValue(date);
+	public void setStart_date(LocalDate date) {
+		start_dateProperty.setValue(date);
 	}
-	public Property<LocalDate> dateProperty() {
-		return dateProperty;
+	public Property<LocalDate> start_dateProperty() {
+		return start_dateProperty;
+	}
+	
+	public LocalDate getEnd_date() {
+		return end_dateProperty.getValue();
+	}
+	public void setEnd_date(LocalDate date) {
+		end_dateProperty.setValue(date);
+	}
+	public Property<LocalDate> end_dateProperty() {
+		return end_dateProperty;
 	}
 	
 	public LocalTime getFrom() {
