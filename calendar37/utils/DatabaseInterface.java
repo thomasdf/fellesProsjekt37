@@ -552,7 +552,7 @@ public class DatabaseInterface {
 	 */
 	public boolean isUsername(String user_name){
 		boolean is_user_name = false;
-		if(user_name.equals("")){
+		if(user_name.isEmpty() || user_name.equals("")){
 			return is_user_name;
 		}
 		try{
