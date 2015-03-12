@@ -4,7 +4,10 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import models.Account;
 import models.Activity;
 import models.Calendar;
@@ -23,7 +26,7 @@ import models.Invite;
  * path. It can be found at http://dev.mysql.com/downloads/connector/j/.
  * <p>
  * 
- * @author Daniel Lines
+ * @author 
  * @version %I%, %G%
  * @since 1.0
  */
@@ -214,7 +217,7 @@ public class DatabaseInterface {
 						+ calendar_id + ", " + activity.getDescription() + ", "
 						+ activity.getDate() + ", " + activity.getDate() + ", "
 						+ activity.getFrom() + ", " + activity.getTo() + ", "
-						+ activity.getOwner_user_name() + ", "
+						+ activity.getActivity_owner() + ", "
 						+ activity.getRoom() + ")");
 				/*
 				 * // check if user name exists result =
@@ -326,7 +329,7 @@ public class DatabaseInterface {
 	 * @return a Calendar-object from the database.
 	 */
 	public Calendar getCalendar(int calendar_id) {
-		Calendar cal;
+		Calendar cal = null;
 		try {
 			ResultSet result = this.statement
 					.executeQuery("select hascalendar.user_name from hascalendar where hascalendar.calendar_id = "
@@ -346,9 +349,9 @@ public class DatabaseInterface {
 					throw new SQLException(
 							"Database inconsistency. This Calendar does not have a registered owner. Neither a group nor an account");
 				} else {// group_id not null, create calendar
-					int group_id = result.getInt("group_id");
-					acc = new Account(calendar_id, group_id);
-					return acc;
+					String group_id = result.getString("group_id");
+					cal = new Calendar(calendar_id, group_id);
+					return cal;
 				}
 			} else {// user_name not null, create calendar
 				String user_name = result.getString("user_name");
@@ -358,6 +361,7 @@ public class DatabaseInterface {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return cal;
 	}
 
 	/**
@@ -795,5 +799,20 @@ public class DatabaseInterface {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public ObservableList<Account> getAllAccounts()	{
+		ObservableList<Account> people = FXCollections.observableList(new ArrayList<Account>());
+		try	{
+			ResultSet result = this.getQuery("SELECT * FROM account");
+			while(result.next())	{
+				people.add(new Account(result.getString("user_name"), result.getString("user_password"), result.getString("first_name"), result.getString("last_name"), result.getString("mobile_nr")));
+				
+			}
+			result.close();
+		}	catch(SQLException e)	{
+			e.printStackTrace();
+		}
+		return people;
 	}
 }
