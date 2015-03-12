@@ -25,9 +25,10 @@ public class LoginController implements Initializable{
 	@FXML private PasswordField txt_password;
 	@FXML private Label label_error;
 	
+	@FXML
 	public void login(ActionEvent login_event){
 		DatabaseInterface databaseinterface = new DatabaseInterface();
-		String user_name = txt_user_name.getText().toLowerCase();
+		String user_name = txt_user_name.getText();
 		String databasepassword = databaseinterface.getPassword(user_name);
 		
 		if(databasepassword.equals(null)){
@@ -35,6 +36,7 @@ public class LoginController implements Initializable{
 		} else{
 			if(databasepassword.equals(txt_password.getText())){//user_name and password are correct. Login success
 				//login success-action!
+				label_error.setText("login success! horray!");
 			} else{
 				label_error.setText("Passordet er ikke riktig. Sjekk om det er skrevet riktig. Kontakt systemadministrator om problemet vedvarer.");
 			}
