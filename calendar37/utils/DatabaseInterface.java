@@ -581,7 +581,7 @@ public class DatabaseInterface {
 					.executeQuery("select calendar.calendar_id from account, calendar, hascalendar where hascalendar.user_name = account.user_name and hascalendar.calendar_id = calendar.calendar_id and hascalendar.user_name = "
 							+ "\"" + user_name + "\"");
 			result.next();
-			calendarId = this.result.getInt(1);
+			calendarId = this.result.getInt("calendar_id");
 		} catch (SQLException e) {
 			System.out.println("Error from DatabaseInterface: "
 					+ e.getLocalizedMessage());
