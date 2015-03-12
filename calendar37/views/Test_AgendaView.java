@@ -10,8 +10,9 @@ import javafx.fxml.FXMLLoader;
 public class Test_AgendaView extends Application {
 
 //	String viewName = "Calendar";
-	String viewName = "Agenda";
+	//String viewName = "Agenda";
 //	String viewName = "Dialogue";
+	String viewName = "Login";
 	
 	@Override public void start(Stage primaryStage) throws Exception{
 		
