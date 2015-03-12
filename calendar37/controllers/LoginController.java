@@ -29,17 +29,14 @@ public class LoginController implements Initializable{
 	public void login(ActionEvent login_event){
 		DatabaseInterface databaseinterface = new DatabaseInterface();
 		String user_name = txt_user_name.getText();
-		String databasepassword = databaseinterface.getPassword(user_name);
 		
-		if(databasepassword.equals(null)){
-			label_error.setText("Brukernavnet eksisterer ikke. Sjekk at det er skrevet riktig. Kontakt systemadministrator om problemet vedvarer.");
-		} else{
-			if(databasepassword.equals(txt_password.getText())){//user_name and password are correct. Login success
+		if(!databaseinterface.isUsername(user_name)){//user_name does not exist.
+			label_error.setText("Brukernavnet eksisterer ikke. Sjekk at det er skrevet riktig.");
+		} else if(databaseinterface.getPassword(user_name).equals(txt_password.getText())){
 				//login success-action!
 				label_error.setText("login success! horray!");
 			} else{
-				label_error.setText("Passordet er ikke riktig. Sjekk om det er skrevet riktig. Kontakt systemadministrator om problemet vedvarer.");
+				label_error.setText("Passordet er ikke riktig. Sjekk om det er skrevet riktig.");
 			}
 		}
-	}
 }
