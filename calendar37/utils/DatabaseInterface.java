@@ -555,9 +555,10 @@ public class DatabaseInterface {
 		}
 		try{
 			this.result = this.statement.executeQuery("select account.user_name from account where account.user_name = \"" + user_name + "\"" );
-			result.next();
-			if(this.result.getString("user_name").equals(user_name)){
-				is_user_name = true;
+			if(result.next()){
+				if(this.result.getString("user_name").equals(user_name)){
+					is_user_name = true;
+				}
 			}
 		} catch(SQLException e){
 			e.printStackTrace();
