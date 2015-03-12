@@ -555,9 +555,10 @@ public class DatabaseInterface {
 		}
 		try{
 			this.result = this.statement.executeQuery("select account.user_name from account where account.user_name = \"" + user_name + "\"" );
-			result.next();
-			if(this.result.getString("user_name").equals(user_name)){
-				is_user_name = true;
+			if(result.next()){
+				if(this.result.getString("user_name").equals(user_name)){
+					is_user_name = true;
+				}
 			}
 		} catch(SQLException e){
 			e.printStackTrace();
@@ -580,7 +581,7 @@ public class DatabaseInterface {
 					.executeQuery("select calendar.calendar_id from account, calendar, hascalendar where hascalendar.user_name = account.user_name and hascalendar.calendar_id = calendar.calendar_id and hascalendar.user_name = "
 							+ "\"" + user_name + "\"");
 			result.next();
-			calendarId = this.result.getInt(1);
+			calendarId = this.result.getInt("calendar_id");
 		} catch (SQLException e) {
 			System.out.println("Error from DatabaseInterface: "
 					+ e.getLocalizedMessage());
