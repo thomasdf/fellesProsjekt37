@@ -552,6 +552,9 @@ public class DatabaseInterface {
 	 */
 	public boolean isUsername(String user_name){
 		boolean is_user_name = false;
+		if(user_name.equals("")){
+			return is_user_name;
+		}
 		try{
 			this.result = this.statement.executeQuery("select account.user_name from account where account.user_name = \"" + user_name + "\"" );
 			result.next();
