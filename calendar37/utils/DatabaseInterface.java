@@ -546,6 +546,28 @@ public class DatabaseInterface {
 	}
 
 	/**
+	 * Checks if the user_name exists in the database.
+	 * @param user_name the user_name we want to check if is in the database
+	 * @return Returns boolean True if the user_name is in the database, false otherwise.
+	 */
+	public boolean isUsername(String user_name){
+		boolean is_user_name = false;
+		if(user_name.equals("")){
+			return is_user_name;
+		}
+		try{
+			this.result = this.statement.executeQuery("select account.user_name from account where account.user_name = \"" + user_name + "\"" );
+			result.next();
+			if(this.result.getString("user_name").equals(user_name)){
+				is_user_name = true;
+			}
+		} catch(SQLException e){
+			e.printStackTrace();
+		}
+		return is_user_name;
+	}
+	
+	/**
 	 * Returns an ID for the calendar related to an account
 	 * 
 	 * @param user_name
