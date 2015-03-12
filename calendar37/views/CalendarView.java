@@ -191,48 +191,51 @@ public class CalendarView extends Application {
 		//TESTVALUES
 			//activity
 		act1 = new Activity(0, 0, "admin");
-		act1.setDescription("Møte undass");
-		act1.setDate(LocalDate.of(2015, 3, 13));
+		act1.setTitle("Møte undass");
+		act1.setStart_date(LocalDate.of(2015, 3, 13));
 		act1.setFrom(LocalTime.of(12, 0));
 		act1.setTo(LocalTime.of(12, 30));
 			//activity
 		act2 = new Activity(1, 0, "admin");
-		act2.setDescription("Middag med den altfor, altfor store familien min");
-		act2.setDate(LocalDate.of(2015, 3, 15));
+		act2.setTitle("Middag med den altfor, altfor store familien min");
+		act2.setStart_date(LocalDate.of(2015, 3, 15));
 		act2.setFrom(LocalTime.of(16, 0));
 		act2.setTo(LocalTime.of(17, 30));
 			//activity
 		act3 = new Activity(2, 0, "admin");
-		act3.setDescription("Gruppearbeid");
-		act3.setDate(LocalDate.of(2015, 4, 24));
+		act3.setTitle("Gruppearbeid");
+		act3.setStart_date(LocalDate.of(2015, 4, 24));
 			//activity
 		act4 = new Activity(3, 0, "admin");
-		act4.setDescription("Travel dag!");
-		act4.setDate(LocalDate.of(2015, 4, 24));
+		act4.setTitle("Travel dag!");
+		act4.setStart_date(LocalDate.of(2015, 4, 24));
 		//activity
 		act5 = new Activity(4, 0, "admin");
-		act5.setDescription("Travel dag!");
-		act5.setDate(LocalDate.of(2015, 4, 24));
+		act5.setTitle("Travel dag!");
+		act5.setStart_date(LocalDate.of(2015, 4, 24));
 		//activity
 		act6 = new Activity(5, 0, "admin");
-		act6.setDescription("Travel dag!");
-		act6.setDate(LocalDate.of(2015, 4, 24));
+		act6.setTitle("Travel dag!");
+		act6.setStart_date(LocalDate.of(2015, 4, 24));
 		//activity
 		act7 = new Activity(6, 0, "admin");
-		act7.setDescription("Travel dag!");
-		act7.setDate(LocalDate.of(2015, 4, 24));
+		act7.setTitle("Gruppearbeid :D");
+		act7.setStart_date(LocalDate.of(2015, 3, 13));
+		act7.setEnd_date(LocalDate.of(2015, 3, 18));
+		act7.setFrom(LocalTime.of(16, 0));
+		act7.setTo(LocalTime.of(17, 30));
 		//activity
 		act8 = new Activity(7, 0, "admin");
-		act8.setDescription("Travel dag!");
-		act8.setDate(LocalDate.of(2015, 4, 24));
+		act8.setTitle("Travel dag!");
+		act8.setStart_date(LocalDate.of(2015, 4, 24));
 		//activity
 		act9 = new Activity(8, 0, "admin");
-		act9.setDescription("Travel dag!");
-		act9.setDate(LocalDate.of(2015, 4, 24));
+		act9.setTitle("Travel dag!");
+		act9.setStart_date(LocalDate.of(2015, 4, 24));
 		//activity
 		act10 = new Activity(9, 0, "admin");
-		act10.setDescription("Travel dag!");
-		act10.setDate(LocalDate.of(2015, 4, 24));
+		act10.setTitle("Travel dag!");
+		act10.setStart_date(LocalDate.of(2015, 4, 24));
 			//the calendar-model
 		model = new models.Calendar(0, "admin");
 			//add activities to the calendar
@@ -270,7 +273,7 @@ public class CalendarView extends Application {
 	
 	private void fillCalendar() {
 		//Titler
-		cal_title.setText("Gruppe 37s kalender");
+		cal_title.setText((model.getIs_group_cal() ? model.getCalendar_owner_group() : model.getCalendar_owner_user()) + "s kalender");
 		cur_month_year.setText(getMonth(cal.get(Calendar.MONTH)) + " " + Integer.toString(cal.get(Calendar.YEAR)));
 		
 		//Forrige måned
@@ -313,8 +316,8 @@ public class CalendarView extends Application {
 		for (int activity_id : model.getActivities()) {
 			try {
 				Activity cur_act = getActivity(activity_id);
-				if (cur_act.getDate().getYear() == cal.get(Calendar.YEAR) && cur_act.getDate().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
-					String formatted_act = getFormattedActivity(cur_act);
+				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
+					String formatted_act = (cur_act.getEnd_date() == null ? "" : "> ") + getFormattedActivity(cur_act, true); 
 					Button activity_btn = new Button(formatted_act);
 					activity_btn.getStyleClass().add("activity");
 					activity_btn.setFocusTraversable(false);
@@ -324,7 +327,22 @@ public class CalendarView extends Application {
 							openActivity(activity_id);
 						}
 					});
-					day_activities.get(start_index + cur_act.getDate().getDayOfMonth() - 1).getChildren().add(activity_btn);
+					day_activities.get(start_index + cur_act.getStart_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
+				}
+				if (cur_act.getEnd_date() != null) {
+					if (cur_act.getEnd_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getEnd_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
+						String formatted_act = "< " + getFormattedActivity(cur_act, false); 
+						Button activity_btn = new Button(formatted_act);
+						activity_btn.getStyleClass().add("activity");
+						activity_btn.setFocusTraversable(false);
+						activity_btn.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent event) {
+								openActivity(activity_id);
+							}
+						});
+						day_activities.get(start_index + cur_act.getEnd_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
+					}
 				}
 			} catch (NullPointerException e) {
 				System.err.println("NullPointerException: " + e.getMessage());
@@ -342,13 +360,19 @@ public class CalendarView extends Application {
 		//FILL IN LATER!
 	}
 	
-	private String getFormattedActivity(Activity act) {
+	private String getFormattedActivity(Activity act, boolean from) {
 		String ret_str = "";
-		if (act.getFrom() != null) {
-			ret_str += act.getFrom() + ": ";
+		if (from) {
+			if (act.getFrom() != null) {
+				ret_str += act.getFrom() + ": ";
+			}
+		} else {
+			if (act.getTo() != null) {
+				ret_str += act.getTo() + ": ";
+			}
 		}
-		if (act.getDescription() != null) {
-			ret_str += act.getDescription();
+		if (act.getTitle() != null) {
+			ret_str += act.getTitle();
 		}
 		return ret_str;
 	}
