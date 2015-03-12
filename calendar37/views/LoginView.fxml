@@ -7,8 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
    <children>
       <Pane layoutX="271.0" layoutY="31.0" prefHeight="734.0" prefWidth="734.0" style="-fx-border-style: dotted;">
          <children>
@@ -33,7 +32,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <TextField prefHeight="25.0" prefWidth="251.0" GridPane.columnIndex="1" />
+                  <TextField fx:id="txt_user_name" prefHeight="25.0" prefWidth="251.0" GridPane.columnIndex="1" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" textAlignment="RIGHT" wrappingWidth="135.9365234375">
                      <font>
                         <Font size="18.0" />
@@ -48,7 +47,7 @@
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <PasswordField GridPane.columnIndex="1" />
+                  <PasswordField fx:id="txt_password" GridPane.columnIndex="1" />
                </children>
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="137.0" />
@@ -58,7 +57,8 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
             </GridPane>
-            <Button layoutX="308.0" layoutY="416.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="121.0" text="Log in" />
+            <Button fx:id="btn_login" layoutX="308.0" layoutY="416.0" mnemonicParsing="false" onAction="#login" prefHeight="27.0" prefWidth="121.0" text="Log in" />
+            <Label fx:id="label_error" layoutX="355.0" layoutY="367.0" textFill="RED" />
          </children>
       </Pane>
    </children>
