@@ -42,11 +42,9 @@ public class DatabaseInterface {
 	 * the constructor instead of making it a static final field.
 	 */
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/fellesprosjekt";
-	private static final String USERNAME = "daniel";
-	// private static final String USERNAME = "thomas";
+	private static final String USERNAME = "fellesprosjekt";
 
-	private static final String PASSWORD = "bringIt1";
-	// private static final String PASSWORD = "bringIt";
+	private static final String PASSWORD = "bringIt";
 
 	private Connection connection;
 	private Statement statement;
