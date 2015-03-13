@@ -47,13 +47,15 @@
 	* Skriv klasser med stor forbokstav, ex "MyClass.java"
 	* Skriv funksjoner med liten forbokstav, og stor bokstav for hvert nytt ord, ex "myFunction()"
 	* Skriv variabelnavn med små bokstaver og understretk, ex. "my_variable"
-* Div:
+* JavaFX:
 	* Skriv FXML-filer med stor forbokstav, som en klasse, ex "MyFXMLView.fxml"
 	* Skriv CSS-filer som en variabel, små bokstaver og understrek, ex "my_style.css"
+		* I CSS-filer, ikke bruk id, bruk kun klasser, ex ".button2 {", ikke "#button2 {".
+	* Skriv fx:id som variabler i Java, ex "btn_cancel".
 
 ## Database Interface
 For å bruke interface mot database som er opprettet i pakken utils, må man først laste ned jdbc driveren fra Oracle og legge den inn i build pathen for
 prosjektet. Anvisninger for å legge inn i build path skrevet med tanke på Eclipse
-1. Last ned connectoren fra: http://dev.mysql.com/downloads/connector/j/
-* Gå inn i Eclipse, høyreklikk på prosjektet ditt Properties->Build Path.
-* Finn frem til den nedlastede mappa og legg til
+	1. Last ned connectoren fra: http://dev.mysql.com/downloads/connector/j/
+	* Gå inn i Eclipse, høyreklikk på prosjektet ditt Properties->Build Path.
+	* Finn frem til den nedlastede mappa og legg til
