@@ -56,6 +56,7 @@
 ## Database Interface
 For å bruke interface mot database som er opprettet i pakken utils, må man først laste ned jdbc driveren fra Oracle og legge den inn i build pathen for
 prosjektet. Anvisninger for å legge inn i build path skrevet med tanke på Eclipse
-	1. Last ned connectoren fra: http://dev.mysql.com/downloads/connector/j/
-	* Gå inn i Eclipse, høyreklikk på prosjektet ditt Properties->Build Path.
-	* Finn frem til den nedlastede mappa og legg til
+
+1. Last ned connectoren fra: http://dev.mysql.com/downloads/connector/j/
+* Gå inn i Eclipse, høyreklikk på prosjektet ditt Properties->Build Path.
+* Finn frem til den nedlastede mappa og legg til
