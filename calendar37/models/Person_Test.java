@@ -11,6 +11,9 @@ public class Person_Test {
 	}
 	
 	//Oppsett for checkbox i tableview
+	//Checked variablen tilsier om denne brukeren er huket av i invite viewet eller ikke
+	//Pass på å alltid sette den til "false" for ALLE brukere når du entrer invite viewet.
+	//Hvis ikke vil systemet tro at brukeren alltid er huket av, og dermed bli invitert til alt.
 //-------------------------------------------------------
 	private SimpleBooleanProperty checked = new SimpleBooleanProperty(false);
 	   // other columns here

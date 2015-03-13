@@ -36,12 +36,17 @@ public class Test_InviteView implements Initializable{
     
     @FXML
     Button CheckEverything;
+    
+    @FXML
+    Button invite_btn;
  
     // The table's data
     ObservableList<Person_Test> data;
      
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+    	//TODO: Implementer henting av ALLE accounts fra databasen (Og sette ALLE brukerne sine CHECKED variabler til false)
+    	//TODO: 
         // Set up the table data
         FirstName.setCellValueFactory(
             new PropertyValueFactory<Person_Test,String>("first_name")
@@ -66,6 +71,14 @@ public class Test_InviteView implements Initializable{
         data.add(test0);
         data.add(test1);
         data.add(test2);
+    }
+    
+    @FXML
+    //Iterer over alle personene og sjekker om de er huket av eller ikke (true = huket, false = ikke huket)
+    private void inviteCheckedPeople(ActionEvent event){
+    	for(int i = 0; i < data.size(); i++) {
+    		System.out.println("Person "+i +" " + data.get(i).getChecked());
+    	}
     }
 }
 

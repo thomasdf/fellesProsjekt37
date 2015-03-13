@@ -13,7 +13,8 @@ public class Test_AgendaView extends Application {
 //	String viewName = "Calendar";
 //	String viewName = "Agenda";
 //	String viewName = "Dialogue";
-	String viewName = "Invite";
+//	String viewName = "Invite";
+	String viewName = "Activity";
 	
 	@Override public void start(Stage primaryStage) throws Exception{
 		
