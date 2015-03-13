@@ -165,6 +165,42 @@ public class DatabaseInterface {
 		return act;
 
 	}
+	
+	/**
+	 * 
+	 * 
+	 * @param owner_user_name
+	 * @param activity_date
+	 * @param end_date
+	 * @param start_time
+	 * @param end_time
+	 * @param room_name
+	 * @return
+	 */
+	public Activity setActivity(String owner_user_name, String description, LocalDate activity_date, LocalDate end_date, LocalTime start_time, LocalTime end_time, String room_name) {
+		int activity_id = 0;
+		try {
+				result = this
+						.getQuery("SELECT calendar_id FROM hasCalendar WHERE user_name="
+								+ owner_user_name);
+				result.next();
+				int calendar_id = result.getInt(1);
+				this.statement.execute("INSERT INTO activity VALUES ("
+						+ calendar_id + ", '" + description + "', "
+						+ activity_date + ", " + end_date + ", "
+						+ start_time + ", " + end_time + ", '"
+						+ owner_user_name + "', '"
+						+ room_name + "')");
+				result.close();
+				// find the id of the new activity
+				result = this.getQuery("SELECT activity_id FROM activity ORDER BY activity_id DESC LIMIT 1");
+				activity_id = result.getInt("activity_id");
+				result.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return this.getActivity(activity_id);
+	}
 
 	/**
 	 * Sets or updates the activity in question depending on if it exists
@@ -716,6 +752,24 @@ public class DatabaseInterface {
 			this.statement.executeUpdate("INSERT INTO invited VALUES("
 					+ activity_id + ", '" + user_name + "', 'false')");
 		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void inviteGroup(int activity_id, int group_id)	{
+		try	{
+			// get user_names in group
+			ResultSet result = this.getQuery("SELECT user_name FROM isMember WHERE group_id=" + group_id);
+			ArrayList<String> invited = new ArrayList<String>();
+			while(result.next())	{
+				invited.add(result.getString("user_name"));
+			}
+			result.close();
+			// invite people in group
+			for(String inv : invited)	{
+				this.inviteAccount(activity_id, inv);
+			}
+		}	catch(SQLException e)	{
 			e.printStackTrace();
 		}
 	}

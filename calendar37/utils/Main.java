@@ -14,10 +14,7 @@ public class Main {
 	public static void main(String[] args)	{
 		
 		DatabaseInterface db = new DatabaseInterface();
-		ArrayList<Invite> inv = db.getAllInvites(90909);
-		for(Invite x : inv)	{
-			System.out.println(x.getInvited() + ", " + x.getInvited_by() + ", " + x.getInvited_to() + ", " + x.getStatus());
-		}
+		db.inviteGroup(90909, 12121);
 		System.out.println("Success!");
 		db.closeItAll();
 	}
