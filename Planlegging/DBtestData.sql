@@ -12,31 +12,18 @@ for relasjonene gjelder det at begge entitetene vi skal relatere må eksistere f
 #######################################################################
 #entities
 
-insert into person
-values
-(12345, 'Spooderman', 'Kent', '81549300'),
-(67890, 'Batman', 'Wayne', '22225555'),
-(24680, 'Steve', 'Stiffler', '99224488'),
-(13579, 'McLovin\'', '', '23562467'),
-(13806, 'John \'Hannlibal\'', 'Smith', '76543210'),
-(76487, 'Templeton \'Face\'', 'Peck', '75630389'),
-(75894, 'Bosco Albert', 'Baracus', '73311337'),
-(87931, 'Howling mad', 'Murdoc', '13377331'),
-(99883, 'Jim', 'Lahey', '13371337'),
-(13371, 'J-', 'Roc', '77337733');
-
 insert into account
 values
-('Spidey', 'Spoider', 12345),
-('manBats', 'noParents', 67890),
-('S.Meister', 'shag',24680),
-('McLovin', 'alcohol', 13579),
-('Hannibal', 'Ateam1337', 13806),
-('Faceman', 'Ateam1337', 76487),
-('Baracus', 'Ateam1337', 75894),
-('Murdoc', 'Ateam1337', 87931),
-('Lahey', 'liquor', 99883),
-('J-Roc', 'mafk', 13371);
+('Spidey', 'Spoider','Spooderman', 'Kent', '81549300'),
+('manBats', 'noParents','Batman', 'Wayne', '22225555'),
+('S.Meister', 'shag', 'Steve', 'Stiffler', '99224488'),
+('McLovin', 'alcohol', 'McLovin\'', '', '23562467'),
+('Hannibal', 'Ateam1337', 'John \'Hannlibal\'', 'Smith', '76543210'),
+('Faceman', 'Ateam1337', 'Templeton \'Face\'', 'Peck', '75630389'),
+('Baracus', 'Ateam1337', 'Bosco Albert', 'Baracus', '73311337'),
+('Murdoc', 'Ateam1337', 'Howling mad', 'Murdoc', '13377331'),
+('Lahey', 'liquor', 'Jim', 'Lahey', '13371337'),
+('J-Roc', 'mafk', 'J-', 'Roc', '77337733');
 
 insert into calendar
 values
@@ -101,13 +88,22 @@ values
 
 insert into ismember
 values
-(12121, 'Hannibal', 'admin'),
-(12121, 'Faceman', 'pleb'),
-(12121, 'Baracus', 'pleb'),
-(12121, 'Murdoc', 'pleb'),
-(13131, 'Lahey', 'pleb'),
-(13131, 'J-Roc', 'admin'),
-(14141, 'manBats', 'admin'),
-(14141, 'Spidey', 'pleb'),
-(15151, 'Spidey', 'admin');
+(12121, 'Hannibal'),
+(12121, 'Faceman'),
+(12121, 'Baracus'),
+(12121, 'Murdoc'),
+(13131, 'Lahey'),
+(13131, 'J-Roc'),
+(14141, 'manBats'),
+(14141, 'Spidey'),
+(15151, 'Spidey');
 
+insert into alarm
+values
+('manBats', 91919, '12:00:00', 'fuk yeah'),
+('Lahey', 90909, '13:12:00', 'soon');
+
+insert into invited
+values
+(90909, 'J-Roc', 'false'),
+(92929, 'Lahey', 'false');

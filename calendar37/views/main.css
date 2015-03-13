@@ -1,66 +1,78 @@
 #calendar {
 	-fx-border-color: black;
 	-fx-background-color: #fff;
-	-fx-max-width: 1600;
-	-fx-max-height: 928;
 }
 
 .header {
-	-fx-background-color: #eeeefa;
-	-fx-pref-width: 1600;
+	-fx-min-height: 64;
 	-fx-pref-height: 64;
-	-fx-spacing: 4;
-	-fx-alignment: center-left;
-	-fx-padding: 0 0 0 64;
+	-fx-hgap: 4;
+	-fx-alignment: center;
+	-fx-padding: 0 32 0 32;
 }
 
-.header .button {
+.header .button, .header .choice-box {
 	-fx-font-size: 16;
 	-fx-font-weight: bold;
 	-fx-pref-width: 128;
-	-fx-pref-height: 48;
 	-fx-background-size: 50%;
 	-fx-background-repeat: no-repeat;
 }
 
-.header .button:hover {
-	-fx-cursor: hand;
+.header .choice-box {
+	-fx-alignment: center-right;
 }
 
 .left {
+	-fx-pref-height: 48;
 	-fx-background-position: left;
 	-fx-background-image: url("http://i247.photobucket.com/albums/gg154/HvitrEbrithil/Private/left_zps3u8wfscx.png");
+	-fx-alignment: center-right;
+	-fx-padding: 0 16 0 0;
 }
 
 .right {
+	-fx-pref-height: 48;
 	-fx-background-position: right;
 	-fx-background-image: url("http://i247.photobucket.com/albums/gg154/HvitrEbrithil/Private/right_zpsro9ufpri.png");
+	-fx-alignment: center-left;
+	-fx-padding: 0 0 0 16;
 }
 
 .footer {
-	-fx-background-color: #eeeefa;
-	-fx-pref-width: 1600;
-	-fx-pref-height: 32;
+	-fx-min-height: 64;
+	-fx-pref-height: 64;
 	-fx-spacing: 32;
-	-fx-alignment: center-left;
-	-fx-padding: 0 0 0 32;
+	-fx-alignment: center-right;
+	-fx-padding: 0 32 0 32;
+}
+
+.footer .button {
+	-fx-pref-width: 200;
+	-fx-pref-height: 32;
+}
+
+.button {
+}
+
+.button:hover {
+	-fx-cursor: hand;
 }
 
 .title {
-	-fx-padding: 0 750 0 0;
 	-fx-font-size: 32;
 	-fx-font-weight: bold;
 }
 
 .month_year {
+	-fx-pref-width: 250;
 	-fx-padding: 0 4 0 0;
 	-fx-font-size: 24;
-	-fx-pref-width: 200;
 	-fx-alignment: center-right;
 }
 
 .weekday {
-	-fx-pref-width: 256;
+	-fx-pref-width: 9999;
 	-fx-padding: 0 0 0 8;
 	-fx-font-size: 16;
 	-fx-font-weight: bold;
@@ -73,9 +85,15 @@
 }
 
 .day {
-	-fx-pref-width: 9999;
+	-fx-pref-width: 100%;
+	-fx-pref-height: 100%;
+	-fx-background-color: #fff;
 	-fx-border-color: #ccc;
 	-fx-padding: 2;
+}
+
+.white {
+	-fx-background-color: #fff;
 }
 
 .activity {
@@ -88,8 +106,13 @@
 }
 
 .activity:hover {
-	-fx-cursor: hand;
+	-fx-background-color: #ebf6ff;
 }
+
+.activity:pressed {
+	-fx-background-color: #d8e2eb;
+}
+
 
 
 
@@ -110,21 +133,44 @@
 
 
 .agenda {
+	-fx-background-color: #eeeefa;
 }
 
 .agenda-head {
-	-fx-background-color: #eeeefa;
 }
 
 .agenda-list {
 	-fx-background-color: #fff;
 }
 
-.agenda-list .hbox {
+.agenda-list .date {
 	-fx-border-width: 0 0 1 0;
 	-fx-border-color: #ccc;
+	-fx-padding: 8 0 8 16;
 }
 
-.day-acts .label {
-	-fx-font-color: #0bbcb2;
+.agenda-list .date .label {
+	-fx-min-width: 128;
+	-fx-pref-width: 128;
+	-fx-text-fill: #241b80;
+	-fx-font-weight: bold;
+}
+
+.date-acts {
+	-fx-spacing: 4;
+}
+
+.date-acts .button {
+	-fx-text-fill: #0bbcb2;
+	-fx-border-color: transparent;
+	-fx-border-width: 0;
+	-fx-background-color: transparent;
+}
+
+.date-acts .button:hover {
+	-fx-text-fill: #0cccc2;
+}
+
+.date-acts .button:pressed {
+	-fx-text-fill: #0aada5;
 }

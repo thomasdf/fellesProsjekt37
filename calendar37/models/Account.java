@@ -2,14 +2,13 @@ package models;
 
 import java.util.ArrayList;
 
-import javafx.beans.property.ObjectPropertyBase;
-import javafx.beans.property.Property;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
- * Account is the class that keeps a record of everything relating to the account of a {@link Person}.
+ * Account is the class that keeps a record of everything relating to the account of a person,
+ * and is used to identify and authenticate a user.
  * The password is encrypted.
- * Account is always used as the reference when we want to get or to set something relating to a {@link Person},
- * we never use {@link Person} itself.
  * 
  * @author gruppe37
  * @version %I%, %G%
@@ -18,36 +17,22 @@ public class Account {
 
 	//Final attributes
 	private final String username;
-	private final int account_owner;
 	private final String password;
+	private final String first_name;
+	private final String last_name;
+	private final String mobile_nr;
 	
 	//Property-attributes
-	private Property<ArrayList<Integer>> member_ofProperty = new ObjectPropertyBase<ArrayList<Integer>>() {
-		@Override
-		public Object getBean() {
-			return this;
-		}
-		@Override
-		public String getName() {
-			return "member_of";
-		}
-	};
-	private Property<ArrayList<Integer>> calendarsProperty = new ObjectPropertyBase<ArrayList<Integer>>() {
-		@Override
-		public Object getBean() {
-			return this;
-		}
-		@Override
-		public String getName() {
-			return "calendars";
-		}
-	};
+	private ObservableList<Integer> in_groupsList = FXCollections.observableList(new ArrayList<Integer>());
+	private ObservableList<Integer> calendarsList = FXCollections.observableList(new ArrayList<Integer>());
 	
 	//Constructor
-	public Account(String username, int account_owner, String password) {
+	public Account(String username, String password, String first_name, String last_name, String mobile_nr) {
 		this.username = username;
-		this.account_owner = account_owner;
 		this.password = password;
+		this.first_name = first_name;
+		this.last_name = last_name;
+		this.mobile_nr = mobile_nr;
 	}
 	
 	//Getters, Setters & Properties
@@ -55,31 +40,39 @@ public class Account {
 		return username;
 	}
 	
-	public int getAccount_owner() {
-		return account_owner;
-	}
-	
 	public String getPassword() {
 		return password;
 	}
 	
-	public ArrayList<Integer> getMember_of() {
-		return member_ofProperty.getValue();
-	}
-	public void setMember_of(ArrayList<Integer> member_of) {
-		member_ofProperty.setValue(member_of);
-	}
-	public Property<ArrayList<Integer>> member_ofProperty() {
-		return member_ofProperty;
+	public String getFirst_name() {
+		return first_name;
 	}
 	
-	public ArrayList<Integer> getCalendars() {
-		return calendarsProperty.getValue();
+	public String getLast_name() {
+		return last_name;
+	}
+	
+	public String getMobile_nr() {
+		return mobile_nr;
+	}
+	
+	public ObservableList<Integer> getIn_groups() {
+		return in_groupsList;
+	}
+	public void addIn_group(int group_id) {
+		in_groupsList.add(group_id);
+	}
+	public void setIn_groups(ArrayList<Integer> in_groups) {
+		in_groupsList.addAll(in_groups);
+	}
+	
+	public ObservableList<Integer> getCalendars() {
+		return calendarsList;
+	}
+	public void addCalendar(int calendar_id) {
+		calendarsList.add(calendar_id);
 	}
 	public void setCalendars(ArrayList<Integer> calendars) {
-		calendarsProperty.setValue(calendars);
-	}
-	public Property<ArrayList<Integer>> calendarsProperty() {
-		return calendarsProperty;
+		calendarsList.addAll(calendars);
 	}
 }
