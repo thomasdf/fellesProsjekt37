@@ -4,7 +4,6 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -134,7 +133,8 @@ public class DatabaseInterface {
 				act.setDescription(result.getString("description"));
 				act.setFrom(result.getTime("start_time").toLocalTime());
 				act.setTo(result.getTime("end_time").toLocalTime());
-				act.setDate(result.getDate("activity_date").toLocalDate());
+				act.setStart_date(result.getDate("activity_date").toLocalDate());
+				act.setEnd_date(result.getDate("end_date").toLocalDate());
 				act.setDescription(result.getString("description"));
 			}
 			result.close();
@@ -226,8 +226,8 @@ public class DatabaseInterface {
 				this.statement.execute("UPDATE activity SET calendar_id="
 						+ calendar_id + ", description="
 						+ activity.getDescription() + ", activity_date="
-						+ activity.getDate() + ", end_date="
-						+ activity.getDate() + ", start_time="
+						+ activity.getStart_date() + ", end_date="
+						+ activity.getEnd_date() + ", start_time="
 						+ activity.getFrom() + ", end_time=" + activity.getTo()
 						+ ", owner_user_name=" + activity.getActivity_owner()
 						+ ", room_name=" + activity.getRoom());
@@ -249,7 +249,7 @@ public class DatabaseInterface {
 				int calendar_id = result.getInt(1);
 				this.statement.execute("INSERT INTO activity VALUES ("
 						+ calendar_id + ", " + activity.getDescription() + ", "
-						+ activity.getDate() + ", " + activity.getDate() + ", "
+						+ activity.getStart_date() + ", " + activity.getEnd_date() + ", "
 						+ activity.getFrom() + ", " + activity.getTo() + ", "
 						+ activity.getActivity_owner() + ", "
 						+ activity.getRoom() + ")");
@@ -652,8 +652,6 @@ public class DatabaseInterface {
 	 */
 	public void setAccount(Account account) {
 		String user_name = account.getUsername();
-		String password = account.getPassword();
-		int employee_nr = account.getAccount_owner();
 		try {
 			ResultSet result = statement
 					.executeQuery("select account.user_name from account where account.user_name = \""
@@ -661,14 +659,9 @@ public class DatabaseInterface {
 			result.next();
 			if (result.getString(1) != null) {// check if account with same id
 												// already exists
-				statement.executeUpdate("update account set employee_nr="
-						+ employee_nr + ", user_password= " + "\"" + password
-						+ "\"" + " where user_name = " + "\"" + user_name
-						+ "\"");
+				statement.executeUpdate("UPDATE account SET user_password='" + account.getPassword() + "', first_name='" + account.getFirst_name() + "', last_name='" + account.getLast_name() + "', mobile_nr='" + account.getMobile_nr() + "')");
 			} else {// account does not exist, and new row created
-				statement.executeUpdate("insert into account values ( \""
-						+ user_name + "\", " + "\"" + password + "\", "
-						+ employee_nr + ")");
+				statement.executeUpdate("INSERT INTO account VALUES ('" + user_name + "', '" + account.getPassword() + "', '" + account.getFirst_name() + "', '" + account.getLast_name() + "', '" + account.getMobile_nr() + "')");
 			}
 		} catch (SQLException e) {
 			System.out.println("Error from DatabaseInterface: "
