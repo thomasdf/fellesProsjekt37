@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import utils.DatabaseInterface;
+import models.Account;
 import models.Activity;
 import javafx.application.Application;
 import javafx.collections.ListChangeListener;
@@ -25,8 +27,12 @@ public class CalendarView extends Application {
 
 	private String viewName = "Calendar";
 	
+	//Init the DBI
+	private DatabaseInterface dbi = new DatabaseInterface();
+	//The owner of this calendar
+	private Account owner = dbi.getAccount("dagerik");
 	//The model for this view
-	private models.Calendar model;
+	private models.Calendar model = dbi.getCalendar(owner.getCalendars().get(0));
 	
 	//TESTVALUES
 	//The activities for this view
@@ -190,11 +196,7 @@ public class CalendarView extends Application {
 		
 		//TESTVALUES
 			//activity
-		act1 = new Activity(0, 0, "admin");
-		act1.setTitle("Møte undass");
-		act1.setStart_date(LocalDate.of(2015, 3, 13));
-		act1.setFrom(LocalTime.of(12, 0));
-		act1.setTo(LocalTime.of(12, 30));
+		act1 = dbi.getActivity(0);
 			//activity
 		act2 = new Activity(1, 0, "admin");
 		act2.setTitle("Middag med den altfor, altfor store familien min");
