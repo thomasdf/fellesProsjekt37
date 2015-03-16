@@ -3,14 +3,13 @@ package views;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import utils.DatabaseInterface;
+import utils.Utilities;
 import models.Account;
 import models.Activity;
 import models.Invite;
@@ -42,9 +41,10 @@ public class AgendaView extends Application {
 	private int cal_id = 99999;
 	//TESTVALUES
 	
-	//Init the DBI
+	//Init the DBI and utils
 	private DatabaseInterface dbi = new DatabaseInterface();
-	//The owner of this calendar
+	private Utilities utils = new Utilities();
+	//The owner of the Calendar
 	private Account owner = dbi.getAccount(user_name);
 	//The model for this view
 	private models.Calendar model;
@@ -61,8 +61,6 @@ public class AgendaView extends Application {
 	private HBox footer = new HBox();
 	
 		//Useful final variables
-	private final List<String> months = Arrays.asList("Januar", "Februar", "Mars", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Desember");
-	private final List<String> weekdays = Arrays.asList("Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag");
 	private int timeframe_index = 2;
 	
 	
@@ -147,15 +145,15 @@ public class AgendaView extends Application {
 	        	}
 			};
 	
-	public void setModel(models.Calendar model) {
+	private void setModel(models.Calendar model) {
 		if (this.model != null) {
 			model.getActivities().removeListener(activitiesChangeListener);
 		}
+		this.model = model;
+		fillAgenda();
 		if (this.model != null) {
 			model.getActivities().addListener(activitiesChangeListener);
 		}
-		this.model = model;
-		fillAgenda();
 	}
 	
 	private void fillAgenda() {
@@ -190,23 +188,23 @@ public class AgendaView extends Application {
 			}
 			if (end_key == null || end_key.equals(start_key)) {
 				if (acts_on_day.containsKey(start_key)) {
-					acts_on_day.get(start_key).add(getFormattedActivity(cur_act, true) + status);
+					acts_on_day.get(start_key).add(utils.getFormattedActivity(cur_act, true) + status);
 				} else {
 					acts_on_day.put(start_key, new ArrayList<String>());
-					acts_on_day.get(start_key).add(getFormattedActivity(cur_act, true) + status);
+					acts_on_day.get(start_key).add(utils.getFormattedActivity(cur_act, true) + status);
 				}
 			} else {
 				if (acts_on_day.containsKey(start_key)) {
-					acts_on_day.get(start_key).add("> " + getFormattedActivity(cur_act, true) + status);
+					acts_on_day.get(start_key).add("> " + utils.getFormattedActivity(cur_act, true) + status);
 				} else {
 					acts_on_day.put(start_key, new ArrayList<String>());
-					acts_on_day.get(start_key).add("> " + getFormattedActivity(cur_act, true) + status);
+					acts_on_day.get(start_key).add("> " + utils.getFormattedActivity(cur_act, true) + status);
 				}
 				if (acts_on_day.containsKey(end_key)) {
-					acts_on_day.get(end_key).add("< " + getFormattedActivity(cur_act, false));
+					acts_on_day.get(end_key).add("< " + utils.getFormattedActivity(cur_act, false));
 				} else {
 					acts_on_day.put(end_key, new ArrayList<String>());
-					acts_on_day.get(end_key).add("< " + getFormattedActivity(cur_act, false));
+					acts_on_day.get(end_key).add("< " + utils.getFormattedActivity(cur_act, false));
 				}
 			}
 		}
@@ -215,9 +213,9 @@ public class AgendaView extends Application {
 			HBox date = new HBox();
 			Label date_txt = new Label(
 					(entry.getKey().getYear() != Calendar.getInstance().get(Calendar.YEAR) ? entry.getKey().getYear() + ": " : "")
-					+ weekdays.get(entry.getKey().getDayOfWeek().getValue() - 1).substring(0, 3)
+					+ utils.weekdays.get(entry.getKey().getDayOfWeek().getValue() - 1).substring(0, 3)
 					+ " " + entry.getKey().getDayOfMonth()
-					+ ". " + months.get(entry.getKey().getMonthValue() - 1).substring(0, 3));
+					+ ". " + utils.months.get(entry.getKey().getMonthValue() - 1).substring(0, 3));
 			VBox date_acts = new VBox();
 			date.getChildren().addAll(date_txt, date_acts);
 				//for hver act. på enhver dato
@@ -229,23 +227,6 @@ public class AgendaView extends Application {
 			date_acts.getStyleClass().add("date-acts");
 			agenda_body.getChildren().add(date);
 		}
-	}
-	
-	private String getFormattedActivity(Activity act, boolean from) {
-		String ret_str = "";
-		if (from) {
-			if (act.getFrom() != null) {
-				ret_str += act.getFrom() + ": ";
-			}
-		} else {
-			if (act.getTo() != null) {
-				ret_str += act.getTo() + ": ";
-			}
-		}
-		if (act.getTitle() != null) {
-			ret_str += act.getTitle();
-		}
-		return ret_str;
 	}
 	
 	public static void main(String[] args) {

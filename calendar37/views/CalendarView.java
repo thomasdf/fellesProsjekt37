@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import utils.DatabaseInterface;
+import utils.Utilities;
 import models.Account;
 import models.Activity;
 import models.Invite;
@@ -31,13 +32,13 @@ public class CalendarView extends Application {
 	private int cal_id = 99999;
 	//TESTVALUES
 	
-	//Init the DBI
+	//Init the DBI and utils
 	private DatabaseInterface dbi = new DatabaseInterface();
+	private Utilities utils = new Utilities();
 	//The owner of this calendar
 	private Account owner = dbi.getAccount(user_name);
 	//The model for this view
 	private models.Calendar model;
-	
 	
 	//The screen-size currently used
 	Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
@@ -60,14 +61,10 @@ public class CalendarView extends Application {
 	private ArrayList<Label> days = new ArrayList<Label>();
 	private ArrayList<VBox> day_activities = new ArrayList<VBox>();
 	
-		//Useful final variables
-	private final List<String> months = Arrays.asList("Januar", "Februar", "Mars", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Desember");
-	private final List<String> weekdays = Arrays.asList("Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag");
-	
 	//Set the values for THIS view, updateable:
 	Calendar cal = Calendar.getInstance();
-	int start_index = getFirstDayInMonth(cal.get(Calendar.YEAR)
-			, cal.get(Calendar.MONTH)) != 1 ? getFirstDayInMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)) - 2 : 6;
+	int start_index = utils.getFirstDayInMonth(cal.get(Calendar.YEAR)
+			, cal.get(Calendar.MONTH)) != 1 ? utils.getFirstDayInMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)) - 2 : 6;
 	int end_index = start_index + cal.getActualMaximum(Calendar.DAY_OF_MONTH) - 1;
 	
 	Calendar prev_cal = new GregorianCalendar((cal.get(Calendar.MONTH) - 1)%12 == 0 ? cal.get(Calendar.YEAR) - 1 : cal.get(Calendar.YEAR)
@@ -75,20 +72,6 @@ public class CalendarView extends Application {
 	
 	Calendar next_cal = new GregorianCalendar((cal.get(Calendar.MONTH) + 1)%12 == 0 ? cal.get(Calendar.YEAR) + 1 : cal.get(Calendar.YEAR)
 			, (cal.get(Calendar.MONTH) + 1)%12, 1);
-	
-	private void setMonth(int diff) {
-		cal.set((cal.get(Calendar.MONTH) + diff)%12 == 0 && cal.get(Calendar.MONTH) != 1 ? cal.get(Calendar.YEAR) + diff : cal.get(Calendar.YEAR)
-				, (cal.get(Calendar.MONTH) + diff)%12, 1);
-		start_index = getFirstDayInMonth(cal.get(Calendar.YEAR)
-				, cal.get(Calendar.MONTH)) != 1 ? getFirstDayInMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)) - 2 : 6;
-		end_index = start_index + cal.getActualMaximum(Calendar.DAY_OF_MONTH) - 1;
-		
-		prev_cal.set((cal.get(Calendar.MONTH) - 1)%12 == 0 ? cal.get(Calendar.YEAR) - 1 : cal.get(Calendar.YEAR)
-				, (cal.get(Calendar.MONTH) - 1)%12, 1);
-		
-		next_cal.set((cal.get(Calendar.MONTH) + 1)%12 == 0 ? cal.get(Calendar.YEAR) + 1 : cal.get(Calendar.YEAR)
-				, (cal.get(Calendar.MONTH) + 1)%12, 1);
-	}
 	
 	@Override public void start(Stage primaryStage) throws Exception {
 		//Sets the root
@@ -144,8 +127,8 @@ public class CalendarView extends Application {
 		footer.getChildren().addAll(profile, tasks);
 			//calendar
 			//the days
-		for (int i = 0; i < weekdays.size(); i++) {
-			Label weekday = new Label(weekdays.get(i));
+		for (int i = 0; i < utils.weekdays.size(); i++) {
+			Label weekday = new Label(utils.weekdays.get(i));
 			weekday.getStyleClass().add("weekday");
 			calendar.add(weekday, i, 0);
 			GridPane.setHgrow(weekday, Priority.ALWAYS);
@@ -208,10 +191,11 @@ public class CalendarView extends Application {
 		}
 	}
 	
+	
 	private void fillCalendar() {
 		//Titler
 		cal_title.setText((model.getIs_group_cal() ? model.getCalendar_owner_group() : model.getCalendar_owner_user()) + "s kalender");
-		cur_month_year.setText(getMonth(cal.get(Calendar.MONTH)) + " " + Integer.toString(cal.get(Calendar.YEAR)));
+		cur_month_year.setText(utils.getMonth(cal.get(Calendar.MONTH)) + " " + Integer.toString(cal.get(Calendar.YEAR)));
 		
 		//Forrige måned
 		int start_prev_month = prev_cal.getActualMaximum(Calendar.DAY_OF_MONTH) - start_index + 1;
@@ -225,7 +209,7 @@ public class CalendarView extends Application {
 		int date = 1;
 		for (int i = start_index; i <= end_index; i++) {
 			if (date == 1) {
-				days.get(i).setText(getMonth(cal.get(Calendar.MONTH)).substring(0, 3) + " " + Integer.toString(date));
+				days.get(i).setText(utils.getMonth(cal.get(Calendar.MONTH)).substring(0, 3) + " " + Integer.toString(date));
 			} else {
 				days.get(i).setText(Integer.toString(date));
 			}
@@ -237,7 +221,7 @@ public class CalendarView extends Application {
 		date = 1;
 		for (int i = end_index + 1; i < days.size(); i++) {
 			if (date == 1) {
-				days.get(i).setText(getMonth(next_cal.get(Calendar.MONTH)).substring(0, 3) + " " + Integer.toString(date));
+				days.get(i).setText(utils.getMonth(next_cal.get(Calendar.MONTH)).substring(0, 3) + " " + Integer.toString(date));
 			} else {
 				days.get(i).setText(Integer.toString(date));
 			}
@@ -257,7 +241,7 @@ public class CalendarView extends Application {
 		for (Activity cur_act : dbi.getAllActivities(user_name)) {
 			try {
 				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
-					String formatted_act = (cur_act.getEnd_date() == null ? "" : "> ") + getFormattedActivity(cur_act, true);
+					String formatted_act = (cur_act.getEnd_date() == null ? "" : "> ") + utils.getFormattedActivity(cur_act, true);
 					Button activity_btn = new Button(formatted_act);
 					activity_btn.getStyleClass().add("personal-activity");
 					activity_btn.setFocusTraversable(false);
@@ -271,7 +255,7 @@ public class CalendarView extends Application {
 				}
 				if (cur_act.getEnd_date() != null) {
 					if (cur_act.getEnd_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getEnd_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
-						String formatted_act = "< " + getFormattedActivity(cur_act, false);
+						String formatted_act = "< " + utils.getFormattedActivity(cur_act, false);
 						Button activity_btn = new Button(formatted_act);
 						activity_btn.getStyleClass().add("personal-activity");
 						activity_btn.setFocusTraversable(false);
@@ -288,42 +272,56 @@ public class CalendarView extends Application {
 				System.err.println("NullPointerException: " + e.getMessage());
 			}
 		}
-//		//Invited
-//		for (Invite cur_inv: dbi.getAllInvitedTo(user_name)) {
-//			try {
-//				Activity cur_act = dbi.getActivity(cur_inv.getInvited_to());
-//				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
-//					String formatted_act = (cur_act.getEnd_date() == null ? "" : "> ") + getFormattedActivity(cur_act, true);
-//					Button activity_btn = new Button(formatted_act + ": " + cur_inv.getStatus());
-//					activity_btn.getStyleClass().add("group-activity");
-//					activity_btn.setFocusTraversable(false);
-//					activity_btn.setOnAction(new EventHandler<ActionEvent>() {
-//						@Override
-//						public void handle(ActionEvent event) {
-//							openActivity(cur_act.getActivity_id());
-//						}
-//					});
-//					day_activities.get(start_index + cur_act.getStart_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
-//				}
-//				if (cur_act.getEnd_date() != null) {
-//					if (cur_act.getEnd_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getEnd_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
-//						String formatted_act = "< " + getFormattedActivity(cur_act, false);
-//						Button activity_btn = new Button(formatted_act + ": " + cur_inv.getStatus());
-//						activity_btn.getStyleClass().add("group-activity");
-//						activity_btn.setFocusTraversable(false);
-//						activity_btn.setOnAction(new EventHandler<ActionEvent>() {
-//							@Override
-//							public void handle(ActionEvent event) {
-//								openActivity(cur_act.getActivity_id());
-//							}
-//						});
-//						day_activities.get(start_index + cur_act.getEnd_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
-//					}
-//				}
-//			} catch (NullPointerException e) {
-//				System.err.println("NullPointerException: " + e.getMessage());
-//			}
-//		}
+		//Invited
+		for (Invite cur_inv: dbi.getAllInvitedTo(user_name)) {
+			try {
+				Activity cur_act = dbi.getActivity(cur_inv.getInvited_to());
+				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
+					String formatted_act = (cur_act.getEnd_date() == null ? "" : "> ") + utils.getFormattedActivity(cur_act, true);
+					Button activity_btn = new Button(formatted_act + ": " + cur_inv.getStatus());
+					activity_btn.getStyleClass().add("group-activity");
+					activity_btn.setFocusTraversable(false);
+					activity_btn.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent event) {
+							openActivity(cur_act.getActivity_id());
+						}
+					});
+					day_activities.get(start_index + cur_act.getStart_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
+				}
+				if (cur_act.getEnd_date() != null) {
+					if (cur_act.getEnd_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getEnd_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
+						String formatted_act = "< " + utils.getFormattedActivity(cur_act, false);
+						Button activity_btn = new Button(formatted_act + ": " + cur_inv.getStatus());
+						activity_btn.getStyleClass().add("group-activity");
+						activity_btn.setFocusTraversable(false);
+						activity_btn.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent event) {
+								openActivity(cur_act.getActivity_id());
+							}
+						});
+						day_activities.get(start_index + cur_act.getEnd_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
+					}
+				}
+			} catch (NullPointerException e) {
+				System.err.println("NullPointerException: " + e.getMessage());
+			}
+		}
+	}
+	
+	private void setMonth(int diff) {
+		cal.set((cal.get(Calendar.MONTH) + diff)%12 == 0 && cal.get(Calendar.MONTH) != 1 ? cal.get(Calendar.YEAR) + diff : cal.get(Calendar.YEAR)
+				, (cal.get(Calendar.MONTH) + diff)%12, 1);
+		start_index = utils.getFirstDayInMonth(cal.get(Calendar.YEAR)
+				, cal.get(Calendar.MONTH)) != 1 ? utils.getFirstDayInMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)) - 2 : 6;
+				end_index = start_index + cal.getActualMaximum(Calendar.DAY_OF_MONTH) - 1;
+				
+				prev_cal.set((cal.get(Calendar.MONTH) - 1)%12 == 0 ? cal.get(Calendar.YEAR) - 1 : cal.get(Calendar.YEAR)
+						, (cal.get(Calendar.MONTH) - 1)%12, 1);
+				
+				next_cal.set((cal.get(Calendar.MONTH) + 1)%12 == 0 ? cal.get(Calendar.YEAR) + 1 : cal.get(Calendar.YEAR)
+						, (cal.get(Calendar.MONTH) + 1)%12, 1);
 	}
 	
 	/**
@@ -334,33 +332,6 @@ public class CalendarView extends Application {
 	 */
 	private void openActivity(int activity_id) {
 		//FILL IN LATER!
-	}
-	
-	private String getFormattedActivity(Activity act, boolean from) {
-		String ret_str = "";
-		if (from) {
-			if (act.getFrom() != null) {
-				ret_str += act.getFrom() + ": ";
-			}
-		} else {
-			if (act.getTo() != null) {
-				ret_str += act.getTo() + ": ";
-			}
-		}
-		if (act.getTitle() != null) {
-			ret_str += act.getTitle();
-		}
-		return ret_str;
-	}
-	
-	private int getFirstDayInMonth(int year, int month) {
-		Calendar c = Calendar.getInstance();
-		c.set(year, month, 1);
-		return c.get(Calendar.DAY_OF_WEEK);
-	}
-	
-	private String getMonth(int i){
-		return months.get(i);
 	}
 	
 	public static void main(String[] args) {
