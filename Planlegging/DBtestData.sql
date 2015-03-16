@@ -51,9 +51,9 @@ values
 
 insert into activity
 values
-(90909, 99999, 'Getting wasted', '2015-06-27', '2015-06-27', '07:30:00', '20:00:00', 'Lahey', 'trailer park'),
-(91919, 22222, 'planning to save the people of gotham', '2015-04-23', '2015-04-26', '09:45:00', '15:44:00', 'manBats', 'batcave'),
-(92929, 44444, 'buy alcohol for the great party', '2015-07-08', '2015-07-08', '14:50:00', '14:59:00', 'McLovin', null);
+(90909, 99999, 'Getting wasted', '2015-06-27', '2015-06-27', '07:30:00', '20:00:00', 'lahey', 'trailer park'),
+(91919, 22222, 'planning to save the people of gotham', '2015-04-23', '2015-04-26', '09:45:00', '15:44:00', 'manbats', 'batcave'),
+(92929, 44444, 'buy alcohol for the great party', '2015-07-08', '2015-07-08', '14:50:00', '14:59:00', 'mclovin', null);
 
 insert into calendarGroup
 values
@@ -68,16 +68,16 @@ values
 
 insert into hascalendar
 values
-('Spidey', 11111),
-('manBats', 22222),
-('S.Meister', 33333),
-('McLovin', 44444),
-('Hannibal', 55555),
-('Faceman', 66666),
-('Baracus', 77777),
-('Murdoc', 88888),
-('Lahey', 99999),
-('J-Roc', 01111);
+('spidey', 11111),
+('manbats', 22222),
+('smeister', 33333),
+('mclovin', 44444),
+('hannibal', 55555),
+('faceman', 66666),
+('baracus', 77777),
+('murdoc', 88888),
+('lahey', 99999),
+('j-roc', 01111);
 
 insert into grouphascalendar
 values
@@ -88,22 +88,22 @@ values
 
 insert into ismember
 values
-(12121, 'Hannibal'),
-(12121, 'Faceman'),
-(12121, 'Baracus'),
-(12121, 'Murdoc'),
-(13131, 'Lahey'),
-(13131, 'J-Roc'),
-(14141, 'manBats'),
-(14141, 'Spidey'),
-(15151, 'Spidey');
+(12121, 'hannibal'),
+(12121, 'faceman'),
+(12121, 'baracus'),
+(12121, 'murdoc'),
+(13131, 'lahey'),
+(13131, 'j-roc'),
+(14141, 'manbats'),
+(14141, 'spidey'),
+(15151, 'spidey');
 
 insert into alarm
 values
-('manBats', 91919, '12:00:00', 'fuk yeah'),
-('Lahey', 90909, '13:12:00', 'soon');
+('manbats', 91919, '12:00:00', 'fuk yeah'),
+('lahey', 90909, '13:12:00', 'soon');
 
 insert into invited
 values
-(90909, 'J-Roc', 'false'),
-(92929, 'Lahey', 'false');
+(90909, 'j-roc', 'false'),
+(92929, 'lahey', 'false');
