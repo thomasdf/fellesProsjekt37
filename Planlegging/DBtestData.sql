@@ -51,7 +51,48 @@ values
 
 insert into activity
 values
-(90909, 99999, 'Getting wasted', '2015-06-27', '2015-06-27', '07:30:00', '20:00:00', 'lahey', 'trailer park'),
+(90909, 99999, 'Getting wasted', '2015-06-27', '2015-06-27', '07:30:00', '08:00:00', 'lahey', 'trailer park'),
+(93939, 99999, 'Getting wasted2', '2015-06-27', '2015-06-27', '08:30:00', '09:00:00', 'lahey', 'trailer park'),
+(94949, 99999, 'Getting wasted3', '2015-06-27', '2015-06-27', '09:30:00', '10:00:00', 'lahey', 'trailer park'),
+(95959, 99999, 'Getting wasted4', '2015-06-27', '2015-06-27', '10:30:00', '11:00:00', 'lahey', 'trailer park'),
+(96969, 99999, 'Getting wasted5', '2015-06-27', '2015-06-27', '11:30:00', '12:00:00', 'lahey', 'trailer park'),
+
+(80808, 99999, 'Getting wasted6', '2015-06-28', '2015-06-28', '07:30:00', '08:00:00', 'lahey', 'trailer park'),
+(83838, 99999, 'Getting wasted7', '2015-06-28', '2015-06-28', '08:30:00', '09:00:00', 'lahey', 'trailer park'),
+(84848, 99999, 'Getting wasted8', '2015-06-28', '2015-06-28', '09:30:00', '10:00:00', 'lahey', 'trailer park'),
+(85858, 99999, 'Getting wasted9', '2015-06-28', '2015-06-28', '10:30:00', '11:00:00', 'lahey', 'trailer park'),
+(86868, 99999, 'Getting wasted10', '2015-06-28', '2015-06-28', '11:30:00', '12:00:00', 'lahey', 'trailer park'),
+
+(70707, 99999, 'Getting wasted11', '2015-06-29', '2015-06-30', '07:30:00', '08:00:00', 'lahey', 'trailer park'),
+(73737, 99999, 'Getting wasted12', '2015-06-29', '2015-06-30', '08:30:00', '09:00:00', 'lahey', 'trailer park'),
+(74747, 99999, 'Getting wasted13', '2015-06-29', '2015-06-30', '09:30:00', '10:00:00', 'lahey', 'trailer park'),
+(75757, 99999, 'Getting wasted14', '2015-06-29', '2015-06-30', '10:30:00', '11:00:00', 'lahey', 'trailer park'),
+(76767, 99999, 'Getting wasted15', '2015-06-29', '2015-06-30', '11:30:00', '12:00:00', 'lahey', 'trailer park'),
+
+(60606, 99999, 'say hello to Randy', '2015-06-01', '2015-06-01', '07:30:00', '08:00:00', 'lahey', 'trailer park'),
+(63636, 99999, 'say hello to Randy2', '2015-06-01', '2015-06-01', '08:30:00', '09:00:00', 'lahey', 'trailer park'),
+(64646, 99999, 'say hello to Randy3', '2015-06-01', '2015-06-01', '09:30:00', '10:00:00', 'lahey', 'trailer park'),
+(65656, 99999, 'say hello to Randy4', '2015-06-01', '2015-06-01', '10:30:00', '11:00:00', 'lahey', 'trailer park'),
+(66666, 99999, 'say hello to Randy5', '2015-06-01', '2015-06-01', '11:30:00', '12:00:00', 'lahey', 'trailer park'),
+
+(53535, 99999, 'say hello to Randy6', '2015-06-02', '2015-06-02', '08:30:00', '09:00:00', 'lahey', 'trailer park'),
+(54545, 99999, 'say hello to Randy7', '2015-06-02', '2015-06-02', '09:30:00', '10:00:00', 'lahey', 'trailer park'),
+(45454, 99999, 'say hello to Randy8', '2015-06-02', '2015-06-02', '10:30:00', '11:00:00', 'lahey', 'trailer park'),
+(46464, 99999, 'say hello to Randy9', '2015-06-02', '2015-06-02', '11:30:00', '12:00:00', 'lahey', 'trailer park'),
+(40404, 99999, 'say hello to Randy10', '2015-06-02', '2015-06-02', '07:30:00', '08:00:00', 'lahey', 'trailer park'),
+
+(30303, 99999, 'Call in the heavies on Ricky, Julian and Bubbles', '2015-06-03', '2015-06-03', '07:30:00', '14:00:00', 'lahey', 'trailer park'),
+
+(21212, 99999, 'buy weed from Ricky', '2015-06-04', '2015-06-04', '07:30:00', '14:00:00', 'lahey', 'trailer park'),
+
+(22222, 99999, 'get some roc vodka', '2015-06-06', '2015-06-06', '07:30:00', '14:00:00', 'lahey', 'trailer park'),
+
+(23232, 99999, 'make cheeseburgers for Randy', '2015-06-07', '2015-06-07', '07:30:00', '14:00:00', 'lahey', 'trailer park'),
+
+(24242, 99999, 'Talk about the upcomming shitstorm', '2015-06-08', '2015-06-08', '07:30:00', '14:00:00', 'lahey', 'trailer park'),
+
+(25252, 99999, 'sober upactivityactivity_id`PRIMARY`', '2015-06-10', '2015-06-10', '07:30:00', '14:00:00', 'lahey', 'trailer park'),
+
 (91919, 22222, 'planning to save the people of gotham', '2015-04-23', '2015-04-26', '09:45:00', '15:44:00', 'manbats', 'batcave'),
 (92929, 44444, 'buy alcohol for the great party', '2015-07-08', '2015-07-08', '14:50:00', '14:59:00', 'mclovin', null);
 
