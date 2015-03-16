@@ -288,42 +288,42 @@ public class CalendarView extends Application {
 				System.err.println("NullPointerException: " + e.getMessage());
 			}
 		}
-		//Invited
-		for (Invite cur_inv: /* må fylle inn senere!!! dbi.getAllInvitedActivities(user_name)*/) {
-			try {
-				Activity cur_act = dbi.getActivity(cur_inv.getInvited_to());
-				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
-					String formatted_act = (cur_act.getEnd_date() == null ? "" : "> ") + getFormattedActivity(cur_act, true);
-					Button activity_btn = new Button(formatted_act + ": " + cur_inv.getStatus());
-					activity_btn.getStyleClass().add("group-activity");
-					activity_btn.setFocusTraversable(false);
-					activity_btn.setOnAction(new EventHandler<ActionEvent>() {
-						@Override
-						public void handle(ActionEvent event) {
-							openActivity(cur_act.getActivity_id());
-						}
-					});
-					day_activities.get(start_index + cur_act.getStart_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
-				}
-				if (cur_act.getEnd_date() != null) {
-					if (cur_act.getEnd_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getEnd_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
-						String formatted_act = "< " + getFormattedActivity(cur_act, false);
-						Button activity_btn = new Button(formatted_act + ": " + cur_inv.getStatus());
-						activity_btn.getStyleClass().add("group-activity");
-						activity_btn.setFocusTraversable(false);
-						activity_btn.setOnAction(new EventHandler<ActionEvent>() {
-							@Override
-							public void handle(ActionEvent event) {
-								openActivity(cur_act.getActivity_id());
-							}
-						});
-						day_activities.get(start_index + cur_act.getEnd_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
-					}
-				}
-			} catch (NullPointerException e) {
-				System.err.println("NullPointerException: " + e.getMessage());
-			}
-		}
+//		//Invited
+//		for (Invite cur_inv: dbi.getAllInvitedTo(user_name)) {
+//			try {
+//				Activity cur_act = dbi.getActivity(cur_inv.getInvited_to());
+//				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
+//					String formatted_act = (cur_act.getEnd_date() == null ? "" : "> ") + getFormattedActivity(cur_act, true);
+//					Button activity_btn = new Button(formatted_act + ": " + cur_inv.getStatus());
+//					activity_btn.getStyleClass().add("group-activity");
+//					activity_btn.setFocusTraversable(false);
+//					activity_btn.setOnAction(new EventHandler<ActionEvent>() {
+//						@Override
+//						public void handle(ActionEvent event) {
+//							openActivity(cur_act.getActivity_id());
+//						}
+//					});
+//					day_activities.get(start_index + cur_act.getStart_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
+//				}
+//				if (cur_act.getEnd_date() != null) {
+//					if (cur_act.getEnd_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getEnd_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
+//						String formatted_act = "< " + getFormattedActivity(cur_act, false);
+//						Button activity_btn = new Button(formatted_act + ": " + cur_inv.getStatus());
+//						activity_btn.getStyleClass().add("group-activity");
+//						activity_btn.setFocusTraversable(false);
+//						activity_btn.setOnAction(new EventHandler<ActionEvent>() {
+//							@Override
+//							public void handle(ActionEvent event) {
+//								openActivity(cur_act.getActivity_id());
+//							}
+//						});
+//						day_activities.get(start_index + cur_act.getEnd_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
+//					}
+//				}
+//			} catch (NullPointerException e) {
+//				System.err.println("NullPointerException: " + e.getMessage());
+//			}
+//		}
 	}
 	
 	/**
