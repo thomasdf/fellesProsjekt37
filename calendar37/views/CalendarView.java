@@ -1,7 +1,5 @@
 package views;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -28,7 +26,8 @@ public class CalendarView extends Application {
 	private String viewName = "Calendar";
 	
 	//TESTVALUES
-	private String user_name = "Spidey";
+	private String user_name = "lahey";
+	private int cal_id = 99999;
 	//TESTVALUES
 	
 	//Init the DBI
@@ -36,7 +35,7 @@ public class CalendarView extends Application {
 	//The owner of this calendar
 	private Account owner = dbi.getAccount(user_name);
 	//The model for this view
-	private models.Calendar model = dbi.getCalendar(owner.getCalendars().get(0));
+	private models.Calendar model = dbi.getCalendar(cal_id);
 	
 	
 	//The screen-size currently used
@@ -185,56 +184,6 @@ public class CalendarView extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
-		//TESTVALUES
-			//activity
-		act1 = dbi.getActivity(0);
-			//activity
-		act2 = new Activity(1, 0, "admin");
-		act2.setTitle("Middag med den altfor, altfor store familien min");
-		act2.setStart_date(LocalDate.of(2015, 3, 15));
-		act2.setFrom(LocalTime.of(16, 0));
-		act2.setTo(LocalTime.of(17, 30));
-			//activity
-		act3 = new Activity(2, 0, "admin");
-		act3.setTitle("Gruppearbeid");
-		act3.setStart_date(LocalDate.of(2015, 4, 24));
-			//activity
-		act4 = new Activity(3, 0, "admin");
-		act4.setTitle("Travel dag!");
-		act4.setStart_date(LocalDate.of(2015, 4, 24));
-		//activity
-		act5 = new Activity(4, 0, "admin");
-		act5.setTitle("Travel dag!");
-		act5.setStart_date(LocalDate.of(2015, 4, 24));
-		//activity
-		act6 = new Activity(5, 0, "admin");
-		act6.setTitle("Travel dag!");
-		act6.setStart_date(LocalDate.of(2015, 4, 24));
-		//activity
-		act7 = new Activity(6, 0, "admin");
-		act7.setTitle("Gruppearbeid :D");
-		act7.setStart_date(LocalDate.of(2015, 3, 13));
-		act7.setEnd_date(LocalDate.of(2015, 3, 18));
-		act7.setFrom(LocalTime.of(16, 0));
-		act7.setTo(LocalTime.of(17, 30));
-		//activity
-		act8 = new Activity(7, 0, "admin");
-		act8.setTitle("Travel dag!");
-		act8.setStart_date(LocalDate.of(2015, 4, 24));
-		//activity
-		act9 = new Activity(8, 0, "admin");
-		act9.setTitle("Travel dag!");
-		act9.setStart_date(LocalDate.of(2015, 4, 24));
-		//activity
-		act10 = new Activity(9, 0, "admin");
-		act10.setTitle("Travel dag!");
-		act10.setStart_date(LocalDate.of(2015, 4, 24));
-			//the calendar-model
-		model = new models.Calendar(0, "admin");
-			//add activities to the calendar
-		model.getActivities().addAll(dbi.getAllActivities(user_name));
-		//TESTVALUES
-		
 		//Sets the model for this view and updates the view according to it
 		setModel(model);
 		
@@ -264,7 +213,11 @@ public class CalendarView extends Application {
 	
 	private void fillCalendar() {
 		//Titler
-		cal_title.setText((model.getIs_group_cal() ? model.getCalendar_owner_group() : model.getCalendar_owner_user()) + "s kalender");
+		if (model.getIs_group_cal()) {
+			cal_title.setText("" + model.getCalendar_owner_group() + "s kalender");
+		} else {
+			cal_title.setText(model.getCalendar_owner_user() + "s kalender");
+		}
 		cur_month_year.setText(getMonth(cal.get(Calendar.MONTH)) + " " + Integer.toString(cal.get(Calendar.YEAR)));
 		
 		//Forrige måned
@@ -307,6 +260,7 @@ public class CalendarView extends Application {
 		for (int activity_id : model.getActivities()) {
 			try {
 				Activity cur_act = getActivity(activity_id);
+				System.out.println(cur_act.getTitle());
 				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
 					String formatted_act = (cur_act.getEnd_date() == null ? "" : "> ") + getFormattedActivity(cur_act, true); 
 					Button activity_btn = new Button(formatted_act);
@@ -370,29 +324,8 @@ public class CalendarView extends Application {
 	
 	//FIKS NÅR VI FÅR INN DATABASEN!
 	private Activity getActivity(int i) {
-		if (i == 0) {
-			return act1;
-		} else if (i == 1) {
-			return act2;
-		} else if (i == 2) {
-			return act3;
-		} else if (i == 3) {
-			return act4;
-		} else if (i == 4) {
-			return act5;
-		} else if (i == 5) {
-			return act6;
-		} else if (i == 6) {
-			return act7;
-		} else if (i == 7) {
-			return act8;
-		} else if (i == 8) {
-			return act9;
-		} else if (i == 9) {
-			return act10;
-		} else {
-			return null;
-		}
+		Activity act = dbi.getActivity(i);
+		return act;
 	}
 	//FIKS NÅR VI FÅR INN DATABASEN!
 	
