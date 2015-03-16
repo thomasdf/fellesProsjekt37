@@ -369,13 +369,13 @@ public class DatabaseInterface {
 					.executeQuery("select hascalendar.user_name from hascalendar where hascalendar.calendar_id = "
 							+ calendar_id);
 			result.next();
-			if (result.getString("user_name").equals(null)) { // check user name
+			if (result.getString("user_name") == null) { // check user name
 																// is null
 				result = this.statement
 						.executeQuery("select grouphascalendar.group_id from grouphascalendar where grouphascalendar.calendar_id = "
 								+ calendar_id);
 				result.next();
-				if (result.getString("group_id").equals(null)) { // check
+				if (result.getString("group_id") == null) { // check
 																	// group_id
 																	// null -
 																	// throw
@@ -385,11 +385,26 @@ public class DatabaseInterface {
 				} else {// group_id not null, create calendar
 					String group_id = result.getString("group_id");
 					cal = new Calendar(calendar_id, group_id);
+					ArrayList<Activity> activities_list = getAllActivities(cal.getCalendar_owner_group());
+					ArrayList<Integer> act_list = new ArrayList<Integer>();
+					
+					for (int i = 0; i < activities_list.size(); i++) {
+						act_list.add(activities_list.get(i).getActivity_id());
+					}
+					cal.setActivities(act_list);
 					return cal;
 				}
 			} else {// user_name not null, create calendar
 				String user_name = result.getString("user_name");
 				cal = new Calendar(calendar_id, user_name);
+				
+				ArrayList<Activity> activities_list = getAllActivities(cal.getCalendar_owner_user());
+				ArrayList<Integer> act_list = new ArrayList<Integer>();
+				
+				for (int i = 0; i < activities_list.size(); i++) {
+					act_list.add(activities_list.get(i).getActivity_id());
+				}
+				cal.setActivities(act_list);
 				return cal;
 			}
 		} catch (SQLException e) {
@@ -683,6 +698,33 @@ public class DatabaseInterface {
 			ResultSet result = this.statement
 					.executeQuery("select activity.activity_id, activity.description, activity.start_time, activity.end_time, activity.activity_date, activity.end_date, activity.owner_user_name, activity.room_name from activity, account, calendar, hascalendar where activity.calendar_id = calendar.calendar_id and hascalendar.user_name = account.user_name and hascalendar.calendar_id = calendar.calendar_id and hascalendar.user_name = "
 							+ "\"" + user_name + "\"");
+			while (result.next()) {
+				Activity act = getActivity(result.getInt("activity_id"));
+				if (act != null) {
+					activityList.add(act);
+				}
+			}
+		} catch (SQLException e) {
+			System.out.println("Error from DatabaseInterface: "
+					+ e.getLocalizedMessage());
+		}
+		return activityList;
+	}
+	
+	/**
+	 * Returns an ArrayList of all Activity-objects related to an Account
+	 * 
+	 * @param user_name
+	 *            the user name which is the primary key for the account
+	 * @return an ArrayList<Activity> with all Activity-objects related to an
+	 *         Account.
+	 */
+	public ArrayList<Activity> getAllActivities(int group_id) {
+		ArrayList<Activity> activityList = new ArrayList<Activity>();
+		try {
+			ResultSet result = this.statement
+					.executeQuery("select activity.activity_id, activity.description, activity.start_time, activity.end_time, activity.activity_date, activity.end_date, activity.owner_user_name, activity.room_name from activity, calendargroup, calendar, grouphascalendar where activity.calendar_id = calendar.calendar_id and grouphascalendar.group_id = calendargrouå and hascalendar.calendar_id = calendar.calendar_id and hascalendar.user_name = "
+							+ group_id);
 			while (result.next()) {
 				Activity act = getActivity(result.getInt("activity_id"));
 				if (act != null) {

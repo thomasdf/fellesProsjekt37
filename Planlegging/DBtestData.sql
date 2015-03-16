@@ -85,7 +85,7 @@ values
 
 (21212, 99999, 'buy weed from Ricky', '2015-06-04', '2015-06-04', '07:30:00', '14:00:00', 'lahey', 'trailer park'),
 
-(22222, 99999, 'get some roc vodka', '2015-06-06', '2015-06-06', '07:30:00', '14:00:00', 'lahey', 'trailer park'),
+(22222, 20000, 'get some roc vodka', '2015-06-06', '2015-06-06', '07:30:00', '14:00:00', 'lahey', 'trailer park'),
 
 (23232, 99999, 'make cheeseburgers for Randy', '2015-06-07', '2015-06-07', '07:30:00', '14:00:00', 'lahey', 'trailer park'),
 
