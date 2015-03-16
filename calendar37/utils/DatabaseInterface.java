@@ -544,7 +544,7 @@ public class DatabaseInterface {
 		String mobile = null;
 		try {
 			this.result = this.statement
-					.executeQuery("select person.mobile_nr from person, account where account.employee_nr = person.employee_nr and account.user_name = "
+					.executeQuery("select account.mobile_nr from account where account.user_name = "
 							+ "\"" + user_name + "\"");
 			result.next();
 			mobile = this.result.getString(1);
