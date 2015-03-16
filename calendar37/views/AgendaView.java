@@ -1,7 +1,6 @@
 package views;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,12 +10,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import utils.DatabaseInterface;
+import models.Account;
 import models.Activity;
+import models.Invite;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -33,23 +37,17 @@ public class AgendaView extends Application {
 
 	String viewName = "Agenda";
 	
+	//TESTVALUES
+	private String user_name = "lahey";
+	private int cal_id = 99999;
+	//TESTVALUES
 	
+	//Init the DBI
+	private DatabaseInterface dbi = new DatabaseInterface();
+	//The owner of this calendar
+	private Account owner = dbi.getAccount(user_name);
 	//The model for this view
 	private models.Calendar model;
-	
-	//TESTVALUES
-	//The activities for this view
-	Activity act1;
-	Activity act2;
-	Activity act3;
-	Activity act4;
-	Activity act5;
-	Activity act6;
-	Activity act7;
-	Activity act8;
-	Activity act9;
-	Activity act10;
-	//TESTVALUES
 	
 	//Variables we need defined outside the "start"-function
 		//View-elements
@@ -69,10 +67,6 @@ public class AgendaView extends Application {
 	
 	
 	@Override public void start(Stage primaryStage) throws Exception{
-		//TESPRINTING
-		
-		//TESPRINTING
-		
 		//Sets the root
 		GridPane root = new GridPane();
 		
@@ -84,7 +78,16 @@ public class AgendaView extends Application {
 		footer.getStyleClass().add("footer");
 		
 		//Add actions
-		
+		close.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+			}
+		});
+		profile.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+			}
+		});
 		
 		//The view
 			//General restraints
@@ -127,63 +130,8 @@ public class AgendaView extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
-		//TESTVALUES
-			//activity
-		act1 = new Activity(0, 0, "admin");
-		act1.setTitle("Møte undass");
-		act1.setStart_date(LocalDate.of(2015, 3, 13));
-		act1.setFrom(LocalTime.of(12, 0));
-		act1.setTo(LocalTime.of(12, 30));
-			//activity
-		act2 = new Activity(1, 0, "admin");
-		act2.setTitle("Gruppearbeid");
-		act2.setStart_date(LocalDate.of(2015, 3, 15));
-		act2.setEnd_date(LocalDate.of(2015, 3, 18));
-		act2.setFrom(LocalTime.of(16, 0));
-		act2.setTo(LocalTime.of(17, 30));
-			//activity
-		act3 = new Activity(2, 0, "admin");
-		act3.setTitle("Middag med den altfor, altfor, altfor, altfor, altfor store familien min");
-		act3.setStart_date(LocalDate.of(2015, 4, 24));
-			//activity
-		act4 = new Activity(3, 0, "admin");
-		act4.setTitle("Travel dag!");
-		act4.setStart_date(LocalDate.of(2015, 4, 24));
-			//activity
-		act5 = new Activity(4, 0, "admin");
-		act5.setTitle("Travel dag!");
-		act5.setStart_date(LocalDate.of(2015, 4, 24));
-			//activity
-		act6 = new Activity(5, 0, "admin");
-		act6.setTitle("Travel dag!");
-		act6.setStart_date(LocalDate.of(2015, 4, 24));
-			//activity
-		act7 = new Activity(6, 0, "admin");
-		act7.setTitle("Travel dag!");
-		act7.setStart_date(LocalDate.of(2015, 4, 24));
-			//activity
-		act8 = new Activity(7, 0, "admin");
-		act8.setTitle("Planlegger i forveien, si!");
-		act8.setStart_date(LocalDate.of(2016, 7, 22));
-			//activity
-		act9 = new Activity(8, 0, "admin");
-		act9.setTitle("Party party");
-		act9.setStart_date(LocalDate.of(2015, 7, 2));
-		act9.setFrom(LocalTime.of(20, 0));
-			//activity
-		act10 = new Activity(9, 0, "admin");
-		act10.setTitle("Travel dag!");
-		act10.setStart_date(LocalDate.of(2015, 4, 24));
-			//the calendar-model
-		model = new models.Calendar(0, "admin");
-			//add activities to the calendar
-		model.getActivities().addAll(act1.getActivity_id(), act2.getActivity_id(), act3.getActivity_id(), act4.getActivity_id()
-				, act5.getActivity_id(), act6.getActivity_id(), act7.getActivity_id(), act8.getActivity_id(), act9.getActivity_id()
-				, act10.getActivity_id());
-		//TESTVALUES
-		
 		//Sets the model for this view and updates the view according to it
-		setModel(model);
+		setModel(dbi.getCalendar(cal_id));
 		
 		//Sets focus to the profile-button
 		profile.requestFocus();
@@ -211,6 +159,8 @@ public class AgendaView extends Application {
 	}
 	
 	private void fillAgenda() {
+		//Refresh the model with new activities
+		model = dbi.getCalendar(cal_id);
 		//Titler
 		ag_title.setText((model.getIs_group_cal() ? model.getCalendar_owner_group() : model.getCalendar_owner_user()) + "s agenda");
 		
@@ -218,11 +168,10 @@ public class AgendaView extends Application {
 		agenda_body.getChildren().clear();
 		
 		//Fylle inn aktiviteter
-		ArrayList<Integer> activites = new ArrayList<Integer>(model.getActivities());
 		Map<LocalDate, ArrayList<String>> acts_on_day = new TreeMap<LocalDate, ArrayList<String>>();
-		for (int act : activites) {
-			LocalDate start_key = getActivity(act).getStart_date();
-			LocalDate end_key = getActivity(act).getEnd_date();
+		for (Activity cur_act : dbi.getAllActivities(user_name)) {
+			LocalDate start_key = cur_act.getStart_date();
+			LocalDate end_key = cur_act.getEnd_date();
 			if (timeframe_index == 0 && start_key.isAfter(LocalDate.now().plus(Period.ofDays(1)))) {
 				continue;
 			} else if (timeframe_index == 1 && start_key.isAfter(LocalDate.now().plus(Period.ofWeeks(1)))) {
@@ -232,25 +181,32 @@ public class AgendaView extends Application {
 			} else if (timeframe_index == 3 && start_key.isAfter(LocalDate.now().plus(Period.ofYears(1)))) {
 				continue;
 			}
-			if (end_key == null) {
+			ArrayList<Invite> invites_on_act = dbi.getAllInvites(cur_act.getActivity_id());
+			String status = "";
+			for (Invite cur_inv : invites_on_act) {
+				if (cur_inv.getInvited() == user_name) {
+					status = ", Status: " + cur_inv.getStatus();
+				}
+			}
+			if (end_key == null || end_key.equals(start_key)) {
 				if (acts_on_day.containsKey(start_key)) {
-					acts_on_day.get(start_key).add(getFormattedActivity(getActivity(act), true));
+					acts_on_day.get(start_key).add(getFormattedActivity(cur_act, true) + status);
 				} else {
 					acts_on_day.put(start_key, new ArrayList<String>());
-					acts_on_day.get(start_key).add(getFormattedActivity(getActivity(act), true));
+					acts_on_day.get(start_key).add(getFormattedActivity(cur_act, true) + status);
 				}
 			} else {
 				if (acts_on_day.containsKey(start_key)) {
-					acts_on_day.get(start_key).add("> " + getFormattedActivity(getActivity(act), true));
+					acts_on_day.get(start_key).add("> " + getFormattedActivity(cur_act, true) + status);
 				} else {
 					acts_on_day.put(start_key, new ArrayList<String>());
-					acts_on_day.get(start_key).add("> " + getFormattedActivity(getActivity(act), true));
+					acts_on_day.get(start_key).add("> " + getFormattedActivity(cur_act, true) + status);
 				}
 				if (acts_on_day.containsKey(end_key)) {
-					acts_on_day.get(end_key).add("< " + getFormattedActivity(getActivity(act), false));
+					acts_on_day.get(end_key).add("< " + getFormattedActivity(cur_act, false));
 				} else {
 					acts_on_day.put(end_key, new ArrayList<String>());
-					acts_on_day.get(end_key).add("< " + getFormattedActivity(getActivity(act), false));
+					acts_on_day.get(end_key).add("< " + getFormattedActivity(cur_act, false));
 				}
 			}
 		}
@@ -291,34 +247,6 @@ public class AgendaView extends Application {
 		}
 		return ret_str;
 	}
-	
-	//FIKS NÅR VI FÅR INN DATABASEN!
-	private Activity getActivity(int i) {
-		if (i == 0) {
-			return act1;
-		} else if (i == 1) {
-			return act2;
-		} else if (i == 2) {
-			return act3;
-		} else if (i == 3) {
-			return act4;
-		} else if (i == 4) {
-			return act5;
-		} else if (i == 5) {
-			return act6;
-		} else if (i == 6) {
-			return act7;
-		} else if (i == 7) {
-			return act8;
-		} else if (i == 8) {
-			return act9;
-		} else if (i == 9) {
-			return act10;
-		} else {
-			return null;
-		}
-	}
-	//FIKS NÅR VI FÅR INN DATABASEN!
 	
 	public static void main(String[] args) {
 		launch(args);

@@ -9,6 +9,7 @@ import java.util.List;
 import utils.DatabaseInterface;
 import models.Account;
 import models.Activity;
+import models.Invite;
 import javafx.application.Application;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
@@ -35,7 +36,7 @@ public class CalendarView extends Application {
 	//The owner of this calendar
 	private Account owner = dbi.getAccount(user_name);
 	//The model for this view
-	private models.Calendar model = dbi.getCalendar(cal_id);
+	private models.Calendar model;
 	
 	
 	//The screen-size currently used
@@ -90,11 +91,7 @@ public class CalendarView extends Application {
 	}
 	
 	@Override public void start(Stage primaryStage) throws Exception {
-		//TESPRINTING
-		
-		//TESPRINTING
-		
-		//Sets the rootd
+		//Sets the root
 		AnchorPane root = new AnchorPane();
 		
 		//Add style classes, id and set size to screen
@@ -185,7 +182,7 @@ public class CalendarView extends Application {
 		primaryStage.show();
 		
 		//Sets the model for this view and updates the view according to it
-		setModel(model);
+		setModel(dbi.getCalendar(cal_id));
 		
 		//Sets focus to the profile-button
 		profile.requestFocus();
@@ -203,21 +200,17 @@ public class CalendarView extends Application {
 		if (this.model != null) {
 			model.getActivities().removeListener(activitiesChangeListener);
 		}
-		if (this.model != null) {
-			model.getActivities().addListener(activitiesChangeListener);
-		}
 		this.model = model;
 		fillCalendar();
 		updateActivitiesView();
+		if (this.model != null) {
+			model.getActivities().addListener(activitiesChangeListener);
+		}
 	}
 	
 	private void fillCalendar() {
 		//Titler
-		if (model.getIs_group_cal()) {
-			cal_title.setText("" + model.getCalendar_owner_group() + "s kalender");
-		} else {
-			cal_title.setText(model.getCalendar_owner_user() + "s kalender");
-		}
+		cal_title.setText((model.getIs_group_cal() ? model.getCalendar_owner_group() : model.getCalendar_owner_user()) + "s kalender");
 		cur_month_year.setText(getMonth(cal.get(Calendar.MONTH)) + " " + Integer.toString(cal.get(Calendar.YEAR)));
 		
 		//Forrige måned
@@ -254,36 +247,74 @@ public class CalendarView extends Application {
 	}
 	
 	private void updateActivitiesView() {
+		//Refresh the model with new activities
+		model = dbi.getCalendar(cal_id);
+		//Clear the activities
 		for (int i = 0; i < days.size(); i++){
 			day_activities.get(i).getChildren().clear();
 		}
-		for (int activity_id : model.getActivities()) {
+		//Personal activities
+		for (Activity cur_act : dbi.getAllActivities(user_name)) {
 			try {
-				Activity cur_act = getActivity(activity_id);
-				System.out.println(cur_act.getTitle());
 				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
-					String formatted_act = (cur_act.getEnd_date() == null ? "" : "> ") + getFormattedActivity(cur_act, true); 
+					String formatted_act = (cur_act.getEnd_date() == null ? "" : "> ") + getFormattedActivity(cur_act, true);
 					Button activity_btn = new Button(formatted_act);
-					activity_btn.getStyleClass().add("activity");
+					activity_btn.getStyleClass().add("personal-activity");
 					activity_btn.setFocusTraversable(false);
 					activity_btn.setOnAction(new EventHandler<ActionEvent>() {
 						@Override
 						public void handle(ActionEvent event) {
-							openActivity(activity_id);
+							openActivity(cur_act.getActivity_id());
 						}
 					});
 					day_activities.get(start_index + cur_act.getStart_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
 				}
 				if (cur_act.getEnd_date() != null) {
 					if (cur_act.getEnd_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getEnd_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
-						String formatted_act = "< " + getFormattedActivity(cur_act, false); 
+						String formatted_act = "< " + getFormattedActivity(cur_act, false);
 						Button activity_btn = new Button(formatted_act);
-						activity_btn.getStyleClass().add("activity");
+						activity_btn.getStyleClass().add("personal-activity");
 						activity_btn.setFocusTraversable(false);
 						activity_btn.setOnAction(new EventHandler<ActionEvent>() {
 							@Override
 							public void handle(ActionEvent event) {
-								openActivity(activity_id);
+								openActivity(cur_act.getActivity_id());
+							}
+						});
+						day_activities.get(start_index + cur_act.getEnd_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
+					}
+				}
+			} catch (NullPointerException e) {
+				System.err.println("NullPointerException: " + e.getMessage());
+			}
+		}
+		//Invited
+		for (Invite cur_inv: /* må fylle inn senere!!! dbi.getAllInvitedActivities(user_name)*/) {
+			try {
+				Activity cur_act = dbi.getActivity(cur_inv.getInvited_to());
+				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
+					String formatted_act = (cur_act.getEnd_date() == null ? "" : "> ") + getFormattedActivity(cur_act, true);
+					Button activity_btn = new Button(formatted_act + ": " + cur_inv.getStatus());
+					activity_btn.getStyleClass().add("group-activity");
+					activity_btn.setFocusTraversable(false);
+					activity_btn.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent event) {
+							openActivity(cur_act.getActivity_id());
+						}
+					});
+					day_activities.get(start_index + cur_act.getStart_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
+				}
+				if (cur_act.getEnd_date() != null) {
+					if (cur_act.getEnd_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getEnd_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
+						String formatted_act = "< " + getFormattedActivity(cur_act, false);
+						Button activity_btn = new Button(formatted_act + ": " + cur_inv.getStatus());
+						activity_btn.getStyleClass().add("group-activity");
+						activity_btn.setFocusTraversable(false);
+						activity_btn.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent event) {
+								openActivity(cur_act.getActivity_id());
 							}
 						});
 						day_activities.get(start_index + cur_act.getEnd_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
@@ -321,13 +352,6 @@ public class CalendarView extends Application {
 		}
 		return ret_str;
 	}
-	
-	//FIKS NÅR VI FÅR INN DATABASEN!
-	private Activity getActivity(int i) {
-		Activity act = dbi.getActivity(i);
-		return act;
-	}
-	//FIKS NÅR VI FÅR INN DATABASEN!
 	
 	private int getFirstDayInMonth(int year, int month) {
 		Calendar c = Calendar.getInstance();

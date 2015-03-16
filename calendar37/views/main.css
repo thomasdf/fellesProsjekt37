@@ -96,7 +96,7 @@
 	-fx-background-color: #fff;
 }
 
-.activity {
+.personal-activity {
 	-fx-pref-width: 9999;
 	-fx-border-color: #9fc6e7;
 	-fx-border-width: 1;
@@ -105,12 +105,29 @@
 	-fx-alignment: center-left;
 }
 
-.activity:hover {
+.personal-activity:hover {
 	-fx-background-color: #ebf6ff;
 }
 
-.activity:pressed {
+.personal-activity:pressed {
 	-fx-background-color: #d8e2eb;
+}
+
+.group-activity {
+	-fx-pref-width: 9999;
+	-fx-border-color: #9fe7c6;
+	-fx-border-width: 1;
+	-fx-background-color: #e4f8ef;
+	-fx-padding: 1;
+	-fx-alignment: center-left;
+}
+
+.group-activity:hover {
+	-fx-background-color: #ebfff6;
+}
+
+.group-activity:pressed {
+	-fx-background-color: #d8ebe2;
 }
 
 
