@@ -27,26 +27,17 @@ public class CalendarView extends Application {
 
 	private String viewName = "Calendar";
 	
+	//TESTVALUES
+	private String user_name = "Spidey";
+	//TESTVALUES
+	
 	//Init the DBI
 	private DatabaseInterface dbi = new DatabaseInterface();
 	//The owner of this calendar
-	private Account owner = dbi.getAccount("dagerik");
+	private Account owner = dbi.getAccount(user_name);
 	//The model for this view
 	private models.Calendar model = dbi.getCalendar(owner.getCalendars().get(0));
 	
-	//TESTVALUES
-	//The activities for this view
-	Activity act1;
-	Activity act2;
-	Activity act3;
-	Activity act4;
-	Activity act5;
-	Activity act6;
-	Activity act7;
-	Activity act8;
-	Activity act9;
-	Activity act10;
-	//TESTVALUES
 	
 	//The screen-size currently used
 	Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
@@ -241,9 +232,7 @@ public class CalendarView extends Application {
 			//the calendar-model
 		model = new models.Calendar(0, "admin");
 			//add activities to the calendar
-		model.getActivities().addAll(act1.getActivity_id(), act2.getActivity_id(), act3.getActivity_id(), act4.getActivity_id()
-				, act5.getActivity_id(), act6.getActivity_id(), act7.getActivity_id(), act8.getActivity_id(), act9.getActivity_id()
-				, act10.getActivity_id());
+		model.getActivities().addAll(dbi.getAllActivities(user_name));
 		//TESTVALUES
 		
 		//Sets the model for this view and updates the view according to it
