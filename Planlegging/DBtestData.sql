@@ -14,16 +14,16 @@ for relasjonene gjelder det at begge entitetene vi skal relatere må eksistere f
 
 insert into account
 values
-('Spidey', 'Spoider','Spooderman', 'Kent', '81549300'),
-('manBats', 'noParents','Batman', 'Wayne', '22225555'),
-('S.Meister', 'shag', 'Steve', 'Stiffler', '99224488'),
-('McLovin', 'alcohol', 'McLovin\'', '', '23562467'),
-('Hannibal', 'Ateam1337', 'John \'Hannlibal\'', 'Smith', '76543210'),
-('Faceman', 'Ateam1337', 'Templeton \'Face\'', 'Peck', '75630389'),
-('Baracus', 'Ateam1337', 'Bosco Albert', 'Baracus', '73311337'),
-('Murdoc', 'Ateam1337', 'Howling mad', 'Murdoc', '13377331'),
-('Lahey', 'liquor', 'Jim', 'Lahey', '13371337'),
-('J-Roc', 'mafk', 'J-', 'Roc', '77337733');
+('spidey', 'Spoider','Spooderman', 'Kent', '81549300'),
+('manbats', 'noParents','Batman', 'Wayne', '22225555'),
+('smeister', 'shag', 'Steve', 'Stiffler', '99224488'),
+('mclovin', 'alcohol', 'McLovin\'', '', '23562467'),
+('hannibal', 'Ateam1337', 'John \'Hannlibal\'', 'Smith', '76543210'),
+('faceman', 'Ateam1337', 'Templeton \'Face\'', 'Peck', '75630389'),
+('baracus', 'Ateam1337', 'Bosco Albert', 'Baracus', '73311337'),
+('murdoc', 'Ateam1337', 'Howling mad', 'Murdoc', '13377331'),
+('lahey', 'liquor', 'Jim', 'Lahey', '13371337'),
+('j-roc', 'mafk', 'J-', 'Roc', '77337733');
 
 insert into calendar
 values

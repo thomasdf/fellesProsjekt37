@@ -3,6 +3,8 @@ package controllers;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,12 +16,6 @@ import utils.DatabaseInterface;
 
 public class LoginController implements Initializable {
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-
-	}
-
 	@FXML
 	private Button btn_login;
 	@FXML
@@ -29,12 +25,19 @@ public class LoginController implements Initializable {
 	@FXML
 	private Label label_error;
 	
-	@FXML
-	public void userNameToLower(ActionEvent textChange){
-		String user_name = txt_user_name.getText();
-		txt_user_name.setText(user_name.toLowerCase());
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		//Listener for textChange in the user_name-textfield.
+		txt_user_name.textProperty().addListener(new ChangeListener<String>() {
+		@Override
+	    public void changed(ObservableValue<? extends String> observable,
+	            String oldValue, String newValue) {
+			txt_user_name.setText(newValue.toLowerCase());
+		}
+	});
+		
 	}
-
+	
 	@FXML
 	public void login(ActionEvent login_event) {
 		DatabaseInterface databaseinterface = new DatabaseInterface();

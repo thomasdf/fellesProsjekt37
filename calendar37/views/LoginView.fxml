@@ -32,7 +32,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <TextField fx:id="txt_user_name" onInputMethodTextChanged="#userNameToLower" prefHeight="25.0" prefWidth="251.0" GridPane.columnIndex="1" />
+                  <TextField fx:id="txt_user_name" prefHeight="25.0" prefWidth="251.0" GridPane.columnIndex="1" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" textAlignment="RIGHT" wrappingWidth="135.9365234375">
                      <font>
                         <Font size="18.0" />
