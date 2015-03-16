@@ -121,7 +121,6 @@ public class DatabaseInterface {
 	 */
 	public Activity getActivity(int activity_id) {
 		Activity act = null;
-		ArrayList<Integer> part = new ArrayList<Integer>();
 		try {
 			ResultSet result = this
 					.getQuery("select * from activity where activity.activity_id="
@@ -130,7 +129,6 @@ public class DatabaseInterface {
 				act = new Activity(result.getInt("activity_id"),
 						result.getInt("calendar_id"),
 						result.getString("owner_user_name"));
-				act.setDescription(result.getString("description"));
 				act.setFrom(result.getTime("start_time").toLocalTime());
 				act.setTo(result.getTime("end_time").toLocalTime());
 				act.setStart_date(result.getDate("activity_date").toLocalDate());
@@ -142,28 +140,18 @@ public class DatabaseInterface {
 					.getQuery("select user_name from invited where activity_id="
 							+ activity_id + " and invitation_status='true'");
 			ArrayList<String> user_names = new ArrayList<String>();
-			int count = 1;
-			if (result.next()) {
 				while (result.next()) {
-					user_names.add(result.getString(count));
+					user_names.add(result.getString("user_name"));
 				}
-				result.close();
-				for (String x : user_names) {
-					result = this
-							.getQuery("select employee_nr from account where user_name='"
-									+ x + "'");
-					if (result.next()) {
-						part.add(result.getInt(1));
-					}
-					result.close();
-				}
+			ArrayList<Integer> calendar_ids_for_user_names = new ArrayList<>();
+			for (int i = 0; i < user_names.size(); i++) {
+				calendar_ids_for_user_names.add(getCalendarId(user_names.get(i)));
 			}
+			act.setParticipants(calendar_ids_for_user_names);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		act.setParticipants(part);
 		return act;
-
 	}
 	
 	/**
