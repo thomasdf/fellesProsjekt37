@@ -27,15 +27,16 @@ public class Utilities {
 	
 	/**
 	 * Formats and {@link Activity} to so that we get the time, if it has a time,
-	 * and we get its description. All well formatted as a string.
+	 * and we get its description. All well formatted as a string with a max length.
 	 * Also pays attention to whether or not the {@link Activity} is the first instance at the
 	 * start-date, or the last instance at the end-date, which should have different formatting.
 	 * 
 	 * @param act
 	 * @param from
+	 * @param max_size
 	 * @return the formatted String representing the {@link Activity}
 	 */
-	public String getFormattedActivity(Activity act, boolean from) {
+	public String getFormattedActivity(Activity act, boolean from, int max_size) {
 		String ret_str = "";
 		if (from) {
 			if (act.getFrom() != null) {
@@ -48,6 +49,10 @@ public class Utilities {
 		}
 		if (act.getDescription() != null) {
 			ret_str += act.getDescription();
+		}
+		if (ret_str.length() > max_size) {
+			ret_str = ret_str.substring(0, max_size);
+			ret_str += "..";
 		}
 		return ret_str;
 	}
