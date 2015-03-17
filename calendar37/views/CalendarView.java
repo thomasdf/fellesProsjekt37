@@ -1,14 +1,11 @@
 package views;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import utils.DatabaseInterface;
 import utils.Utilities;
-import models.Account;
 import models.Activity;
 import models.Invite;
 import javafx.application.Application;
@@ -35,8 +32,6 @@ public class CalendarView extends Application {
 	//Init the DBI and utils
 	private DatabaseInterface dbi = new DatabaseInterface();
 	private Utilities utils = new Utilities();
-	//The owner of this calendar
-	private Account owner = dbi.getAccount(user_name);
 	//The model for this view
 	private models.Calendar model;
 	
@@ -173,12 +168,18 @@ public class CalendarView extends Application {
 	
 	//Set up bindings and listeners:
 	private ListChangeListener<Integer> activitiesChangeListener = new ListChangeListener<Integer>() {
-	        @SuppressWarnings("rawtypes")
-			public void onChanged(ListChangeListener.Change change) {
-	        	updateActivitiesView();
-	        }
-		};
+		        @SuppressWarnings("rawtypes")
+				public void onChanged(ListChangeListener.Change change) {
+		        	updateActivitiesView();
+		        }
+			};
 	
+	/**
+	 * Updates the global model-attribute and activates the listeners if it's needed,
+	 * and updates the view with correct attributes and {@link Activity}s.
+	 * 
+	 * @param model
+	 */
 	public void setModel(models.Calendar model) {
 		if (this.model != null) {
 			model.getActivities().removeListener(activitiesChangeListener);
@@ -191,11 +192,13 @@ public class CalendarView extends Application {
 		}
 	}
 	
-	
+	/**
+	 * Fills in all the dates, month names, and sets the color/opacity of the dates according to what the current month is.
+	 */
 	private void fillCalendar() {
 		//Titler
-		cal_title.setText((model.getIs_group_cal() ? model.getCalendar_owner_group() : model.getCalendar_owner_user()) + "s kalender");
-		cur_month_year.setText(utils.getMonth(cal.get(Calendar.MONTH)) + " " + Integer.toString(cal.get(Calendar.YEAR)));
+		cal_title.setText((model.getIs_group_cal() ? dbi.getGroup(model.getCalendar_owner_group()).getGroup_name() : model.getCalendar_owner_user()) + "s kalender");
+		cur_month_year.setText(utils.months.get(cal.get(Calendar.MONTH)) + " " + Integer.toString(cal.get(Calendar.YEAR)));
 		
 		//Forrige måned
 		int start_prev_month = prev_cal.getActualMaximum(Calendar.DAY_OF_MONTH) - start_index + 1;
@@ -209,7 +212,7 @@ public class CalendarView extends Application {
 		int date = 1;
 		for (int i = start_index; i <= end_index; i++) {
 			if (date == 1) {
-				days.get(i).setText(utils.getMonth(cal.get(Calendar.MONTH)).substring(0, 3) + " " + Integer.toString(date));
+				days.get(i).setText(utils.months.get(cal.get(Calendar.MONTH)).substring(0, 3) + " " + Integer.toString(date));
 			} else {
 				days.get(i).setText(Integer.toString(date));
 			}
@@ -221,7 +224,7 @@ public class CalendarView extends Application {
 		date = 1;
 		for (int i = end_index + 1; i < days.size(); i++) {
 			if (date == 1) {
-				days.get(i).setText(utils.getMonth(next_cal.get(Calendar.MONTH)).substring(0, 3) + " " + Integer.toString(date));
+				days.get(i).setText(utils.months.get(next_cal.get(Calendar.MONTH)).substring(0, 3) + " " + Integer.toString(date));
 			} else {
 				days.get(i).setText(Integer.toString(date));
 			}
@@ -230,6 +233,9 @@ public class CalendarView extends Application {
 		}
 	}
 	
+	/**
+	 * Updates all the {@link Activity}s that this {@link CalendarView} is displaying according to what month the view is on.
+	 */
 	private void updateActivitiesView() {
 		//Refresh the model with new activities
 		model = dbi.getCalendar(cal_id);
@@ -273,7 +279,10 @@ public class CalendarView extends Application {
 			}
 		}
 		//Invited
-		for (Invite cur_inv: dbi.getAllInvitedTo(user_name)) {
+		/**
+		 * TODO: Wait for the getAllInvitedTo(user_name)-method from the DatabaseInterface.
+		 */
+		/*for (Invite cur_inv: dbi.getAllInvitedTo(user_name)) {
 			try {
 				Activity cur_act = dbi.getActivity(cur_inv.getInvited_to());
 				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
@@ -307,9 +316,15 @@ public class CalendarView extends Application {
 			} catch (NullPointerException e) {
 				System.err.println("NullPointerException: " + e.getMessage());
 			}
-		}
+		}*/
 	}
 	
+	/**
+	 * Updates all the global variables in the {@link CalendarView} to a new month, either one previous,
+	 * or the next month, specified by the diff-attribute.
+	 * 
+	 * @param diff
+	 */
 	private void setMonth(int diff) {
 		cal.set((cal.get(Calendar.MONTH) + diff)%12 == 0 && cal.get(Calendar.MONTH) != 1 ? cal.get(Calendar.YEAR) + diff : cal.get(Calendar.YEAR)
 				, (cal.get(Calendar.MONTH) + diff)%12, 1);
@@ -333,6 +348,7 @@ public class CalendarView extends Application {
 	private void openActivity(int activity_id) {
 		//FILL IN LATER!
 	}
+	
 	
 	public static void main(String[] args) {
 		launch(args);

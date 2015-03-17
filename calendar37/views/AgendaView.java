@@ -10,7 +10,6 @@ import java.util.TreeMap;
 
 import utils.DatabaseInterface;
 import utils.Utilities;
-import models.Account;
 import models.Activity;
 import models.Invite;
 import javafx.application.Application;
@@ -44,8 +43,6 @@ public class AgendaView extends Application {
 	//Init the DBI and utils
 	private DatabaseInterface dbi = new DatabaseInterface();
 	private Utilities utils = new Utilities();
-	//The owner of the Calendar
-	private Account owner = dbi.getAccount(user_name);
 	//The model for this view
 	private models.Calendar model;
 	
@@ -136,15 +133,19 @@ public class AgendaView extends Application {
 	}
 	
 	//Set up bindings and listeners:
-	private ListChangeListener<Integer> activitiesChangeListener = new
-			ListChangeListener<Integer>() {
-	        @SuppressWarnings("rawtypes")
-			public void onChanged(
-				ListChangeListener.Change change) {
+	private ListChangeListener<Integer> activitiesChangeListener = new ListChangeListener<Integer>() {
+		        @SuppressWarnings("rawtypes")
+				public void onChanged(ListChangeListener.Change change) {
 		        	fillAgenda();
-	        	}
+		    	}
 			};
 	
+	/**
+	 * Updates the global model-attribute and activates the listeners if it's needed,
+	 * and updates the view with correct attributes and {@link Activity}s.
+	 * 
+	 * @param model
+	 */
 	private void setModel(models.Calendar model) {
 		if (this.model != null) {
 			model.getActivities().removeListener(activitiesChangeListener);
@@ -156,6 +157,9 @@ public class AgendaView extends Application {
 		}
 	}
 	
+	/**
+	 * Fills in all the dates with all the {@link Activity}s associated with that date.
+	 */
 	private void fillAgenda() {
 		//Refresh the model with new activities
 		model = dbi.getCalendar(cal_id);
@@ -228,6 +232,7 @@ public class AgendaView extends Application {
 			agenda_body.getChildren().add(date);
 		}
 	}
+	
 	
 	public static void main(String[] args) {
 		launch(args);
