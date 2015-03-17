@@ -59,14 +59,11 @@ public class CreateActivityController {
 		if(!checkTimeString(start_hours.getText() + ":" + start_minutes.getText()) || !checkTimeString(end_hours.getText() + ":" + end_minutes.getText()))	{
 			return false;
 		}
-		if(!this.dateIsOkay())	{
-			System.out.println("Hello");
-			return false;
-		}	else if(this.start_date.getValue().isEqual(this.end_date.getValue()))	{
-			System.out.println("This is what I wanted");
+		if(this.start_date.getValue().isEqual(this.end_date.getValue()))	{
 			LocalTime start = this.parseTime(this.start_hours.getText() + ":" + this.start_minutes.getText());
 			LocalTime end = this.parseTime(this.end_hours.getText() + ":" + this.end_minutes.getText());
-			System.out.println(start.isAfter(end));
+			System.out.println("Start: " + start + "\nEnd: " + end);
+			System.out.println(start.isBefore(end));
 			if(start.isAfter(end))	{
 				return false;
 			}
@@ -81,7 +78,7 @@ public class CreateActivityController {
 	}
 	
 	private boolean checkTimeString(String time)	{
-		if(time.matches("([0-2][0-9][2][0-3]):([0-5][0-9])"))	{
+		if(time.matches("([01]?[0-9]|2[0-3]):[0-5][0-9]"))	{
 			return true;
 		}
 		return false;
@@ -102,7 +99,7 @@ public class CreateActivityController {
 	//Init
 	@SuppressWarnings("unchecked")
 	@FXML void initialize(){
-		
+		System.out.println(checkTimeString("22:30"));
 	}
 	
 	/**
@@ -139,36 +136,40 @@ public class CreateActivityController {
 		this.timeChange();
 	}
 	
+	private void makeTimeColor(String color)	{
+		String style = "-fx-border-color: " + color;
+		start_hours.setStyle(style);
+		start_minutes.setStyle(style);
+		end_hours.setStyle(style);
+		end_minutes.setStyle(style);
+	}
+	
 	/**
 	 * Function that changes border of time fields to red and back again according to validation
 	 */
 	@FXML private void timeChange()	{
-		if(start_hours.getText().equals("") && start_minutes.getText().equals("") && end_hours.getText().equals("") && end_minutes.getText().equals(""))	{
-			this.start_hours.setStyle("-fx-border-color: none");
-			this.start_minutes.setStyle("-fx-border-color: none");
-			this.end_hours.setStyle("-fx-border-color: none");
-			this.end_minutes.setStyle("-fx-border-color: none");
-		}
 		if(start_hours.getText().equals("") || start_minutes.getText().equals("") ||
 				end_hours.getText().equals("") || end_minutes.getText().equals(""))	{
+			makeTimeColor("none");
 			return;
 		}
-		if(this.start_date.getValue() == null || this.end_date.getValue() == null)	{
+		if(start_date.getValue() == null || end_date.getValue() == null)	{
+			makeTimeColor("none");
 			return;
 		}
-		if(this.start_date.getValue().isEqual(this.end_date.getValue()))	{
+		if(start_date.getValue().isBefore(end_date.getValue()))	{
+			makeTimeColor("none");
+			return;
+		}
+		if(start_date.getValue().isEqual(end_date.getValue()))	{
 			if(!timeIsLogical())	{
-				this.start_hours.setStyle("-fx-border-color: red");
-				this.start_minutes.setStyle("-fx-border-color: red");
-				this.end_hours.setStyle("-fx-border-color: red");
-				this.end_minutes.setStyle("-fx-border-color: red");
+				makeTimeColor("red");
 			}	else	{
-				this.start_hours.setStyle("-fx-border-color: none");
-				this.start_minutes.setStyle("-fx-border-color: none");
-				this.end_hours.setStyle("-fx-border-color: none");
-				this.end_minutes.setStyle("-fx-border-color: none");
+				makeTimeColor("none");
 			}
+			return;
 		}
+		
 	}
 	
 	
