@@ -42,6 +42,7 @@ public class CalendarView extends Application {
 	
 	//Variables we need defined outside the "start"-function
 		//View-elements
+	private AnchorPane root;
 	private GridPane calendar = new GridPane();
 	private GridPane header = new GridPane();
 	private Label cal_title = new Label("<kalendernavn>");
@@ -51,6 +52,7 @@ public class CalendarView extends Application {
 	private HBox footer = new HBox();
 	private Button profile = new Button("Min profil");
 	private Button tasks = new Button("Aktivitets-agenda");
+	private Button close = new Button("Lukk");
 	
 		//Lists containing current days and activities
 	private ArrayList<Label> days = new ArrayList<Label>();
@@ -70,7 +72,7 @@ public class CalendarView extends Application {
 	
 	@Override public void start(Stage primaryStage) throws Exception {
 		//Sets the root
-		AnchorPane root = new AnchorPane();
+		root = new AnchorPane();
 		
 		//Add style classes, id and set size to screen
 		root.styleProperty().set("-fx-background-color: #eeeefa");
@@ -115,6 +117,12 @@ public class CalendarView extends Application {
 				openAgenda();
 			}
 		});
+		close.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				close();
+			}
+		});
 		
 		//The view
 			//General restraints
@@ -131,7 +139,7 @@ public class CalendarView extends Application {
 		header.add(prev_month, 2, 0);
 		header.add(next_month, 3, 0);
 			//footer
-		footer.getChildren().addAll(profile, tasks);
+		footer.getChildren().addAll(profile, tasks, close);
 			//calendar
 			//the days
 		for (int i = 0; i < utils.weekdays.size(); i++) {
@@ -259,7 +267,8 @@ public class CalendarView extends Application {
 		for (Activity cur_act : dbi.getAllActivities(user_name)) {
 			try {
 				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
-					String formatted_act = (cur_act.getEnd_date() == null ? "" : "> ") + utils.getFormattedActivity(cur_act, true);
+					String formatted_act = (cur_act.getEnd_date() == null || cur_act.getEnd_date().equals(cur_act.getStart_date()) ?
+							"" : "> ") + utils.getFormattedActivity(cur_act, true);
 					Button activity_btn = new Button(formatted_act);
 					activity_btn.getStyleClass().add("personal-activity");
 					activity_btn.setFocusTraversable(false);
@@ -271,7 +280,7 @@ public class CalendarView extends Application {
 					});
 					day_activities.get(start_index + cur_act.getStart_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
 				}
-				if (cur_act.getEnd_date() != null) {
+				if (cur_act.getEnd_date() != null && !cur_act.getEnd_date().equals(cur_act.getStart_date())) {
 					if (cur_act.getEnd_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getEnd_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
 						String formatted_act = "< " + utils.getFormattedActivity(cur_act, false);
 						Button activity_btn = new Button(formatted_act);
@@ -355,26 +364,42 @@ public class CalendarView extends Application {
 	 * Opens up the view for an {@link Activity} that is pressed in this {@link CalendarView},
 	 * and retains information about in what {@link models.Calendar} the {@link Activity} was pressed.
 	 * 
+	 * TODO: Fill in when we get an ActivityView up and running.
+	 * 
 	 * @param activity_id
 	 */
 	private void openActivity(int activity_id) {
-		//FILL IN LATER!
 	}
 	
 	/**
 	 * Opens up the view for an {@link Account} that is pressed in this {@link CalendarView},
 	 * and retains information about in what {@link models.Calendar} the {@link Account} was pressed.
+	 * 
+	 * TODO: Fill in when we get an AccountView up and running.
 	 */
-	private void openAccount() {
-		//FILL IN LATER!
+	private void openProfile() {
 	}
 	
 	/**
 	 * Opens up the view for an {@link Agenda} that is pressed in this {@link CalendarView},
-	 * and retains information about in what {@link models.Calendar} the {@link Agenda} was pressed.
+	 * and retains information about in what {@link models.Calendar} the {@link Agenda} was pressed,
+	 * as well 
 	 */
 	private void openAgenda() {
-		AgendaView agenda = new AgendaView();
+		AgendaView agenda = new AgendaView(root, user_name, cal_id);
+		try {
+			root.disableProperty().set(true);
+			agenda.start(new Stage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Closes this view, as well as any other open view, commits nothing to the model when doing so.
+	 */
+	private void close() {
+		System.exit(0);
 	}
 	
 	
