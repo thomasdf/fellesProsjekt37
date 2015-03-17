@@ -1,6 +1,6 @@
 
 #the following three lines are for problems with mySql and should be deleted before the final version
-drop schema fellesprosjekt;
+#drop schema fellesprosjekt;
 create schema fellesprosjekt;
 use fellesprosjekt;
 

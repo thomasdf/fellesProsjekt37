@@ -2,6 +2,7 @@ package models;
 
 import java.util.ArrayList;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -68,4 +69,25 @@ public class Group {
 	public void setSubgroups(ArrayList<Integer> subgroups) {
 		subgroupsList.addAll(subgroups);
 	}
+	
+	//Oppsett for checkbox i tableview
+			//Checked variablen tilsier om denne brukeren er huket av i invite viewet eller ikke
+			//Pass på å alltid sette den til "false" for ALLE brukere når du entrer invite viewet.
+			//Hvis ikke vil systemet tro at brukeren alltid er huket av, og dermed bli invitert til alt.
+		//-------------------------------------------------------
+			private SimpleBooleanProperty checked = new SimpleBooleanProperty(false);
+			   // other columns here
+
+			    public SimpleBooleanProperty checkedProperty() {
+			        return this.checked;
+			    }
+
+			    public java.lang.Boolean getChecked() {
+			        return this.checkedProperty().get();
+			    }
+
+			    public void setChecked(final java.lang.Boolean checked) {
+			        this.checkedProperty().set(checked);
+			    }
+		//---------------------------------------------------
 }

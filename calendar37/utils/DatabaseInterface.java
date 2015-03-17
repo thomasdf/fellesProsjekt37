@@ -836,4 +836,20 @@ public class DatabaseInterface {
 		}
 		return people;
 	}
+
+
+	public ObservableList<Group> getAllGroups() {
+		ObservableList<Group> groups = FXCollections.observableList(new ArrayList<Group>());
+		try	{
+			ResultSet result = this.getQuery("SELECT * FROM calendargroup");
+			while(result.next())	{
+				groups.add(new Group(result.getInt("group_id"), result.getString("group_name")));
+				
+			}
+			result.close();
+		}	catch(SQLException e)	{
+			e.printStackTrace();
+		}
+		return groups;
+	}
 }
