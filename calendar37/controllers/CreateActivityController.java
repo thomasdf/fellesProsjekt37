@@ -38,9 +38,11 @@ public class CreateActivityController {
 	 * @return true if start_date is before or equal to end_date
 	 */
 	private boolean dateIsOkay()	{
+		if(this.start_date.getValue() == null || this.end_date.getValue() == null)	{
+			return false;
+		}
 		if(this.start_date.getValue().isBefore(this.end_date.getValue())
 				|| this.start_date.getValue().isEqual(this.end_date.getValue()))	{
-			System.out.println("We run this");
 			return true;
 		}
 		if(this.start_date.getValue().isEqual(this.end_date.getValue()))	{
@@ -61,6 +63,7 @@ public class CreateActivityController {
 			System.out.println("Hello");
 			return false;
 		}	else if(this.start_date.getValue().isEqual(this.end_date.getValue()))	{
+			System.out.println("This is what I wanted");
 			LocalTime start = this.parseTime(this.start_hours.getText() + ":" + this.start_minutes.getText());
 			LocalTime end = this.parseTime(this.end_hours.getText() + ":" + this.end_minutes.getText());
 			System.out.println(start.isAfter(end));
@@ -155,7 +158,6 @@ public class CreateActivityController {
 		}
 		if(this.start_date.getValue().isEqual(this.end_date.getValue()))	{
 			if(!timeIsLogical())	{
-				System.out.println(this.start_date.getValue().isEqual(this.end_date.getValue()));
 				this.start_hours.setStyle("-fx-border-color: red");
 				this.start_minutes.setStyle("-fx-border-color: red");
 				this.end_hours.setStyle("-fx-border-color: red");
