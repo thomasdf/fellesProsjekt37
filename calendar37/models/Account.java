@@ -25,6 +25,7 @@ public class Account {
 	//Property-attributes
 	private ObservableList<Integer> in_groupsList = FXCollections.observableList(new ArrayList<Integer>());
 	private ObservableList<Integer> calendarsList = FXCollections.observableList(new ArrayList<Integer>());
+		//^ muligvis slette denne?
 	
 	//Constructor
 	public Account(String username, String password, String first_name, String last_name, String mobile_nr) {
