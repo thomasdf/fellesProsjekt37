@@ -107,7 +107,7 @@ values
 ################################################################################
 #relations
 
-insert into hascalendar
+insert into hasCalendar
 values
 ('spidey', 11111),
 ('manbats', 22222),
@@ -120,14 +120,14 @@ values
 ('lahey', 99999),
 ('j-roc', 01111);
 
-insert into grouphascalendar
+insert into groupHasCalendar
 values
 (10000, 12121),
 (20000, 13131),
 (30000, 14141),
 (40000, 14141);
 
-insert into ismember
+insert into isMember
 values
 (12121, 'hannibal'),
 (12121, 'faceman'),
