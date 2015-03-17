@@ -202,32 +202,61 @@ public class AgendaView {
 			} else if (timeframe_index == 3 && start_key.isAfter(LocalDate.now().plus(Period.ofYears(1)))) {
 				continue;
 			}
-			ArrayList<Invite> invites_on_act = dbi.getAllInvites(cur_act.getActivity_id());
-			String status = "";
-			for (Invite cur_inv : invites_on_act) {
-				if (cur_inv.getInvited() == user_name) {
-					status = ", Status: " + cur_inv.getStatus();
-				}
-			}
 			if (end_key == null || end_key.equals(start_key)) {
 				if (acts_on_day.containsKey(start_key)) {
-					acts_on_day.get(start_key).add(utils.getFormattedActivity(cur_act, true) + status);
+					acts_on_day.get(start_key).add(utils.getFormattedActivity(cur_act, true, 42));
 				} else {
 					acts_on_day.put(start_key, new ArrayList<String>());
-					acts_on_day.get(start_key).add(utils.getFormattedActivity(cur_act, true) + status);
+					acts_on_day.get(start_key).add(utils.getFormattedActivity(cur_act, true, 42));
 				}
 			} else {
 				if (acts_on_day.containsKey(start_key)) {
-					acts_on_day.get(start_key).add("> " + utils.getFormattedActivity(cur_act, true) + status);
+					acts_on_day.get(start_key).add("> " + utils.getFormattedActivity(cur_act, true, 40));
 				} else {
 					acts_on_day.put(start_key, new ArrayList<String>());
-					acts_on_day.get(start_key).add("> " + utils.getFormattedActivity(cur_act, true) + status);
+					acts_on_day.get(start_key).add("> " + utils.getFormattedActivity(cur_act, true, 40));
 				}
 				if (acts_on_day.containsKey(end_key)) {
-					acts_on_day.get(end_key).add("< " + utils.getFormattedActivity(cur_act, false));
+					acts_on_day.get(end_key).add("< " + utils.getFormattedActivity(cur_act, false, 40));
 				} else {
 					acts_on_day.put(end_key, new ArrayList<String>());
-					acts_on_day.get(end_key).add("< " + utils.getFormattedActivity(cur_act, false));
+					acts_on_day.get(end_key).add("< " + utils.getFormattedActivity(cur_act, false, 40));
+				}
+			}
+		}
+		for (Invite cur_inv : dbi.getUserInvitedTo(user_name)) {
+			Activity cur_act = dbi.getActivity(cur_inv.getInvited_to());
+			LocalDate start_key = cur_act.getStart_date();
+			LocalDate end_key = cur_act.getEnd_date();
+			if (timeframe_index == 0 && start_key.isAfter(LocalDate.now().plus(Period.ofDays(1)))) {
+				continue;
+			} else if (timeframe_index == 1 && start_key.isAfter(LocalDate.now().plus(Period.ofWeeks(1)))) {
+				continue;
+			} else if (timeframe_index == 2 && start_key.isAfter(LocalDate.now().plus(Period.ofMonths(1)))) {
+				continue;
+			} else if (timeframe_index == 3 && start_key.isAfter(LocalDate.now().plus(Period.ofYears(1)))) {
+				continue;
+			}
+			String status = ", S: " + (cur_inv.getStatus().equals("true") ? "ja" : "nei");
+			if (end_key == null || end_key.equals(start_key)) {
+				if (acts_on_day.containsKey(start_key)) {
+					acts_on_day.get(start_key).add(utils.getFormattedActivity(cur_act, true, 42) + status);
+				} else {
+					acts_on_day.put(start_key, new ArrayList<String>());
+					acts_on_day.get(start_key).add(utils.getFormattedActivity(cur_act, true, 42) + status);
+				}
+			} else {
+				if (acts_on_day.containsKey(start_key)) {
+					acts_on_day.get(start_key).add("> " + utils.getFormattedActivity(cur_act, true, 40) + status);
+				} else {
+					acts_on_day.put(start_key, new ArrayList<String>());
+					acts_on_day.get(start_key).add("> " + utils.getFormattedActivity(cur_act, true, 40) + status);
+				}
+				if (acts_on_day.containsKey(end_key)) {
+					acts_on_day.get(end_key).add("< " + utils.getFormattedActivity(cur_act, false, 40));
+				} else {
+					acts_on_day.put(end_key, new ArrayList<String>());
+					acts_on_day.get(end_key).add("< " + utils.getFormattedActivity(cur_act, false, 40));
 				}
 			}
 		}

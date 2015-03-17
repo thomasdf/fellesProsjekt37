@@ -8,7 +8,6 @@ import utils.DatabaseInterface;
 import utils.Utilities;
 import models.Activity;
 import models.Invite;
-import javafx.application.Application;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,7 +19,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.*;
 
-public class CalendarView extends Application {
+public class CalendarView {
 
 	private String viewName = "Calendar";
 	
@@ -73,7 +72,7 @@ public class CalendarView extends Application {
 	Calendar next_cal = new GregorianCalendar((cal.get(Calendar.MONTH) + 1)%12 == 0 ? cal.get(Calendar.YEAR) + 1 : cal.get(Calendar.YEAR)
 			, (cal.get(Calendar.MONTH) + 1)%12, 1);
 	
-	@Override public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) throws Exception {
 		//Sets the root
 		root = new AnchorPane();
 		
@@ -271,7 +270,7 @@ public class CalendarView extends Application {
 			try {
 				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
 					String formatted_act = (cur_act.getEnd_date() == null || cur_act.getEnd_date().equals(cur_act.getStart_date()) ?
-							"" : "> ") + utils.getFormattedActivity(cur_act, true);
+							"" : "> ") + utils.getFormattedActivity(cur_act, true, 30);
 					Button activity_btn = new Button(formatted_act);
 					activity_btn.getStyleClass().add("personal-activity");
 					activity_btn.setFocusTraversable(false);
@@ -285,7 +284,7 @@ public class CalendarView extends Application {
 				}
 				if (cur_act.getEnd_date() != null && !cur_act.getEnd_date().equals(cur_act.getStart_date())) {
 					if (cur_act.getEnd_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getEnd_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
-						String formatted_act = "< " + utils.getFormattedActivity(cur_act, false);
+						String formatted_act = "< " + utils.getFormattedActivity(cur_act, false, 30);
 						Button activity_btn = new Button(formatted_act);
 						activity_btn.getStyleClass().add("personal-activity");
 						activity_btn.setFocusTraversable(false);
@@ -308,8 +307,8 @@ public class CalendarView extends Application {
 				Activity cur_act = dbi.getActivity(cur_inv.getInvited_to());
 				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
 					String formatted_act = (cur_act.getEnd_date() == null || cur_act.getEnd_date().equals(cur_act.getStart_date()) ?
-							"" : "> ") + utils.getFormattedActivity(cur_act, true);
-					Button activity_btn = new Button(formatted_act + ": " + cur_inv.getStatus());
+							"" : "> ") + utils.getFormattedActivity(cur_act, true, 30);
+					Button activity_btn = new Button(formatted_act + ", S: " + (cur_inv.getStatus().equals("true") ? "ja" : "nei"));
 					activity_btn.getStyleClass().add("group-activity");
 					activity_btn.setFocusTraversable(false);
 					activity_btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -322,8 +321,8 @@ public class CalendarView extends Application {
 				}
 				if (cur_act.getEnd_date() != null && !cur_act.getEnd_date().equals(cur_act.getStart_date())) {
 					if (cur_act.getEnd_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getEnd_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
-						String formatted_act = "< " + utils.getFormattedActivity(cur_act, false);
-						Button activity_btn = new Button(formatted_act + ": " + cur_inv.getStatus());
+						String formatted_act = "< " + utils.getFormattedActivity(cur_act, false, 30);
+						Button activity_btn = new Button(formatted_act + ", S: " + (cur_inv.getStatus().equals("true") ? "ja" : "nei"));
 						activity_btn.getStyleClass().add("group-activity");
 						activity_btn.setFocusTraversable(false);
 						activity_btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -401,10 +400,5 @@ public class CalendarView extends Application {
 	 */
 	private void close() {
 		System.exit(0);
-	}
-	
-	
-	public static void main(String[] args) {
-		launch(args);
 	}
 }

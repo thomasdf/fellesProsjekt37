@@ -60,10 +60,9 @@ public class MainApplication extends Application {
 	}
 	
 	private void openCalendar() {
-		CalendarView agenda = new CalendarView(user_name, cal_id);
+		CalendarView calendar = new CalendarView(user_name, cal_id);
 		try {
-			root.disableProperty().set(true);
-			agenda.start(new Stage());
+			calendar.start(new Stage());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
