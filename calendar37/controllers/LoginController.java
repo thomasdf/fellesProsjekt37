@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import utils.DatabaseInterface;
 
 public class LoginController implements Initializable {
@@ -24,6 +25,9 @@ public class LoginController implements Initializable {
 	private PasswordField txt_password;
 	@FXML
 	private Label label_error;
+	
+	private Stage stage;
+	private boolean is_ok = false;
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -56,10 +60,24 @@ public class LoginController implements Initializable {
 			} else if (db_password.equals(txt_password.getText())) {
 				// login success-action!
 				label_error.setText("login success! horray!");
+				is_ok = true;
+				stage.close();
 			} else {
 				label_error
 						.setText("Passordet er ikke riktig. Sjekk om det er skrevet riktig.");
 			}
 		}
+	}
+	
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
+	
+	public boolean isOk() {
+		return is_ok;
+	}
+	
+	public String getUser_name() {
+		return txt_user_name.getText();
 	}
 }
