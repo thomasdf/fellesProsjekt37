@@ -1433,9 +1433,7 @@ public class DatabaseInterface {
 			statement = connection.createStatement();
 			// method
 			result = statement
-					.executeQuery("SELECT invited.activity_id, invited.user_name, invited.invitation_status, activity.owner_user_name FROM activity, invited WHERE activity.activity_id ="
-							+ activity_id
-							+ " AND invited.activity_id="
+					.executeQuery("SELECT invited.activity_id, invited.user_name, invited.invitation_status, activity.owner_user_name FROM activity, invited WHERE activity.activity_id = invited.activity_id and activity.activity_id = "
 							+ activity_id
 							+ " AND invited.user_name='"
 							+ user_name + "'");
@@ -1487,7 +1485,7 @@ public class DatabaseInterface {
 			statement = connection.createStatement();
 			// method
 			result = statement
-					.executeQuery("SELECT invited.activity_id, invited.user_name, invited.invitation_status, activity.owner_user_name FROM activity, invited WHERE invited.user_name= \""
+					.executeQuery("SELECT invited.activity_id, invited.user_name, invited.invitation_status, activity.owner_user_name FROM activity, invited, account where activity.activity_id = invited.activity_id and invited.user_name = account.user_name and account.user_name =  \""
 							+ user_name + "\"");
 			while(result.next()){
 				Invite invite = new Invite(result.getString("owner_user_name"),
