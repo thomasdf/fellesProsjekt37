@@ -1471,6 +1471,58 @@ public class DatabaseInterface {
 		return invite;
 	}
 
+	
+	public ArrayList<Invite> getUserInvitedTo(String user_name){
+		ArrayList<Invite> invitesList = new ArrayList<>();
+
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+
+		try {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("SELECT invited.activity_id, invited.user_name, invited.invitation_status, activity.owner_user_name FROM activity, invited WHERE invited.user_name= \""
+							+ user_name + "\"");
+			while(result.next()){
+				Invite invite = new Invite(result.getString("owner_user_name"),
+						result.getString("user_name"), result.getInt("activity_id"));
+				invite.setStatus(result.getString("invitation_status"));
+				invitesList.add(invite);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
+		}
+		return invitesList;
+	}
+	
 	/**
 	 * Returns a list of Invite-objects that are related to an activity in the
 	 * database.
