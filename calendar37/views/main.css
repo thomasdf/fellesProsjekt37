@@ -1,3 +1,4 @@
+/*CalendarView*/
 #calendar {
 	-fx-border-color: black;
 	-fx-background-color: #fff;
@@ -97,6 +98,7 @@
 }
 
 .personal-activity {
+	-fx-focus-traversable: false;
 	-fx-pref-width: 9999;
 	-fx-border-color: #9fc6e7;
 	-fx-border-width: 1;
@@ -114,6 +116,7 @@
 }
 
 .group-activity {
+	-fx-focus-traversable: false;
 	-fx-pref-width: 9999;
 	-fx-border-color: #9fe7c6;
 	-fx-border-width: 1;
@@ -131,29 +134,9 @@
 }
 
 
-
-
-
-
-
-.dialogue {
-	-fx-background-color: #eee;
-	-fx-background-radius: 5;
-	-fx-border-color: #ddd;
-	-fx-border-radius: 5;
-}
-
-
-
-
-
-
-
+/*AgendaView*/
 .agenda {
 	-fx-background-color: #eeeefa;
-}
-
-.agenda-head {
 }
 
 .agenda-list {
@@ -182,6 +165,7 @@
 	-fx-border-color: transparent;
 	-fx-border-width: 0;
 	-fx-background-color: transparent;
+	-fx-focus-traversable: false;
 }
 
 .date-acts .button:hover {
@@ -190,4 +174,13 @@
 
 .date-acts .button:pressed {
 	-fx-text-fill: #0aada5;
+}
+
+
+/*DialogueView*/
+.dialogue {
+	-fx-background-color: #eee;
+	-fx-background-radius: 5;
+	-fx-border-color: #ddd;
+	-fx-border-radius: 5;
 }

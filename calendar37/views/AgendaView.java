@@ -12,7 +12,6 @@ import utils.DatabaseInterface;
 import utils.Utilities;
 import models.Activity;
 import models.Invite;
-import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,25 +19,34 @@ import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class AgendaView extends Application {
+public class AgendaView {
 
 	String viewName = "Agenda";
 	
 	//TESTVALUES
-	private String user_name = "lahey";
-	private int cal_id = 99999;
+	private AnchorPane parent;
+	private String user_name;
+	private int cal_id;
 	//TESTVALUES
+	
+	public AgendaView(AnchorPane parent, String user_name, int cal_id) {
+		this.parent = parent;
+		this.user_name = user_name;
+		this.cal_id = cal_id;
+	}
 	
 	//Init the DBI and utils
 	private DatabaseInterface dbi = new DatabaseInterface();
@@ -48,22 +56,23 @@ public class AgendaView extends Application {
 	
 	//Variables we need defined outside the "start"-function
 		//View-elements
+	GridPane root;
 	private Label ag_title = new Label("<min agenda>");
 	private ChoiceBox<String> timeframe = new ChoiceBox<String>();
 	private GridPane header = new GridPane();
 	private VBox agenda_body = new VBox();
 	private ScrollPane agenda = new ScrollPane(agenda_body);
-	private Button close = new Button("Lukk");
 	private Button profile = new Button("Min profil");
+	private Button close = new Button("Lukk");
 	private HBox footer = new HBox();
 	
 		//Useful final variables
 	private int timeframe_index = 2;
 	
 	
-	@Override public void start(Stage primaryStage) throws Exception{
+	public void start(Stage primaryStage) throws Exception {
 		//Sets the root
-		GridPane root = new GridPane();
+		root = new GridPane();
 		
 		//Add style classes, id and set size to screen
 		root.styleProperty().set("-fx-background-color: #eeeefa");
@@ -73,14 +82,16 @@ public class AgendaView extends Application {
 		footer.getStyleClass().add("footer");
 		
 		//Add actions
-		close.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-			}
-		});
 		profile.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				openProfile();
+			}
+		});
+		close.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				close();
 			}
 		});
 		
@@ -102,7 +113,7 @@ public class AgendaView extends Application {
 		timeframe.setItems(FXCollections.observableArrayList("1 Dag","1 Uke","1 Måned", "1 År", "All tid"));
 		timeframe.getSelectionModel().select(timeframe_index);
 			//footer
-		footer.getChildren().addAll(close, profile);
+		footer.getChildren().addAll(profile, close);
 			//managing timeframes
 		timeframe.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 			@Override
@@ -124,6 +135,16 @@ public class AgendaView extends Application {
 		primaryStage.setTitle(viewName);
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			public void handle(WindowEvent we) {
+				parent.disableProperty().set(false);
+			}
+		});
+		primaryStage.setOnHiding(new EventHandler<WindowEvent>() {
+			public void handle(WindowEvent we) {
+				parent.disableProperty().set(false);
+			}
+		});
 		
 		//Sets the model for this view and updates the view according to it
 		setModel(dbi.getCalendar(cal_id));
@@ -164,7 +185,7 @@ public class AgendaView extends Application {
 		//Refresh the model with new activities
 		model = dbi.getCalendar(cal_id);
 		//Titler
-		ag_title.setText((model.getIs_group_cal() ? /*model.getCalendar_owner_group()*/ "" : /*model.getCalendar_owner_user()*/ "") + "s agenda");
+		ag_title.setText((model.getIs_group_cal() ? model.getCalendar_owner_group() : model.getCalendar_owner_user()) + "s agenda");
 		
 		//Fjern tidligere aktiviteter
 		agenda_body.getChildren().clear();
@@ -233,8 +254,20 @@ public class AgendaView extends Application {
 		}
 	}
 	
+	/**
+	 * Opens up the view for an {@link Account} that is pressed in this {@link AgendaView},
+	 * and retains information about in what {@link models.Calendar} the {@link Account} was pressed.
+	 * 
+	 * TODO: Fill in when we get an AccountView up and running.
+	 */
+	private void openProfile() {
+	}
 	
-	public static void main(String[] args) {
-		launch(args);
+	/**
+	 * Closes this view, and re-enables the {@link CalendarView}, commits nothing to the model when doing so.
+	 */
+	private void close() {
+		Stage stage  = (Stage) root.getScene().getWindow();
+		stage.close();
 	}
 }
