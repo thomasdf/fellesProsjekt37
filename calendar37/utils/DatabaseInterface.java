@@ -25,7 +25,7 @@ import models.Invite;
  * path. It can be found at http://dev.mysql.com/downloads/connector/j/.
  * <p>
  * 
- * @author 
+ * @author
  * @version %I%, %G%
  * @since 1.0
  */
@@ -45,71 +45,6 @@ public class DatabaseInterface {
 
 	private static final String PASSWORD = "bringIt";
 
-	private Connection connection;
-	private Statement statement;
-	private ResultSet result;
-
-	/**
-	 * Class constructor.
-	 */
-	public DatabaseInterface() {
-		try {
-			Class.forName(DB_DRIVER);
-			this.connection = DriverManager.getConnection(DB_URL, USERNAME,
-					PASSWORD);
-			this.statement = this.connection.createStatement();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Fetches a ResultSet from the database based on the given query.
-	 * 
-	 * @param query
-	 *            SQL query string
-	 * @return ResultSet result
-	 */
-	public ResultSet getQuery(String query) {
-		try {
-			this.connection = DriverManager.getConnection(DB_URL, USERNAME,
-					PASSWORD);
-			this.statement = connection.createStatement();
-			this.result = statement.executeQuery(query);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return this.result;
-	}
-
-	/**
-	 * Closes all connection to the database.
-	 */
-	public void closeItAll() {
-
-		if (this.result != null) {
-			try {
-				this.result.close();
-			} catch (SQLException e) {
-
-			}
-		}
-		if (this.statement != null) {
-			try {
-				this.statement.close();
-			} catch (SQLException e) {
-
-			}
-		}
-		if (this.connection != null) {
-			try {
-				this.connection.close();
-			} catch (SQLException e) {
-
-			}
-		}
-	}
-
 	/**
 	 * Fetches the activity with the given id from the database. Throws a
 	 * SQLException if something goes wrong, then it returns an Activity object
@@ -121,9 +56,20 @@ public class DatabaseInterface {
 	 */
 	public Activity getActivity(int activity_id) {
 		Activity act = null;
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		try {
-			ResultSet result = this
-					.getQuery("select * from activity where activity.activity_id="
+
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+
+			result = statement
+					.executeQuery("select * from activity where activity.activity_id="
 							+ activity_id);
 			if (result.next()) {
 				act = new Activity(result.getInt("activity_id"),
@@ -136,24 +82,47 @@ public class DatabaseInterface {
 				act.setDescription(result.getString("description"));
 			}
 			result.close();
-			result = this
-					.getQuery("select user_name from invited where activity_id="
+			result = statement
+					.executeQuery("select user_name from invited where activity_id="
 							+ activity_id + " and invitation_status='true'");
 			ArrayList<String> user_names = new ArrayList<String>();
-				while (result.next()) {
-					user_names.add(result.getString("user_name"));
-				}
+			while (result.next()) {
+				user_names.add(result.getString("user_name"));
+			}
 			ArrayList<Integer> calendar_ids_for_user_names = new ArrayList<>();
 			for (int i = 0; i < user_names.size(); i++) {
-				calendar_ids_for_user_names.add(getCalendarId(user_names.get(i)));
+				calendar_ids_for_user_names
+						.add(getCalendarId(user_names.get(i)));
 			}
 			act.setParticipants(calendar_ids_for_user_names);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return act;
 	}
-	
+
 	/**
 	 * 
 	 * 
@@ -165,27 +134,59 @@ public class DatabaseInterface {
 	 * @param room_name
 	 * @return
 	 */
-	public Activity setActivity(String owner_user_name, String description, LocalDate activity_date, LocalDate end_date, LocalTime start_time, LocalTime end_time, String room_name) {
+	public Activity setActivity(String owner_user_name, String description,
+			LocalDate activity_date, LocalDate end_date, LocalTime start_time,
+			LocalTime end_time, String room_name) {
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		int activity_id = 0;
 		try {
-				result = this
-						.getQuery("SELECT calendar_id FROM hasCalendar WHERE user_name="
-								+ owner_user_name);
-				result.next();
-				int calendar_id = result.getInt(1);
-				this.statement.execute("INSERT INTO activity VALUES ("
-						+ calendar_id + ", '" + description + "', "
-						+ activity_date + ", " + end_date + ", "
-						+ start_time + ", " + end_time + ", '"
-						+ owner_user_name + "', '"
-						+ room_name + "')");
-				result.close();
-				// find the id of the new activity
-				result = this.getQuery("SELECT activity_id FROM activity ORDER BY activity_id DESC LIMIT 1");
-				activity_id = result.getInt("activity_id");
-				result.close();
-		} catch (SQLException e) {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("SELECT calendar_id FROM hasCalendar WHERE user_name="
+							+ owner_user_name);
+			result.next();
+			int calendar_id = result.getInt(1);
+			statement.executeUpdate("INSERT INTO activity VALUES ("
+					+ calendar_id + ", '" + description + "', " + activity_date
+					+ ", " + end_date + ", " + start_time + ", " + end_time
+					+ ", '" + owner_user_name + "', '" + room_name + "')");
+			result.close();
+			// find the id of the new activity
+			result = statement
+					.executeQuery("SELECT activity_id FROM activity ORDER BY activity_id DESC LIMIT 1");
+			activity_id = result.getInt("activity_id");
+			result.close();
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return this.getActivity(activity_id);
 	}
@@ -198,20 +199,28 @@ public class DatabaseInterface {
 	 *            Activity object that should be updated
 	 */
 	public void setActivity(Activity activity) {
-
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		try {
-			ResultSet result = this
-					.getQuery("select * from activity where activity_id="
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("select * from activity where activity_id="
 							+ activity.getActivity_id());
 			result.next();
 			if (result.getString(1) != null) {
 				result.close();
-				result = this
-						.getQuery("SELECT calendar_id FROM hasCalendar WHERE user_name="
+				result = statement
+						.executeQuery("SELECT calendar_id FROM hasCalendar WHERE user_name="
 								+ activity.getActivity_owner());
 				result.next();
 				int calendar_id = result.getInt(1);
-				this.statement.execute("UPDATE activity SET calendar_id="
+				statement.executeUpdate("UPDATE activity SET calendar_id="
 						+ calendar_id + ", description="
 						+ activity.getDescription() + ", activity_date="
 						+ activity.getStart_date() + ", end_date="
@@ -221,41 +230,44 @@ public class DatabaseInterface {
 						+ ", room_name=" + activity.getRoom());
 				/*
 				 * if(activity.getRoom() != null) { result =
-				 * this.getQuery("SELECT room_name FROM room WHERE room_name=" +
+				 * statement.executeQuery
+				 * ("SELECT room_name FROM room WHERE room_name=" +
 				 * activity.getRoom()); result.next(); if(result.getString(1)!=
 				 * null) {
 				 * 
 				 * } else { throw new SQLException(); } } else {
-				 * this.statement.execute("UPDATE activity calendar_id="); }
+				 * statement.executeUpdate("UPDATE activity calendar_id="); }
 				 */
 			} else {
 				result.close();
-				result = this
-						.getQuery("SELECT calendar_id FROM hasCalendar WHERE user_name="
+				result = statement
+						.executeQuery("SELECT calendar_id FROM hasCalendar WHERE user_name="
 								+ activity.getActivity_owner());
 				result.next();
 				int calendar_id = result.getInt(1);
-				this.statement.execute("INSERT INTO activity VALUES ("
+				statement.executeUpdate("INSERT INTO activity VALUES ("
 						+ calendar_id + ", " + activity.getDescription() + ", "
-						+ activity.getStart_date() + ", " + activity.getEnd_date() + ", "
-						+ activity.getFrom() + ", " + activity.getTo() + ", "
+						+ activity.getStart_date() + ", "
+						+ activity.getEnd_date() + ", " + activity.getFrom()
+						+ ", " + activity.getTo() + ", "
 						+ activity.getActivity_owner() + ", "
 						+ activity.getRoom() + ")");
 				/*
-				 * // check if user name exists result =
-				 * this.getQuery("SELECT user_name FROM account WHERE user_name="
-				 * + activity.getOwner_user_name()); result.next();
+				 * // check if user name exists result = statement.executeQuery(
+				 * "SELECT user_name FROM account WHERE user_name=" +
+				 * activity.getOwner_user_name()); result.next();
 				 * if(result.getString(1) != null) { result.close(); // check if
-				 * user has calendar result = this.getQuery(
+				 * user has calendar result = statement.executeQuery(
 				 * "SELECT calendar_id FROM hasCalendar WHERE user_name=" +
 				 * activity.getOwner_user_name()); result.next(); int
 				 * calendar_id = result.getInt(1); if(result.getString(1)!=null)
 				 * { result.close(); // check if room_name exists
 				 * if(activity.getRoom() != null) { result =
-				 * this.getQuery("SELECT room_name FROM room WHERE room_name=" +
+				 * statement.executeQuery
+				 * ("SELECT room_name FROM room WHERE room_name=" +
 				 * activity.getRoom()); result.next(); if(result.getString(1) !=
 				 * null) { result.close(); // insert the damn data
-				 * this.statement.execute("INSERT INTO activity VALUES (" +
+				 * statement.executeUpdate("INSERT INTO activity VALUES (" +
 				 * calendar_id + ", " + activity.getDescription() + ", " +
 				 * activity.getDate() + ", " + activity.getDate() + ", " +
 				 * activity.getFrom() + ", " + activity.getTo() + ", " +
@@ -263,8 +275,30 @@ public class DatabaseInterface {
 				 * } } } else { throw new SQLException(); }
 				 */
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 	}
 
@@ -277,17 +311,48 @@ public class DatabaseInterface {
 	 */
 	public String getActivityDesc(int activity_id) {
 		String s = "";
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		try {
-			ResultSet result = this
-					.getQuery("select description from activity where activity.activity_id="
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("select description from activity where activity.activity_id="
 							+ activity_id);
 
 			if (result.next()) {
 				s = result.getString("description");
 			}
 			result.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return s;
 	}
@@ -301,17 +366,48 @@ public class DatabaseInterface {
 	 */
 	public ArrayList<LocalTime> getFromTo(int activity_id) {
 		ArrayList<LocalTime> time = new ArrayList<LocalTime>();
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		try {
-			ResultSet result = this
-					.getQuery("select start_time, end_time from activity where activity.activity_id="
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("select start_time, end_time from activity where activity.activity_id="
 							+ activity_id);
 			if (result.next()) {
 				time.add(result.getTime("start_time").toLocalTime());
 				time.add(result.getTime("end_time").toLocalTime());
 			}
 			result.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return time;
 	}
@@ -327,16 +423,48 @@ public class DatabaseInterface {
 	public int getCalendarId(int activity_id) {
 		int cal_id = 0;
 
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+
 		try {
-			ResultSet result = this
-					.getQuery("select calendar_id from activity where activity_id="
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("select calendar_id from activity where activity_id="
 							+ activity_id);
 			if (result.next()) {
 				cal_id = result.getInt("calendar_id");
 			}
 			result.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return cal_id;
 	}
@@ -350,10 +478,20 @@ public class DatabaseInterface {
 	 *            the id for the calendar we want returned
 	 * @return a Calendar-object from the database.
 	 */
+	@SuppressWarnings("resource")
 	public Calendar getCalendar(int calendar_id) {
 		Calendar cal = null;
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		try {
-			ResultSet result = this.statement
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
 					.executeQuery("select hascalendar.user_name from hascalendar where hascalendar.calendar_id = "
 							+ calendar_id);
 			if (result.next()) { // the calendar_id corresponds to a user_name
@@ -371,8 +509,7 @@ public class DatabaseInterface {
 				cal.setActivities(act_list);
 				return cal;
 			} else {
-
-				result = this.statement
+				result = statement
 						.executeQuery("select grouphascalendar.group_id from grouphascalendar where grouphascalendar.calendar_id = "
 								+ calendar_id);
 				if (result.next()) { // the calendar_id corresponds to a
@@ -394,10 +531,33 @@ public class DatabaseInterface {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return cal;
 	}
-	
 
 	/**
 	 * Fetches the id of the room that connects with the activity. Returns an
@@ -410,16 +570,48 @@ public class DatabaseInterface {
 	public String getRoomName(int activity_id) {
 		String room_name = "";
 
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+
 		try {
-			ResultSet result = this
-					.getQuery("select room.* from activity, room where activity.room_name= room.room_name and activity_id="
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("select room.* from activity, room where activity.room_name= room.room_name and activity_id="
 							+ activity_id);
 			if (result.next()) {
 				room_name = result.getString("room_name");
 			}
 			result.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return room_name;
 	}
@@ -433,34 +625,65 @@ public class DatabaseInterface {
 	 */
 	public Group getGroup(int group_id) {
 		Group group = null;
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		ArrayList<String> member = new ArrayList<String>();
 		ArrayList<Integer> sub_groups = new ArrayList<Integer>();
 		try {
-			ResultSet result = this
-					.getQuery("select * from calendarGroup where calendarGroup.group_id="
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("select * from calendarGroup where calendarGroup.group_id="
 							+ group_id);
 			if (result.next()) {
 				group = new Group(group_id, result.getString("group_name"));
 			}
 			result.close();
-			ResultSet members = this
-					.getQuery("select account.user_name from account, isMember where account.user_name=isMember.user_name and isMember.group_id="
+			ResultSet members = statement
+					.executeQuery("select account.user_name from account, isMember where account.user_name=isMember.user_name and isMember.group_id="
 							+ group_id);
 			while (members.next()) {
 				member.add(members.getString(1));
 			}
 			group.setMembers(member);
 			members.close();
-			ResultSet sub_group = this
-					.getQuery("select subGroup.subgroup_id from subGroup where supergroup_id="
+			ResultSet sub_group = statement
+					.executeQuery("select subGroup.subgroup_id from subGroup where supergroup_id="
 							+ group_id);
 			while (sub_group.next()) {
 				sub_groups.add(sub_group.getInt(1));
 			}
 			group.setSubgroups(sub_groups);
 			sub_group.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return group;
 	}
@@ -474,17 +697,47 @@ public class DatabaseInterface {
 	 */
 	public String getGroupAdmin(int group_id) {
 		String admin_user_name = null;
-
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		try {
-			ResultSet result = this
-					.getQuery("select account.user_name from calendargroup, account, ismember where account.user_name=ismember.username and ismember.group_id=calendargroup.group_id and calendargroup.group_id="
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("select account.user_name from calendargroup, account, ismember where account.user_name=ismember.username and ismember.group_id=calendargroup.group_id and calendargroup.group_id="
 							+ group_id + " and ismember.role='admin'");
 			if (result.next()) {
 				admin_user_name = result.getString("user_name");
 			}
 			result.close();
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return admin_user_name;
 	}
@@ -501,10 +754,10 @@ public class DatabaseInterface {
 
 	/*
 	 * public int getEmployeeNr(String user_name) { int employeeNr = 0; try {
-	 * this.result = this.statement .executeQuery(
+	 * result = statement.executeQuery(
 	 * "select person.employee_nr from person, account where account.employee_nr = person.employee_nr and account.user_name = "
-	 * + "\"" + user_name + "\""); result.next(); employeeNr =
-	 * this.result.getInt(1); } catch (SQLException e) {
+	 * + "\"" + user_name + "\""); result.next(); employeeNr = result.getInt(1);
+	 * } catch (SQLException e) {
 	 * System.out.println("Error from DatabaseInterface: " +
 	 * e.getLocalizedMessage()); } return employeeNr; }
 	 */
@@ -519,16 +772,47 @@ public class DatabaseInterface {
 	 */
 	public ArrayList<String> getFullName(String user_name) {
 		ArrayList<String> fullName = new ArrayList<String>();
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		try {
-			this.result = this.statement
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
 					.executeQuery("select account.first_name, account.last_name from account where account.user_name = "
 							+ "\"" + user_name + "\"");
 			result.next();
-			fullName.add(this.result.getString("first_name"));
-			fullName.add(this.result.getString("last_name"));
-		} catch (SQLException e) {
+			fullName.add(result.getString("first_name"));
+			fullName.add(result.getString("last_name"));
+		} catch (Exception e) {
 			System.out.println("Error from DatabaseInterface: "
 					+ e.getLocalizedMessage());
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return fullName;
 	}
@@ -543,15 +827,48 @@ public class DatabaseInterface {
 	 */
 	public String getMobile(String user_name) {
 		String mobile = null;
+
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+
 		try {
-			this.result = this.statement
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
 					.executeQuery("select account.mobile_nr from account where account.user_name = "
 							+ "\"" + user_name + "\"");
 			result.next();
-			mobile = this.result.getString(1);
-		} catch (SQLException e) {
+			mobile = result.getString(1);
+		} catch (Exception e) {
 			System.out.println("Error from DatabaseInterface: "
 					+ e.getLocalizedMessage());
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return mobile;
 	}
@@ -567,42 +884,109 @@ public class DatabaseInterface {
 	public String getPassword(String user_name) { // this method is not a smart
 													// way to do things
 		String password = null;
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		try {
-			this.result = this.statement
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
 					.executeQuery("select account.user_password from account where account.user_name = "
 							+ "\"" + user_name + "\"");
 			result.next();
-			password = this.result.getString(1);
-		} catch (SQLException e) {
+			password = result.getString(1);
+		} catch (Exception e) {
 			System.out.println("Error from DatabaseInterface: "
 					+ e.getLocalizedMessage());
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return password;
 	}
 
 	/**
 	 * Checks if the user_name exists in the database.
-	 * @param user_name the user_name we want to check if is in the database
-	 * @return Returns boolean True if the user_name is in the database, false otherwise.
+	 * 
+	 * @param user_name
+	 *            the user_name we want to check if is in the database
+	 * @return Returns boolean True if the user_name is in the database, false
+	 *         otherwise.
 	 */
-	public boolean isUsername(String user_name){
+	public boolean isUsername(String user_name) {
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		boolean is_user_name = false;
-		if(user_name.isEmpty() || user_name.equals("")){
+		if (user_name.isEmpty() || user_name.equals("")) {
 			return is_user_name;
 		}
-		try{
-			this.result = this.statement.executeQuery("select account.user_name from account where account.user_name = \"" + user_name + "\"" );
-			if(result.next()){
-				if(this.result.getString("user_name").equals(user_name)){
+		try {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("select account.user_name from account where account.user_name = \""
+							+ user_name + "\"");
+			if (result.next()) {
+				if (result.getString("user_name").equals(user_name)) {
 					is_user_name = true;
 				}
 			}
-		} catch(SQLException e){
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return is_user_name;
 	}
-	
+
 	/**
 	 * Returns an ID for the calendar related to an account
 	 * 
@@ -613,15 +997,46 @@ public class DatabaseInterface {
 	 */
 	public int getCalendarId(String user_name) {
 		int calendarId = 0;
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		try {
-			this.result = this.statement
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
 					.executeQuery("select calendar.calendar_id from account, calendar, hascalendar where hascalendar.user_name = account.user_name and hascalendar.calendar_id = calendar.calendar_id and hascalendar.user_name = "
 							+ "\"" + user_name + "\"");
 			result.next();
-			calendarId = this.result.getInt("calendar_id");
-		} catch (SQLException e) {
+			calendarId = result.getInt("calendar_id");
+		} catch (Exception e) {
 			System.out.println("Error from DatabaseInterface: "
 					+ e.getLocalizedMessage());
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return calendarId;
 	}
@@ -652,21 +1067,60 @@ public class DatabaseInterface {
 	 *            the account we want to add to the database
 	 */
 	public void setAccount(Account account) {
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		String user_name = account.getUsername();
 		try {
-			ResultSet result = statement
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
 					.executeQuery("select account.user_name from account where account.user_name = \""
 							+ user_name + "\"");
 			result.next();
 			if (result.getString(1) != null) {// check if account with same id
 												// already exists
-				statement.executeUpdate("UPDATE account SET user_password='" + account.getPassword() + "', first_name='" + account.getFirst_name() + "', last_name='" + account.getLast_name() + "', mobile_nr='" + account.getMobile_nr() + "')");
+				statement.executeUpdate("UPDATE account SET user_password='"
+						+ account.getPassword() + "', first_name='"
+						+ account.getFirst_name() + "', last_name='"
+						+ account.getLast_name() + "', mobile_nr='"
+						+ account.getMobile_nr() + "')");
 			} else {// account does not exist, and new row created
-				statement.executeUpdate("INSERT INTO account VALUES ('" + user_name + "', '" + account.getPassword() + "', '" + account.getFirst_name() + "', '" + account.getLast_name() + "', '" + account.getMobile_nr() + "')");
+				statement.executeUpdate("INSERT INTO account VALUES ('"
+						+ user_name + "', '" + account.getPassword() + "', '"
+						+ account.getFirst_name() + "', '"
+						+ account.getLast_name() + "', '"
+						+ account.getMobile_nr() + "')");
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			System.out.println("Error from DatabaseInterface: "
 					+ e.getLocalizedMessage());
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 	}
 
@@ -680,8 +1134,17 @@ public class DatabaseInterface {
 	 */
 	public ArrayList<Activity> getAllActivities(String user_name) {
 		ArrayList<Activity> activityList = new ArrayList<Activity>();
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		try {
-			ResultSet result = this.statement
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
 					.executeQuery("select activity.activity_id, activity.description, activity.start_time, activity.end_time, activity.activity_date, activity.end_date, activity.owner_user_name, activity.room_name from activity, account, calendar, hascalendar where activity.calendar_id = calendar.calendar_id and hascalendar.user_name = account.user_name and hascalendar.calendar_id = calendar.calendar_id and hascalendar.user_name = "
 							+ "\"" + user_name + "\"");
 			while (result.next()) {
@@ -690,13 +1153,35 @@ public class DatabaseInterface {
 					activityList.add(act);
 				}
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			System.out.println("Error from DatabaseInterface: "
 					+ e.getLocalizedMessage());
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return activityList;
 	}
-	
+
 	/**
 	 * Returns an ArrayList of all Activity-objects related to an Account
 	 * 
@@ -707,8 +1192,17 @@ public class DatabaseInterface {
 	 */
 	public ArrayList<Activity> getAllActivities(int group_id) {
 		ArrayList<Activity> activityList = new ArrayList<Activity>();
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		try {
-			ResultSet result = this.statement
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
 					.executeQuery("select activity.activity_id, activity.description, activity.start_time, activity.end_time, activity.activity_date, activity.end_date, activity.owner_user_name, activity.room_name from activity, calendargroup, calendar, grouphascalendar where activity.calendar_id = calendar.calendar_id and grouphascalendar.group_id = calendargroup.group_id and grouphascalendar.calendar_id = calendar.calendar_id and grouphascalendar.group_id = "
 							+ group_id);
 			while (result.next()) {
@@ -717,9 +1211,31 @@ public class DatabaseInterface {
 					activityList.add(act);
 				}
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			System.out.println("Error from DatabaseInterface: "
 					+ e.getLocalizedMessage());
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return activityList;
 	}
@@ -727,7 +1243,7 @@ public class DatabaseInterface {
 	/*
 	 * 
 	 * public Person getPerson(String user_name) { Person person = null; try {
-	 * ResultSet result = this.statement .executeQuery(
+	 * ResultSet result = statement .executeQuery(
 	 * "select * from account, person where account.employee_nr = person.employee_nr and user_name = "
 	 * + "\"" + user_name + "\""); result.next(); int employee_nr =
 	 * result.getInt("employee_nr"); String first_name =
@@ -752,11 +1268,42 @@ public class DatabaseInterface {
 	 *            relationship
 	 */
 	public void setSubGroup(int supergroup_id, int subgroup_id) {
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		try {
-			this.statement.executeUpdate("insert into subgroup values("
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			statement.executeUpdate("insert into subgroup values("
 					+ subgroup_id + ", " + supergroup_id + ")");
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 	}
 
@@ -769,75 +1316,222 @@ public class DatabaseInterface {
 	 *            user_name that should be invited
 	 */
 	public void inviteAccount(int activity_id, String user_name) {
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		try {
-			this.statement.executeUpdate("INSERT INTO invited VALUES("
-					+ activity_id + ", '" + user_name + "', 'false')");
-		} catch (SQLException e) {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			statement.executeUpdate("INSERT INTO invited VALUES(" + activity_id
+					+ ", '" + user_name + "', 'false')");
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 	}
-	
-	public void inviteGroup(int activity_id, int group_id)	{
-		try	{
+
+	public void inviteGroup(int activity_id, int group_id) {
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+		try {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
 			// get user_names in group
-			ResultSet result = this.getQuery("SELECT user_name FROM isMember WHERE group_id=" + group_id);
+			result = statement
+					.executeQuery("SELECT user_name FROM isMember WHERE group_id="
+							+ group_id);
 			ArrayList<String> invited = new ArrayList<String>();
-			while(result.next())	{
+			while (result.next()) {
 				invited.add(result.getString("user_name"));
 			}
 			result.close();
 			// invite people in group
-			for(String inv : invited)	{
+			for (String inv : invited) {
 				this.inviteAccount(activity_id, inv);
 			}
-		}	catch(SQLException e)	{
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 	}
 
 	/**
-	 * Returns an invite-object between an activity and an account. This is used to get information about one invite when we know both the activity and the user_name
-	 * @param activity_id the id for the activity in the relation
-	 * @param user_name the user_name for the account in the relation
+	 * Returns an invite-object between an activity and an account. This is used
+	 * to get information about one invite when we know both the activity and
+	 * the user_name
+	 * 
+	 * @param activity_id
+	 *            the id for the activity in the relation
+	 * @param user_name
+	 *            the user_name for the account in the relation
 	 * @return One Invite-object
 	 */
 	public Invite getInvite(int activity_id, String user_name) {
-		
+
 		Invite invite = null;
-		
-		try	{
-			ResultSet result = this.getQuery("SELECT invited.activity_id, invited.user_name, invited.invitation_status, activity.owner_user_name FROM activity, invited WHERE activity.activity_id =" + activity_id + " AND invited.activity_id=" + activity_id + " AND invited.user_name='" + user_name + "'");
+
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+
+		try {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("SELECT invited.activity_id, invited.user_name, invited.invitation_status, activity.owner_user_name FROM activity, invited WHERE activity.activity_id ="
+							+ activity_id
+							+ " AND invited.activity_id="
+							+ activity_id
+							+ " AND invited.user_name='"
+							+ user_name + "'");
 			result.next();
-			invite = new Invite(result.getString("owner_user_name"), result.getString("user_name"), result.getInt("activity_id"));
+			invite = new Invite(result.getString("owner_user_name"),
+					result.getString("user_name"), result.getInt("activity_id"));
 			invite.setStatus(result.getString("invitation_status"));
-		}	catch(SQLException e)	{
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return invite;
 	}
-	
+
 	/**
-	 * Returns a list of Invite-objects that are related to an activity in the database.
-	 * @param activity_id the id for the activity we want to get all invites related to.
+	 * Returns a list of Invite-objects that are related to an activity in the
+	 * database.
+	 * 
+	 * @param activity_id
+	 *            the id for the activity we want to get all invites related to.
 	 * @return an ArrayList of invite-objects
 	 */
-	public ArrayList<Invite> getAllInvites(int activity_id){
+	@SuppressWarnings("resource")
+	public ArrayList<Invite> getAllInvites(int activity_id) {
 		ArrayList<Invite> invites = new ArrayList<Invite>();
-		try	{
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+		try {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
 			// first get owner
-			ResultSet result = this.getQuery("SELECT owner_user_name FROM activity WHERE activity_id=" + activity_id);
+			result = statement
+					.executeQuery("SELECT owner_user_name FROM activity WHERE activity_id="
+							+ activity_id);
 			result.next();
 			String owner_user_name = result.getString("owner_user_name");
-			result.close();
 			// then get all the invited people
-			result = this.getQuery("SELECT * FROM invited WHERE activity_id=" + activity_id);
-			while(result.next())	{
-				Invite invite = new Invite(owner_user_name, result.getString("user_name"), activity_id);
+			result = statement
+					.executeQuery("SELECT * FROM invited WHERE activity_id="
+							+ activity_id);
+			while (result.next()) {
+				Invite invite = new Invite(owner_user_name,
+						result.getString("user_name"), activity_id);
 				invite.setStatus(result.getString("invitation_status"));
 				invites.add(invite);
 			}
-		}	catch(SQLException e)	{
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return invites;
 	}
@@ -852,9 +1546,18 @@ public class DatabaseInterface {
 	 * @return boolean the status of the invitation
 	 */
 	public boolean isComing(int activity_id, String user_name) {
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		try {
-			ResultSet result = this
-					.getQuery("SELECT invitation_status FROM invited WHERE activity_id="
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("SELECT invitation_status FROM invited WHERE activity_id="
 							+ activity_id
 							+ " AND user_name='"
 							+ user_name
@@ -864,8 +1567,30 @@ public class DatabaseInterface {
 					: true;
 			result.close();
 			return is_coming;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return false;
 	}
@@ -877,9 +1602,18 @@ public class DatabaseInterface {
 	 * @param user_name
 	 */
 	public void changeInvitedStatus(int activity_id, String user_name) {
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
 		try {
-			ResultSet result = this
-					.getQuery("SELECT invitation_status FROM invited WHERE activity_id="
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("SELECT invitation_status FROM invited WHERE activity_id="
 							+ activity_id
 							+ " AND user_name='"
 							+ user_name
@@ -888,26 +1622,83 @@ public class DatabaseInterface {
 			String status = result.getString(1).equals("true") ? "false"
 					: "true";
 			result.close();
-			this.statement
-					.executeUpdate("UPDATE invited SET invitation_status='"
-							+ status + "' WHERE activity_id=" + activity_id
-							+ " AND user_name='" + user_name + "'");
-		} catch (SQLException e) {
+			statement.executeUpdate("UPDATE invited SET invitation_status='"
+					+ status + "' WHERE activity_id=" + activity_id
+					+ " AND user_name='" + user_name + "'");
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 	}
-	
-	public ObservableList<Account> getAllAccounts()	{
-		ObservableList<Account> people = FXCollections.observableList(new ArrayList<Account>());
-		try	{
-			ResultSet result = this.getQuery("SELECT * FROM account");
-			while(result.next())	{
-				people.add(new Account(result.getString("user_name"), result.getString("user_password"), result.getString("first_name"), result.getString("last_name"), result.getString("mobile_nr")));
-				
+
+	public ObservableList<Account> getAllAccounts() {
+		ObservableList<Account> people = FXCollections
+				.observableList(new ArrayList<Account>());
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+		try {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement.executeQuery("SELECT * FROM account");
+			while (result.next()) {
+				people.add(new Account(result.getString("user_name"), result
+						.getString("user_password"), result
+						.getString("first_name"),
+						result.getString("last_name"), result
+								.getString("mobile_nr")));
+
 			}
 			result.close();
-		}	catch(SQLException e)	{
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
 		}
 		return people;
 	}
