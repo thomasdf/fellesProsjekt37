@@ -164,7 +164,7 @@ public class AgendaView extends Application {
 		//Refresh the model with new activities
 		model = dbi.getCalendar(cal_id);
 		//Titler
-		ag_title.setText((model.getIs_group_cal() ? model.getCalendar_owner_group() : model.getCalendar_owner_user()) + "s agenda");
+		ag_title.setText((model.getIs_group_cal() ? /*model.getCalendar_owner_group()*/ "" : /*model.getCalendar_owner_user()*/ "") + "s agenda");
 		
 		//Fjern tidligere aktiviteter
 		agenda_body.getChildren().clear();

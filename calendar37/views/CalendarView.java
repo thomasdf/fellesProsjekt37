@@ -103,6 +103,18 @@ public class CalendarView extends Application {
 				updateActivitiesView();
 			}
 		});
+		profile.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				openProfile();
+			}
+		});
+		tasks.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				openAgenda();
+			}
+		});
 		
 		//The view
 			//General restraints
@@ -347,6 +359,22 @@ public class CalendarView extends Application {
 	 */
 	private void openActivity(int activity_id) {
 		//FILL IN LATER!
+	}
+	
+	/**
+	 * Opens up the view for an {@link Account} that is pressed in this {@link CalendarView},
+	 * and retains information about in what {@link models.Calendar} the {@link Account} was pressed.
+	 */
+	private void openAccount() {
+		//FILL IN LATER!
+	}
+	
+	/**
+	 * Opens up the view for an {@link Agenda} that is pressed in this {@link CalendarView},
+	 * and retains information about in what {@link models.Calendar} the {@link Agenda} was pressed.
+	 */
+	private void openAgenda() {
+		AgendaView agenda = new AgendaView();
 	}
 	
 	
