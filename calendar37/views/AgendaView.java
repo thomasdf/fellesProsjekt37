@@ -12,7 +12,6 @@ import utils.DatabaseInterface;
 import utils.Utilities;
 import models.Activity;
 import models.Invite;
-import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,6 +19,7 @@ import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -32,7 +32,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-public class AgendaView extends Application {
+public class AgendaView {
 
 	String viewName = "Agenda";
 	
@@ -70,7 +70,7 @@ public class AgendaView extends Application {
 	private int timeframe_index = 2;
 	
 	
-	@Override public void start(Stage primaryStage) throws Exception{
+	public void start(Stage primaryStage) throws Exception {
 		//Sets the root
 		root = new GridPane();
 		
@@ -135,6 +135,16 @@ public class AgendaView extends Application {
 		primaryStage.setTitle(viewName);
 		primaryStage.setScene(scene);
 		primaryStage.show();
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			public void handle(WindowEvent we) {
+				parent.disableProperty().set(false);
+			}
+		});
+		primaryStage.setOnHiding(new EventHandler<WindowEvent>() {
+			public void handle(WindowEvent we) {
+				parent.disableProperty().set(false);
+			}
+		});
 		
 		//Sets the model for this view and updates the view according to it
 		setModel(dbi.getCalendar(cal_id));
@@ -257,12 +267,7 @@ public class AgendaView extends Application {
 	 * Closes this view, and re-enables the {@link CalendarView}, commits nothing to the model when doing so.
 	 */
 	private void close() {
-		parent.disableProperty().set(false);
 		Stage stage  = (Stage) root.getScene().getWindow();
 		stage.close();
-	}
-	
-	public static void main(String[] args) {
-		launch(args);
 	}
 }
