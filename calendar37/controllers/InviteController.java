@@ -23,6 +23,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 public class InviteController implements Initializable{
 	
@@ -47,7 +48,7 @@ public class InviteController implements Initializable{
     TableColumn GroupName;
     
     @FXML
-    TableColumn CheckBoxGroup;
+    TableColumn checkBoxGroup;
     
     
     @FXML
@@ -136,6 +137,36 @@ public class InviteController implements Initializable{
     	for(int i = 0; i < PersonData.size(); i++) {
     		PersonData.get(i).setChecked(false);
     	}
+    }
+    
+    @FXML
+    private ObservableList<Account> findInvited(){
+    	ObservableList<Account> InvitedAccounts = FXCollections.observableArrayList();
+    	ObservableList<String> InvitedGroups = FXCollections.observableArrayList();
+    	for(int i = 0; i < PersonData.size(); i++) {
+			if(PersonData.get(i).getChecked()==true){
+				System.out.println(PersonData.get(i).getUsername() + " is marked as invited.");
+				InvitedAccounts.add(PersonData.get(i));
+			} 
+			
+    	}
+    	for(int i = 0; i < GroupData.size(); i++) {
+    		if(GroupData.get(i).getChecked()==true){
+    			System.out.println(GroupData.get(i).getMembers());
+    		}
+    	}
+    	return InvitedAccounts;
+    }
+    
+    @FXML
+    private void closeWindow(ActionEvent event){
+    	
+    	CreateActivityController_Lars.fetchList(findInvited());
+    	
+    	 // get a handle to the stage
+        Stage stage = (Stage) invite_btn.getScene().getWindow();
+        // do what you have to do
+        stage.close();
     }
     
    

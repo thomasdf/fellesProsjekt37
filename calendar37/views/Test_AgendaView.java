@@ -19,7 +19,7 @@ public class Test_AgendaView extends Application {
 	@Override public void start(Stage primaryStage) throws Exception{
 		
 		//Sets the root
-		Parent root = FXMLLoader.load(getClass().getResource("/views/" + viewName + "View.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/views/CreateActivity.fxml"));
 		Scene scene = new Scene(root);
 		
 		//Adds a css-stylesheet to the scene
