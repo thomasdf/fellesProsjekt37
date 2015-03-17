@@ -24,10 +24,13 @@ public class CalendarView extends Application {
 
 	private String viewName = "Calendar";
 	
-	//TESTVALUES
-	private String user_name = "lahey";
-	private int cal_id = 99999;
-	//TESTVALUES
+	private String user_name;
+	private int cal_id;
+	
+	public CalendarView(String user_name, int cal_id) {
+		this.user_name = user_name;
+		this.cal_id = cal_id;
+	}
 	
 	//Init the DBI and utils
 	private DatabaseInterface dbi = new DatabaseInterface();

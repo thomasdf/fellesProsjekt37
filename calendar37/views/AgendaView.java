@@ -36,11 +36,9 @@ public class AgendaView {
 
 	String viewName = "Agenda";
 	
-	//TESTVALUES
 	private AnchorPane parent;
 	private String user_name;
 	private int cal_id;
-	//TESTVALUES
 	
 	public AgendaView(AnchorPane parent, String user_name, int cal_id) {
 		this.parent = parent;
