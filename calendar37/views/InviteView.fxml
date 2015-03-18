@@ -10,8 +10,9 @@
 <?import javafx.scene.control.cell.*?>
 <?import javafx.collections.*?>
 <?import fxmltableview.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.InviteController">
    <children>
       <Pane layoutX="263.0" layoutY="23.0" prefHeight="747.0" prefWidth="778.0" style="-fx-border-style: dotted;">
          <children>
@@ -31,18 +32,22 @@
                   </TextFlow>
                </children>
             </HBox>
-            <TabPane layoutX="178.0" layoutY="184.0" prefHeight="396.0" prefWidth="423.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="tabPane" layoutX="178.0" layoutY="184.0" prefHeight="396.0" prefWidth="423.0" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Person">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TableView fx:id="PersonTable" prefHeight="367.0" prefWidth="423.0">
+                              <TableView fx:id="PersonTable" editable="true" prefHeight="367.0" prefWidth="423.0">
                                 <columns>
-                                  <TableColumn prefWidth="159.0" text="First Name" />
+                                  <TableColumn fx:id="FirstName" prefWidth="174.0" resizable="false" text="First Name" />
                                   	
-                                  <TableColumn prefWidth="130.0" sortable="false" text="Last Name" />
-                                  	
+                                  <TableColumn fx:id="LastName" prefWidth="162.0" resizable="false" sortable="true" text="Last Name" />
+                                  
+                                  <TableColumn fx:id="checkBoxTableColumn" prefWidth="86.0" resizable="false" sortable="false" text="Invite">
+                                  	<cellValueFactory><PropertyValueFactory property="checked" /></cellValueFactory>
+									<cellFactory><views.CheckBoxCellFactory_Account /></cellFactory>
+                                  </TableColumn>	
                                 </columns>
                               </TableView>
                            </children>
@@ -53,10 +58,14 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <TableView prefHeight="367.0" prefWidth="423.0">
+                             <TableView fx:id="GroupTable" prefHeight="367.0" prefWidth="423.0" editable="true">
                                 <columns>
-                                  <TableColumn prefWidth="159.0" text="Name" />
-                                  <TableColumn prefWidth="121.0" text="#Members" />
+                                  <TableColumn fx:id="GroupName" prefWidth="335.0" text="Name" />
+                                  
+                                  <TableColumn prefWidth="89.0" resizable="false" sortable="false" text="Invite" fx:id="checkBoxGroup">
+                                  <cellValueFactory><PropertyValueFactory property="checked" /></cellValueFactory>
+									<cellFactory><views.CheckBoxCellFactory_Group /></cellFactory>
+								</TableColumn>
                                 </columns>
                               </TableView>
                            </children></AnchorPane>
@@ -64,9 +73,10 @@
                 </Tab>
               </tabs>
             </TabPane>
-            <Button layoutX="392.0" layoutY="580.0" mnemonicParsing="false" text="Uncheck everything" />
-            <Button layoutX="267.0" layoutY="580.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="120.0" text="Check everything" />
-            <Button layoutX="319.0" layoutY="667.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="150.0" text="Invite">
+            <Button layoutX="392.0" layoutY="580.0" mnemonicParsing="false" onAction="#unselectAll" text="Uncheck everything" />
+            <Button fx:id="CheckEverything" layoutX="267.0" layoutY="580.0" mnemonicParsing="false" onAction="#selectAll" prefHeight="25.0" prefWidth="120.0" text="Check everything" />
+            <Button fx:id="invite_btn" layoutX="319.0" layoutY="667.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="150.0" text="Invite"
+            onAction="#closeWindow">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

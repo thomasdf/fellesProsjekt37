@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="700.0" maxWidth="1280.0" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: dcdff5;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="700.0" maxWidth="1280.0" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: dcdff5;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ActivityController">
    <children>
       <Pane layoutX="186.0" layoutY="39.0" prefHeight="620.0" prefWidth="906.0" style="-fx-border-style: none;">
          <children>

@@ -1,3 +1,7 @@
+#drop schema fellesprosjekt
+#create schema fellesprosjekt
+#use schema fellesprosjekt
+
 use thomasdf_fellesprosjekt;
 Create table account( #entity including hasAccount
 user_name varChar(10) unique primary key,
