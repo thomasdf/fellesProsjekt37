@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="96.0" prefWidth="256.0" styleClass="dialogue" stylesheets="@main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.DialogueController{">
+<AnchorPane prefHeight="96.0" prefWidth="256.0" styleClass="dialogue" stylesheets="@main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.UNUSED_DialogueController{">
    <children>
       <Label alignment="CENTER" text="Er du sikker på at du vil fortsette?" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0">
          <font>

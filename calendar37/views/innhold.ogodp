@@ -1,9 +1,11 @@
+AgendaView.java
 CalendarView.java
-Calendar.fxml
+CheckBoxCellFactory_Account.java
+CheckBoxCellFactory_Group.java
+MainApplication.java
 ActivityView.java
-Activity.fxml
-AccountView.java
-Account.fxml
-ParticipantsForm.java
-Participants.fxml
+CreateActivity.fxml
+CreateGroupView.java
+InviteView.fxml
+LoginView.fxml
 main.css
