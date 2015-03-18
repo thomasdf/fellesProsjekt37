@@ -178,7 +178,7 @@ public class InviteController implements Initializable{
     @FXML
     private void closeWindow(ActionEvent event){
     	
-    	CreateActivityController_Lars.fetchList(findInvited());
+    	CreateActivityController.fetchList(findInvited());
     	
     	 // get a handle to the stage
         Stage stage = (Stage) invite_btn.getScene().getWindow();
