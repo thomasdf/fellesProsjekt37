@@ -23,31 +23,16 @@ public class Account {
 	private final String last_name;
 	private final String mobile_nr;
 	
-	//Oppsett for checkbox i tableview
-		//Checked variablen tilsier om denne brukeren er huket av i invite viewet eller ikke
-		//Pass på å alltid sette den til "false" for ALLE brukere når du entrer invite viewet.
-		//Hvis ikke vil systemet tro at brukeren alltid er huket av, og dermed bli invitert til alt.
-	//-------------------------------------------------------
-		private SimpleBooleanProperty checked = new SimpleBooleanProperty(false);
-		   // other columns here
-
-		    public SimpleBooleanProperty checkedProperty() {
-		        return this.checked;
-		    }
-
-		    public java.lang.Boolean getChecked() {
-		        return this.checkedProperty().get();
-		    }
-
-		    public void setChecked(final java.lang.Boolean checked) {
-		        this.checkedProperty().set(checked);
-		    }
-	//---------------------------------------------------
-	
 	//Property-attributes
+	/**
+	 * Checked variablen tilsier om denne brukeren er huket av i invite viewet eller ikke
+	 * Pass pÃ¥ Ã¥ alltid sette den til "false" for ALLE brukere nÃ¥r du entrer invite viewet.
+	 * Hvis ikke vil systemet tro at brukeren alltid er huket av, og dermed bli invitert til alt.
+	 */
+	private SimpleBooleanProperty checked = new SimpleBooleanProperty(false);
 	private ObservableList<Integer> in_groupsList = FXCollections.observableList(new ArrayList<Integer>());
 	private ObservableList<Integer> calendarsList = FXCollections.observableList(new ArrayList<Integer>());
-		//^ muligvis slette denne?
+		//TODO: ^ muligvis slette denne?
 	
 	//Constructor
 	public Account(String username, String password, String first_name, String last_name, String mobile_nr) {
@@ -97,5 +82,15 @@ public class Account {
 	}
 	public void setCalendars(ArrayList<Integer> calendars) {
 		calendarsList.addAll(calendars);
+	}
+	
+	public java.lang.Boolean getChecked() {
+		return checked.get();
+	}
+	public void setChecked(final java.lang.Boolean checked) {
+		this.checked.set(checked);
+	}
+	public SimpleBooleanProperty checkedProperty() {
+		return checked;
 	}
 }
