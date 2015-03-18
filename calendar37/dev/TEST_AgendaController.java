@@ -1,10 +1,10 @@
-package views;
+package dev;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-public class Test_AgendaController{
+public class TEST_AgendaController{
 	
 	//Deklarerer modellen
 	

@@ -1,5 +1,4 @@
-package views;
-
+package dev;
 
 
 import javafx.application.Application;
@@ -8,18 +7,14 @@ import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;
 
-public class Test_AgendaView extends Application {
+public class DialogueView extends Application {
 
-//	String viewName = "Calendar";
-//	String viewName = "Agenda";
-//	String viewName = "Dialogue";
-	String viewName = "Invite";
-//	String viewName = "Activity";
+	String viewName = "Dialogue";
 	
 	@Override public void start(Stage primaryStage) throws Exception{
 		
 		//Sets the root
-		Parent root = FXMLLoader.load(getClass().getResource("/views/CreateActivity.fxml"));
+		Parent root = FXMLLoader.load(getClass().getResource("/views/" + viewName + "View.fxml"));
 		Scene scene = new Scene(root);
 		
 		//Adds a css-stylesheet to the scene
