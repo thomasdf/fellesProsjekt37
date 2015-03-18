@@ -73,8 +73,8 @@ public class DatabaseInterface {
 	 * Perhaps make class usable for different users by including credentials in
 	 * the constructor instead of making it a static final field.
 	 */
-	private static final String DB_URL = "jdbc:mysql://localhost:3306/fellesprosjekt";
-	private static final String USERNAME = "fellesprosjekt";
+	private static final String DB_URL = "jdbc:mysql://mysql.stud.ntnu.no/thomasdf_fellesprosjekt";
+	private static final String USERNAME = "thomasdf_fellesp";
 
 	private static final String PASSWORD = "bringIt";
 
@@ -525,7 +525,7 @@ public class DatabaseInterface {
 			statement = connection.createStatement();
 			// method
 			result = statement
-					.executeQuery("select hascalendar.user_name from hascalendar where hascalendar.calendar_id = "
+					.executeQuery("select hasCalendar.user_name from hasCalendar where hasCalendar.calendar_id = "
 							+ calendar_id);
 			if (result.next()) { // the calendar_id corresponds to a user_name
 									// in the database
@@ -543,7 +543,7 @@ public class DatabaseInterface {
 				return cal;
 			} else {
 				result = statement
-						.executeQuery("select grouphascalendar.group_id from grouphascalendar where grouphascalendar.calendar_id = "
+						.executeQuery("select groupHasCalendar.group_id from groupHasCalendar where groupHasCalendar.calendar_id = "
 								+ calendar_id);
 				if (result.next()) { // the calendar_id corresponds to a
 										// group_id in the database
@@ -686,7 +686,7 @@ public class DatabaseInterface {
 			group.setMembers(member);
 			members.close();
 			ResultSet sub_group = statement
-					.executeQuery("select subGroup.subgroup_id from subGroup where supergroup_id="
+					.executeQuery("select subGroup.subGroup_id from subGroup where superGroup_id="
 							+ group_id);
 			while (sub_group.next()) {
 				sub_groups.add(sub_group.getInt(1));
@@ -741,8 +741,8 @@ public class DatabaseInterface {
 			statement = connection.createStatement();
 			// method
 			result = statement
-					.executeQuery("select account.user_name from calendargroup, account, ismember where account.user_name=ismember.username and ismember.group_id=calendargroup.group_id and calendargroup.group_id="
-							+ group_id + " and ismember.role='admin'");
+					.executeQuery("select account.user_name from calendarGroup, account, isMember where account.user_name=isMember.username and isMember.group_id=calendarGroup.group_id and calendarGroup.group_id="
+							+ group_id + " and isMember.role='admin'");
 			if (result.next()) {
 				admin_user_name = result.getString("user_name");
 			}
@@ -1041,7 +1041,7 @@ public class DatabaseInterface {
 			statement = connection.createStatement();
 			// method
 			result = statement
-					.executeQuery("select calendar.calendar_id from account, calendar, hascalendar where hascalendar.user_name = account.user_name and hascalendar.calendar_id = calendar.calendar_id and hascalendar.user_name = "
+					.executeQuery("select calendar.calendar_id from account, calendar, hasCalendar where hasCalendar.user_name = account.user_name and hasCalendar.calendar_id = calendar.calendar_id and hasCalendar.user_name = "
 							+ "\"" + user_name + "\"");
 			result.next();
 			calendarId = result.getInt("calendar_id");
@@ -1181,7 +1181,7 @@ public class DatabaseInterface {
 			statement = connection.createStatement();
 			// method
 			result = statement
-					.executeQuery("select activity.activity_id, activity.description, activity.start_time, activity.end_time, activity.activity_date, activity.end_date, activity.owner_user_name, activity.room_name from activity, account, calendar, hascalendar where activity.calendar_id = calendar.calendar_id and hascalendar.user_name = account.user_name and hascalendar.calendar_id = calendar.calendar_id and hascalendar.user_name = "
+					.executeQuery("select activity.activity_id, activity.description, activity.start_time, activity.end_time, activity.activity_date, activity.end_date, activity.owner_user_name, activity.room_name from activity, account, calendar, hasCalendar where activity.calendar_id = calendar.calendar_id and hasCalendar.user_name = account.user_name and hasCalendar.calendar_id = calendar.calendar_id and hasCalendar.user_name = "
 							+ "\"" + user_name + "\"");
 			while (result.next()) {
 				Activity act = getActivity(result.getInt("activity_id"));
@@ -1239,7 +1239,7 @@ public class DatabaseInterface {
 			statement = connection.createStatement();
 			// method
 			result = statement
-					.executeQuery("select activity.activity_id, activity.description, activity.start_time, activity.end_time, activity.activity_date, activity.end_date, activity.owner_user_name, activity.room_name from activity, calendargroup, calendar, grouphascalendar where activity.calendar_id = calendar.calendar_id and grouphascalendar.group_id = calendargroup.group_id and grouphascalendar.calendar_id = calendar.calendar_id and grouphascalendar.group_id = "
+					.executeQuery("select activity.activity_id, activity.description, activity.start_time, activity.end_time, activity.activity_date, activity.end_date, activity.owner_user_name, activity.room_name from activity, calendarGroup, calendar, groupHasCalendar where activity.calendar_id = calendar.calendar_id and groupHasCalendar.group_id = calendarGroup.group_id and groupHasCalendar.calendar_id = calendar.calendar_id and groupHasCalendar.group_id = "
 							+ group_id);
 			while (result.next()) {
 				Activity act = getActivity(result.getInt("activity_id"));
@@ -1314,7 +1314,7 @@ public class DatabaseInterface {
 					.getConnection(DB_URL, USERNAME, PASSWORD);
 			statement = connection.createStatement();
 			// method
-			statement.executeUpdate("insert into subgroup values("
+			statement.executeUpdate("insert into subGroup values("
 					+ subgroup_id + ", " + supergroup_id + ")");
 		} catch (Exception e) {
 			e.printStackTrace();
