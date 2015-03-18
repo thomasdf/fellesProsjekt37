@@ -58,9 +58,10 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                             <TableView fx:id="GroupTable" prefHeight="367.0" prefWidth="423.0">
+                             <TableView fx:id="GroupTable" prefHeight="367.0" prefWidth="423.0" editable="true">
                                 <columns>
                                   <TableColumn fx:id="GroupName" prefWidth="335.0" text="Name" />
+                                  
                                   <TableColumn prefWidth="89.0" resizable="false" sortable="false" text="Invite" fx:id="checkBoxGroup">
                                   <cellValueFactory><PropertyValueFactory property="checked" /></cellValueFactory>
 									<cellFactory><views.CheckBoxCellFactory_Group /></cellFactory>

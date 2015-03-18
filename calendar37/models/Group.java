@@ -75,19 +75,19 @@ public class Group {
 			//Pass på å alltid sette den til "false" for ALLE brukere når du entrer invite viewet.
 			//Hvis ikke vil systemet tro at brukeren alltid er huket av, og dermed bli invitert til alt.
 		//-------------------------------------------------------
-			private SimpleBooleanProperty checked = new SimpleBooleanProperty(false);
-			   // other columns here
+	private SimpleBooleanProperty checked = new SimpleBooleanProperty(false);
+	   // other columns here
 
-			    public SimpleBooleanProperty checkedProperty() {
-			        return this.checked;
-			    }
+	    public SimpleBooleanProperty checkedProperty() {
+	        return this.checked;
+	    }
 
-			    public java.lang.Boolean getChecked() {
-			        return this.checkedProperty().get();
-			    }
+	    public java.lang.Boolean getChecked() {
+	        return this.checkedProperty().get();
+	    }
 
-			    public void setChecked(final java.lang.Boolean checked) {
-			        this.checkedProperty().set(checked);
-			    }
+	    public void setChecked(final java.lang.Boolean checked) {
+	        this.checkedProperty().set(checked);
+	    }
 		//---------------------------------------------------
 }

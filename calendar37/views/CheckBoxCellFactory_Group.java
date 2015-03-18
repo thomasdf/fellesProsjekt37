@@ -1,7 +1,8 @@
 package views;
 
-import models.Account;
+
 import models.Group;
+
 import javafx.scene.control.TableCell;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.util.Callback;

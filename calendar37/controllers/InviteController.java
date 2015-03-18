@@ -62,10 +62,7 @@ public class InviteController implements Initializable{
     
     @FXML
     TabPane tabPane;
- 
-    // The table's data
-//    ObservableList<Person_Test> data;
-    
+
     //Store all the accounts from the database in this list:
     ObservableList<Account> PersonData;
     ObservableList<Group> GroupData;
@@ -121,24 +118,32 @@ public class InviteController implements Initializable{
      
     @FXML
     private void selectAll(ActionEvent event) {
-    	if(currentTab=="Person"){
+    	if(currentTab.equals("Person")){
     		for(int i = 0; i < PersonData.size(); i++) {
     			PersonData.get(i).setChecked(true);
     		} 
     	}else {
     			for(int i = 0; i < GroupData.size(); i++) {
         			GroupData.get(i).setChecked(true);
+        			System.out.println(GroupData.get(i).getGroup_name());
     		}
     	}
     }
     
     @FXML
     private void unselectAll(ActionEvent event) {
-    	for(int i = 0; i < PersonData.size(); i++) {
-    		PersonData.get(i).setChecked(false);
+    	if(currentTab=="Person"){
+    		for(int i = 0; i < PersonData.size(); i++) {
+    			PersonData.get(i).setChecked(false);
+    		}} else {
+    			for(int i = 0; i < PersonData.size(); i++) {
+        			GroupData.get(i).setChecked(false);
+    		}
+    			
     	}
     }
     
+    //findInvited vil finne alle de inviterte account objektene (også via inviterte grupper) og returnere en ObservableList
     @FXML
     private ObservableList<Account> findInvited(){
     	ObservableList<Account> InvitedAccounts = FXCollections.observableArrayList();
@@ -152,12 +157,21 @@ public class InviteController implements Initializable{
     	}
     	for(int i = 0; i < GroupData.size(); i++) {
     		if(GroupData.get(i).getChecked()==true){
-    			System.out.println(GroupData.get(i).getMembers());
+    			InvitedGroups.addAll(GroupData.get(i).getMembers());
+    			System.out.println(InvitedGroups.size());
+    			
     		}
+    		
+    	}
+    	for(int i = 0; i < InvitedGroups.size(); i++) {
+//    		System.out.println(InvitedGroups.get(i));
+    		
     	}
     	return InvitedAccounts;
     }
     
+    
+    //CloseWindow vil lukke invite vinduet og sende en liste med inviterte brukere tilbake til "CreateActivity" kontrolleren
     @FXML
     private void closeWindow(ActionEvent event){
     	
