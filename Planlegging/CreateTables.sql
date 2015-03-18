@@ -1,4 +1,9 @@
-use thomasdf_fellesprosjekt;
+#use thomasdf_fellesprosjekt;
+
+drop schema fellesprosjekt;
+create schema fellesprosjekt;
+use fellesprosjekt;
+
 Create table account( #entity including hasAccount
 user_name varChar(10) unique primary key,
 user_password varChar(10) not null, #should be scrambled

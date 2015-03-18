@@ -1211,6 +1211,55 @@ public class DatabaseInterface {
 			}
 		}
 	}
+	/**
+	 * Deletes an account from the database. I the account is not in the database, the deletion is aborted and no action is taken. Remember that an account that is admin for an activity cannot be deleted without the activities first being deleted.
+	 * @param account the account we want to delete from the database.
+	 */
+	public void deleteAccount(Account account) {
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+		String user_name = account.getUsername();
+		try {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("select account.user_name from account where account.user_name = \""
+							+ user_name + "\"");
+			if(result.next()){//account exists in the database
+				statement.executeUpdate("DELETE from account where account.user_name = \"" + user_name + "\"");
+			}//else: no account in the database with this user_name. no action taken
+		} catch (Exception e) {
+			System.out.println("Error from DatabaseInterface: "
+					+ e.getLocalizedMessage());
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
+		}
+	}
 
 	/**
 	 * Returns an ArrayList of all Activity-objects related to an Account
