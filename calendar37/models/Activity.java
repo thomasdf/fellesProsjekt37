@@ -27,7 +27,6 @@ public class Activity {
 	private final String activity_owner;
 	
 	//Property-attributes
-	private StringProperty titleProperty = new SimpleStringProperty();
 	private StringProperty descriptionProperty = new SimpleStringProperty();
 	private StringProperty roomProperty = new SimpleStringProperty();
 	private Property<LocalDate> start_dateProperty = new ObjectPropertyBase<LocalDate>(null) {
@@ -89,16 +88,6 @@ public class Activity {
 	
 	public String getActivity_owner() {
 		return activity_owner;
-	}
-	
-	public String getTitle() {
-		return titleProperty.getValue();
-	}
-	public void setTitle(String title) {
-		titleProperty.setValue(title);
-	}
-	public StringProperty titleProperty() {
-		return titleProperty;
 	}
 	
 	public String getDescription() {

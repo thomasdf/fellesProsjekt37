@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CreateActivityController_Lars">
+<AnchorPane prefHeight="800.0" fx:controller="controllers.CreateActivityController" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane layoutX="311.0" layoutY="46.0" prefHeight="704.0" prefWidth="658.0" style="-fx-border-style: dotted;">
          <children>
@@ -83,9 +83,9 @@
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <DatePicker fx:id="start_date" prefHeight="25.0" prefWidth="171.0" GridPane.rowIndex="1" />
-                  <TextField fx:id="start_hours" promptText="HH" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="start_minutes" promptText="MM" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <DatePicker fx:id="start_date" onAction="#dateChange" prefHeight="25.0" prefWidth="171.0" GridPane.rowIndex="1" />
+                  <TextField fx:id="start_hours" onFocusedChange="#timeChange" promptText="HH" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="start_minutes" onFocusedChange="#timeChange" promptText="MM" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                </children>
             </GridPane>
@@ -97,8 +97,8 @@
                      </font>
                   </Text>
                   <DatePicker fx:id="end_date" onAction="#dateChange" prefHeight="25.0" prefWidth="171.0" GridPane.rowIndex="1" />
-                  <TextField fx:id="end_hours" onAction="#dateChange" promptText="HH" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="end_minutes" promptText="MM" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <TextField fx:id="end_hours" onFocusedChange="#timeChange" promptText="HH" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="end_minutes" onFocusedChange="#timeChange" promptText="MM" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                </children>
                <columnConstraints>
@@ -114,8 +114,7 @@
                </rowConstraints>
             </GridPane>
             <Button fx:id="Invite_btn" layoutX="97.0" layoutY="568.0" mnemonicParsing="false" onAction="#showInviteWindow" prefHeight="25.0" prefWidth="94.0" text="Invite " />
-            <Button fx:id="Create_btn" layoutX="277.0" layoutY="640.0" mnemonicParsing="false" text="Create"
-            onAction="#findInvitedAccounts" />
+			<Button fx:id="Create_btn" layoutX="277.0" layoutY="640.0" mnemonicParsing="false" text="Create" onAction="#createActivity" />
          </children>
       </Pane>
    </children>

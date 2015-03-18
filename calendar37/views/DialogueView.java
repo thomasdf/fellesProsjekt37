@@ -7,10 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;
 
-public class Test_DialogueView extends Application {
+public class DialogueView extends Application {
 
-//	String viewName = "Calendar";
-//	String viewName = "Agenda";
 	String viewName = "Dialogue";
 	
 	@Override public void start(Stage primaryStage) throws Exception{
@@ -20,7 +18,7 @@ public class Test_DialogueView extends Application {
 		Scene scene = new Scene(root);
 		
 		//Adds a css-stylesheet to the scene
-//		scene.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
 		
 		//Initializes the stage and shows it
 		primaryStage.setTitle(viewName);

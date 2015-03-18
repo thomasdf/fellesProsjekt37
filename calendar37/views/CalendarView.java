@@ -1,15 +1,13 @@
 package views;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 
+import utils.DatabaseInterface;
+import utils.Utilities;
 import models.Activity;
-import javafx.application.Application;
+import models.Invite;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,26 +19,23 @@ import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.*;
 
-public class CalendarView extends Application {
+public class CalendarView {
 
 	private String viewName = "Calendar";
 	
+	private String user_name;
+	private int cal_id;
+	
+	public CalendarView(String user_name, int cal_id) {
+		this.user_name = user_name;
+		this.cal_id = cal_id;
+	}
+	
+	//Init the DBI and utils
+	private DatabaseInterface dbi = new DatabaseInterface();
+	private Utilities utils = new Utilities();
 	//The model for this view
 	private models.Calendar model;
-	
-	//TESTVALUES
-	//The activities for this view
-	Activity act1;
-	Activity act2;
-	Activity act3;
-	Activity act4;
-	Activity act5;
-	Activity act6;
-	Activity act7;
-	Activity act8;
-	Activity act9;
-	Activity act10;
-	//TESTVALUES
 	
 	//The screen-size currently used
 	Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
@@ -49,6 +44,7 @@ public class CalendarView extends Application {
 	
 	//Variables we need defined outside the "start"-function
 		//View-elements
+	private AnchorPane root;
 	private GridPane calendar = new GridPane();
 	private GridPane header = new GridPane();
 	private Label cal_title = new Label("<kalendernavn>");
@@ -58,19 +54,16 @@ public class CalendarView extends Application {
 	private HBox footer = new HBox();
 	private Button profile = new Button("Min profil");
 	private Button tasks = new Button("Aktivitets-agenda");
+	private Button close = new Button("Lukk");
 	
 		//Lists containing current days and activities
 	private ArrayList<Label> days = new ArrayList<Label>();
 	private ArrayList<VBox> day_activities = new ArrayList<VBox>();
 	
-		//Useful final variables
-	private final List<String> months = Arrays.asList("Januar", "Februar", "Mars", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Desember");
-	private final List<String> weekdays = Arrays.asList("Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag");
-	
 	//Set the values for THIS view, updateable:
 	Calendar cal = Calendar.getInstance();
-	int start_index = getFirstDayInMonth(cal.get(Calendar.YEAR)
-			, cal.get(Calendar.MONTH)) != 1 ? getFirstDayInMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)) - 2 : 6;
+	int start_index = utils.getFirstDayInMonth(cal.get(Calendar.YEAR)
+			, cal.get(Calendar.MONTH)) != 1 ? utils.getFirstDayInMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)) - 2 : 6;
 	int end_index = start_index + cal.getActualMaximum(Calendar.DAY_OF_MONTH) - 1;
 	
 	Calendar prev_cal = new GregorianCalendar((cal.get(Calendar.MONTH) - 1)%12 == 0 ? cal.get(Calendar.YEAR) - 1 : cal.get(Calendar.YEAR)
@@ -79,27 +72,9 @@ public class CalendarView extends Application {
 	Calendar next_cal = new GregorianCalendar((cal.get(Calendar.MONTH) + 1)%12 == 0 ? cal.get(Calendar.YEAR) + 1 : cal.get(Calendar.YEAR)
 			, (cal.get(Calendar.MONTH) + 1)%12, 1);
 	
-	private void setMonth(int diff) {
-		cal.set((cal.get(Calendar.MONTH) + diff)%12 == 0 && cal.get(Calendar.MONTH) != 1 ? cal.get(Calendar.YEAR) + diff : cal.get(Calendar.YEAR)
-				, (cal.get(Calendar.MONTH) + diff)%12, 1);
-		start_index = getFirstDayInMonth(cal.get(Calendar.YEAR)
-				, cal.get(Calendar.MONTH)) != 1 ? getFirstDayInMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)) - 2 : 6;
-		end_index = start_index + cal.getActualMaximum(Calendar.DAY_OF_MONTH) - 1;
-		
-		prev_cal.set((cal.get(Calendar.MONTH) - 1)%12 == 0 ? cal.get(Calendar.YEAR) - 1 : cal.get(Calendar.YEAR)
-				, (cal.get(Calendar.MONTH) - 1)%12, 1);
-		
-		next_cal.set((cal.get(Calendar.MONTH) + 1)%12 == 0 ? cal.get(Calendar.YEAR) + 1 : cal.get(Calendar.YEAR)
-				, (cal.get(Calendar.MONTH) + 1)%12, 1);
-	}
-	
-	@Override public void start(Stage primaryStage) throws Exception {
-		//TESPRINTING
-		
-		//TESPRINTING
-		
-		//Sets the rootd
-		AnchorPane root = new AnchorPane();
+	public void start(Stage primaryStage) throws Exception {
+		//Sets the root
+		root = new AnchorPane();
 		
 		//Add style classes, id and set size to screen
 		root.styleProperty().set("-fx-background-color: #eeeefa");
@@ -132,6 +107,24 @@ public class CalendarView extends Application {
 				updateActivitiesView();
 			}
 		});
+		profile.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				openProfile();
+			}
+		});
+		tasks.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				openAgenda();
+			}
+		});
+		close.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				close();
+			}
+		});
 		
 		//The view
 			//General restraints
@@ -148,11 +141,11 @@ public class CalendarView extends Application {
 		header.add(prev_month, 2, 0);
 		header.add(next_month, 3, 0);
 			//footer
-		footer.getChildren().addAll(profile, tasks);
+		footer.getChildren().addAll(profile, tasks, close);
 			//calendar
 			//the days
-		for (int i = 0; i < weekdays.size(); i++) {
-			Label weekday = new Label(weekdays.get(i));
+		for (int i = 0; i < utils.weekdays.size(); i++) {
+			Label weekday = new Label(utils.weekdays.get(i));
 			weekday.getStyleClass().add("weekday");
 			calendar.add(weekday, i, 0);
 			GridPane.setHgrow(weekday, Priority.ALWAYS);
@@ -188,64 +181,8 @@ public class CalendarView extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		
-		//TESTVALUES
-			//activity
-		act1 = new Activity(0, 0, "admin");
-		act1.setTitle("Møte undass");
-		act1.setStart_date(LocalDate.of(2015, 3, 13));
-		act1.setFrom(LocalTime.of(12, 0));
-		act1.setTo(LocalTime.of(12, 30));
-			//activity
-		act2 = new Activity(1, 0, "admin");
-		act2.setTitle("Middag med den altfor, altfor store familien min");
-		act2.setStart_date(LocalDate.of(2015, 3, 15));
-		act2.setFrom(LocalTime.of(16, 0));
-		act2.setTo(LocalTime.of(17, 30));
-			//activity
-		act3 = new Activity(2, 0, "admin");
-		act3.setTitle("Gruppearbeid");
-		act3.setStart_date(LocalDate.of(2015, 4, 24));
-			//activity
-		act4 = new Activity(3, 0, "admin");
-		act4.setTitle("Travel dag!");
-		act4.setStart_date(LocalDate.of(2015, 4, 24));
-		//activity
-		act5 = new Activity(4, 0, "admin");
-		act5.setTitle("Travel dag!");
-		act5.setStart_date(LocalDate.of(2015, 4, 24));
-		//activity
-		act6 = new Activity(5, 0, "admin");
-		act6.setTitle("Travel dag!");
-		act6.setStart_date(LocalDate.of(2015, 4, 24));
-		//activity
-		act7 = new Activity(6, 0, "admin");
-		act7.setTitle("Gruppearbeid :D");
-		act7.setStart_date(LocalDate.of(2015, 3, 13));
-		act7.setEnd_date(LocalDate.of(2015, 3, 18));
-		act7.setFrom(LocalTime.of(16, 0));
-		act7.setTo(LocalTime.of(17, 30));
-		//activity
-		act8 = new Activity(7, 0, "admin");
-		act8.setTitle("Travel dag!");
-		act8.setStart_date(LocalDate.of(2015, 4, 24));
-		//activity
-		act9 = new Activity(8, 0, "admin");
-		act9.setTitle("Travel dag!");
-		act9.setStart_date(LocalDate.of(2015, 4, 24));
-		//activity
-		act10 = new Activity(9, 0, "admin");
-		act10.setTitle("Travel dag!");
-		act10.setStart_date(LocalDate.of(2015, 4, 24));
-			//the calendar-model
-		model = new models.Calendar(0, "admin");
-			//add activities to the calendar
-		model.getActivities().addAll(act1.getActivity_id(), act2.getActivity_id(), act3.getActivity_id(), act4.getActivity_id()
-				, act5.getActivity_id(), act6.getActivity_id(), act7.getActivity_id(), act8.getActivity_id(), act9.getActivity_id()
-				, act10.getActivity_id());
-		//TESTVALUES
-		
 		//Sets the model for this view and updates the view according to it
-		setModel(model);
+		setModel(dbi.getCalendar(cal_id));
 		
 		//Sets focus to the profile-button
 		profile.requestFocus();
@@ -253,28 +190,37 @@ public class CalendarView extends Application {
 	
 	//Set up bindings and listeners:
 	private ListChangeListener<Integer> activitiesChangeListener = new ListChangeListener<Integer>() {
-	        @SuppressWarnings("rawtypes")
-			public void onChanged(ListChangeListener.Change change) {
-	        	updateActivitiesView();
-	        }
-		};
+		        @SuppressWarnings("rawtypes")
+				public void onChanged(ListChangeListener.Change change) {
+		        	updateActivitiesView();
+		        }
+			};
 	
+	/**
+	 * Updates the global model-attribute and activates the listeners if it's needed,
+	 * and updates the view with correct attributes and {@link Activity}s.
+	 * 
+	 * @param model
+	 */
 	public void setModel(models.Calendar model) {
 		if (this.model != null) {
 			model.getActivities().removeListener(activitiesChangeListener);
 		}
-		if (this.model != null) {
-			model.getActivities().addListener(activitiesChangeListener);
-		}
 		this.model = model;
 		fillCalendar();
 		updateActivitiesView();
+		if (this.model != null) {
+			model.getActivities().addListener(activitiesChangeListener);
+		}
 	}
 	
+	/**
+	 * Fills in all the dates, month names, and sets the color/opacity of the dates according to what the current month is.
+	 */
 	private void fillCalendar() {
 		//Titler
-		cal_title.setText((model.getIs_group_cal() ? model.getCalendar_owner_group() : model.getCalendar_owner_user()) + "s kalender");
-		cur_month_year.setText(getMonth(cal.get(Calendar.MONTH)) + " " + Integer.toString(cal.get(Calendar.YEAR)));
+		cal_title.setText((model.getIs_group_cal() ? dbi.getGroup(model.getCalendar_owner_group()).getGroup_name() : model.getCalendar_owner_user()) + "s kalender");
+		cur_month_year.setText(utils.months.get(cal.get(Calendar.MONTH)) + " " + Integer.toString(cal.get(Calendar.YEAR)));
 		
 		//Forrige måned
 		int start_prev_month = prev_cal.getActualMaximum(Calendar.DAY_OF_MONTH) - start_index + 1;
@@ -288,7 +234,7 @@ public class CalendarView extends Application {
 		int date = 1;
 		for (int i = start_index; i <= end_index; i++) {
 			if (date == 1) {
-				days.get(i).setText(getMonth(cal.get(Calendar.MONTH)).substring(0, 3) + " " + Integer.toString(date));
+				days.get(i).setText(utils.months.get(cal.get(Calendar.MONTH)).substring(0, 3) + " " + Integer.toString(date));
 			} else {
 				days.get(i).setText(Integer.toString(date));
 			}
@@ -300,7 +246,7 @@ public class CalendarView extends Application {
 		date = 1;
 		for (int i = end_index + 1; i < days.size(); i++) {
 			if (date == 1) {
-				days.get(i).setText(getMonth(next_cal.get(Calendar.MONTH)).substring(0, 3) + " " + Integer.toString(date));
+				days.get(i).setText(utils.months.get(next_cal.get(Calendar.MONTH)).substring(0, 3) + " " + Integer.toString(date));
 			} else {
 				days.get(i).setText(Integer.toString(date));
 			}
@@ -309,36 +255,80 @@ public class CalendarView extends Application {
 		}
 	}
 	
+	/**
+	 * Updates all the {@link Activity}s that this {@link CalendarView} is displaying according to what month the view is on.
+	 */
 	private void updateActivitiesView() {
+		//Refresh the model with new activities
+		model = dbi.getCalendar(cal_id);
+		//Clear the activities
 		for (int i = 0; i < days.size(); i++){
 			day_activities.get(i).getChildren().clear();
 		}
-		for (int activity_id : model.getActivities()) {
+		//Personal activities
+		for (Activity cur_act : dbi.getAllActivities(user_name)) {
 			try {
-				Activity cur_act = getActivity(activity_id);
 				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
-					String formatted_act = (cur_act.getEnd_date() == null ? "" : "> ") + getFormattedActivity(cur_act, true); 
+					String formatted_act = (cur_act.getEnd_date() == null || cur_act.getEnd_date().equals(cur_act.getStart_date()) ?
+							"" : "> ") + utils.getFormattedActivity(cur_act, true, 30);
 					Button activity_btn = new Button(formatted_act);
-					activity_btn.getStyleClass().add("activity");
+					activity_btn.getStyleClass().add("personal-activity");
 					activity_btn.setFocusTraversable(false);
 					activity_btn.setOnAction(new EventHandler<ActionEvent>() {
 						@Override
 						public void handle(ActionEvent event) {
-							openActivity(activity_id);
+							openActivity(cur_act.getActivity_id());
 						}
 					});
 					day_activities.get(start_index + cur_act.getStart_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
 				}
-				if (cur_act.getEnd_date() != null) {
+				if (cur_act.getEnd_date() != null && !cur_act.getEnd_date().equals(cur_act.getStart_date())) {
 					if (cur_act.getEnd_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getEnd_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
-						String formatted_act = "< " + getFormattedActivity(cur_act, false); 
+						String formatted_act = "< " + utils.getFormattedActivity(cur_act, false, 30);
 						Button activity_btn = new Button(formatted_act);
-						activity_btn.getStyleClass().add("activity");
+						activity_btn.getStyleClass().add("personal-activity");
 						activity_btn.setFocusTraversable(false);
 						activity_btn.setOnAction(new EventHandler<ActionEvent>() {
 							@Override
 							public void handle(ActionEvent event) {
-								openActivity(activity_id);
+								openActivity(cur_act.getActivity_id());
+							}
+						});
+						day_activities.get(start_index + cur_act.getEnd_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
+					}
+				}
+			} catch (NullPointerException e) {
+				System.err.println("NullPointerException: " + e.getMessage());
+			}
+		}
+		//Invited
+		for (Invite cur_inv: dbi.getUserInvitedTo(user_name)) {
+			try {
+				Activity cur_act = dbi.getActivity(cur_inv.getInvited_to());
+				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
+					String formatted_act = (cur_act.getEnd_date() == null || cur_act.getEnd_date().equals(cur_act.getStart_date()) ?
+							"" : "> ") + utils.getFormattedActivity(cur_act, true, 30);
+					Button activity_btn = new Button(formatted_act + ", S: " + (cur_inv.getStatus().equals("true") ? "ja" : "nei"));
+					activity_btn.getStyleClass().add("group-activity");
+					activity_btn.setFocusTraversable(false);
+					activity_btn.setOnAction(new EventHandler<ActionEvent>() {
+						@Override
+						public void handle(ActionEvent event) {
+							openActivity(cur_act.getActivity_id());
+						}
+					});
+					day_activities.get(start_index + cur_act.getStart_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
+				}
+				if (cur_act.getEnd_date() != null && !cur_act.getEnd_date().equals(cur_act.getStart_date())) {
+					if (cur_act.getEnd_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getEnd_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
+						String formatted_act = "< " + utils.getFormattedActivity(cur_act, false, 30);
+						Button activity_btn = new Button(formatted_act + ", S: " + (cur_inv.getStatus().equals("true") ? "ja" : "nei"));
+						activity_btn.getStyleClass().add("group-activity");
+						activity_btn.setFocusTraversable(false);
+						activity_btn.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent event) {
+								openActivity(cur_act.getActivity_id());
 							}
 						});
 						day_activities.get(start_index + cur_act.getEnd_date().getDayOfMonth() - 1).getChildren().add(activity_btn);
@@ -351,71 +341,64 @@ public class CalendarView extends Application {
 	}
 	
 	/**
+	 * Updates all the global variables in the {@link CalendarView} to a new month, either one previous,
+	 * or the next month, specified by the diff-attribute.
+	 * 
+	 * @param diff
+	 */
+	private void setMonth(int diff) {
+		cal.set((cal.get(Calendar.MONTH) + diff)%12 == 0 && cal.get(Calendar.MONTH) != 1 ? cal.get(Calendar.YEAR) + diff : cal.get(Calendar.YEAR)
+				, (cal.get(Calendar.MONTH) + diff)%12, 1);
+		start_index = utils.getFirstDayInMonth(cal.get(Calendar.YEAR)
+				, cal.get(Calendar.MONTH)) != 1 ? utils.getFirstDayInMonth(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)) - 2 : 6;
+				end_index = start_index + cal.getActualMaximum(Calendar.DAY_OF_MONTH) - 1;
+				
+				prev_cal.set((cal.get(Calendar.MONTH) - 1)%12 == 0 ? cal.get(Calendar.YEAR) - 1 : cal.get(Calendar.YEAR)
+						, (cal.get(Calendar.MONTH) - 1)%12, 1);
+				
+				next_cal.set((cal.get(Calendar.MONTH) + 1)%12 == 0 ? cal.get(Calendar.YEAR) + 1 : cal.get(Calendar.YEAR)
+						, (cal.get(Calendar.MONTH) + 1)%12, 1);
+	}
+	
+	/**
 	 * Opens up the view for an {@link Activity} that is pressed in this {@link CalendarView},
 	 * and retains information about in what {@link models.Calendar} the {@link Activity} was pressed.
+	 * 
+	 * TODO: Fill in when we get an ActivityView up and running.
 	 * 
 	 * @param activity_id
 	 */
 	private void openActivity(int activity_id) {
-		//FILL IN LATER!
 	}
 	
-	private String getFormattedActivity(Activity act, boolean from) {
-		String ret_str = "";
-		if (from) {
-			if (act.getFrom() != null) {
-				ret_str += act.getFrom() + ": ";
-			}
-		} else {
-			if (act.getTo() != null) {
-				ret_str += act.getTo() + ": ";
-			}
-		}
-		if (act.getTitle() != null) {
-			ret_str += act.getTitle();
-		}
-		return ret_str;
+	/**
+	 * Opens up the view for an {@link Account} that is pressed in this {@link CalendarView},
+	 * and retains information about in what {@link models.Calendar} the {@link Account} was pressed.
+	 * 
+	 * TODO: Fill in when we get an AccountView up and running.
+	 */
+	private void openProfile() {
 	}
 	
-	//FIKS NÅR VI FÅR INN DATABASEN!
-	private Activity getActivity(int i) {
-		if (i == 0) {
-			return act1;
-		} else if (i == 1) {
-			return act2;
-		} else if (i == 2) {
-			return act3;
-		} else if (i == 3) {
-			return act4;
-		} else if (i == 4) {
-			return act5;
-		} else if (i == 5) {
-			return act6;
-		} else if (i == 6) {
-			return act7;
-		} else if (i == 7) {
-			return act8;
-		} else if (i == 8) {
-			return act9;
-		} else if (i == 9) {
-			return act10;
-		} else {
-			return null;
+	/**
+	 * Opens up the view for an {@link Agenda} that is pressed in this {@link CalendarView},
+	 * and retains information about in what {@link models.Calendar} the {@link Agenda} was pressed,
+	 * as well 
+	 */
+	private void openAgenda() {
+		AgendaView agenda = new AgendaView(root, user_name, cal_id);
+		try {
+			root.disableProperty().set(true);
+			agenda.start(new Stage());
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
-	//FIKS NÅR VI FÅR INN DATABASEN!
 	
-	private int getFirstDayInMonth(int year, int month) {
-		Calendar c = Calendar.getInstance();
-		c.set(year, month, 1);
-		return c.get(Calendar.DAY_OF_WEEK);
-	}
-	
-	private String getMonth(int i){
-		return months.get(i);
-	}
-	
-	public static void main(String[] args) {
-		launch(args);
+	/**
+	 * Closes this view, as well as any other open view, commits nothing to the model when doing so.
+	 */
+	private void close() {
+		System.exit(0);
 	}
 }

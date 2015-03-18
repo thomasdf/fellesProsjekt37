@@ -1,9 +1,8 @@
+#drop schema fellesprosjekt
+#create schema fellesprosjekt
+#use schema fellesprosjekt
 
-#the following three lines are for problems with mySql and should be deleted before the final version
-#drop schema fellesprosjekt;
-create schema fellesprosjekt;
-use fellesprosjekt;
-
+use thomasdf_fellesprosjekt;
 Create table account( #entity including hasAccount
 user_name varChar(10) unique primary key,
 user_password varChar(10) not null, #should be scrambled
@@ -43,8 +42,8 @@ group_name varchar(20) not null
 
 create table subGroup( #subgroup-Relation
 #subgroup-relation. A group can have many "children" and "many parents". None of which needs to be unique, but the composite primary key ensures that there are no duplicates. To find all children, the supergroup-ID can be usedd.
-subgroup_id int,
-supergroup_id int,
+subGroup_id int,
+superGroup_id int,
 primary key(supergroup_id, subgroup_id),
 foreign key(subgroup_id) references calendarGroup(group_id) on delete cascade,
 foreign key(supergroup_id) references calendarGroup(group_id) on delete cascade

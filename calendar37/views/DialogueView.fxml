@@ -7,15 +7,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="96.0" prefWidth="256.0" styleClass="dialogue" stylesheets="@main.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<AnchorPane prefHeight="96.0" prefWidth="256.0" styleClass="dialogue" stylesheets="@main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.DialogueController{">
    <children>
       <Label alignment="CENTER" text="Er du sikker på at du vil fortsette?" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="16.0">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Button defaultButton="true" mnemonicParsing="false" prefWidth="64.0" text="OK" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="48.0" />
-      <Button cancelButton="true" mnemonicParsing="false" prefWidth="64.0" text="Cancel" AnchorPane.bottomAnchor="16.0" AnchorPane.rightAnchor="48.0" />
+      <Button fx:id="btn_ok" defaultButton="true" mnemonicParsing="false" onAction="#ok" prefWidth="64.0" text="OK" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="48.0" />
+      <Button fx:id="btn_cancel" cancelButton="true" mnemonicParsing="false" onAction="#cancel" prefWidth="64.0" text="Cancel" AnchorPane.bottomAnchor="16.0" AnchorPane.rightAnchor="48.0" />
    </children>
 </AnchorPane>

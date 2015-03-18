@@ -37,7 +37,7 @@ public class Calendar {
 		this.calendar_id = calendar_id;
 		this.calendar_owner_group = group_id;
 		this.calendar_owner_user = null;
-		this.is_group_cal = false;
+		this.is_group_cal = true;
 	}
 	
 	//Getters, Setters & Properties
