@@ -89,7 +89,7 @@ values
 
 (23232, 99999, 'make cheeseburgers for Randy', '2015-06-07', '2015-06-07', '07:30:00', '14:00:00', 'lahey', 'trailer park'),
 
-(24242, 99999, 'Talk about the upcomming shitstorm', '2015-06-08', '2015-06-08', '07:30:00', '14:00:00', 'lahey', 'trailer park'),
+(24242, 99999, 'Talk about the upcomming storm', '2015-06-08', '2015-06-08', '07:30:00', '14:00:00', 'lahey', 'trailer park'),
 
 (25252, 99999, 'do absolutely nothing', '2015-06-10', '2015-06-10', '07:30:00', '14:00:00', 'lahey', 'trailer park'),
 
@@ -153,6 +153,7 @@ values
 ('faceman',86868, '11:00:00','time for coffee'),
 ('baracus',86868, '11:00:00','time for coffee'),
 ('murdoc',86868, '11:00:00','time for coffee'),
+('lahey',86868, '11:00:00','time for coffee'),
 ('j-roc',86868, '11:00:00','time for coffee');
 
 insert into invited

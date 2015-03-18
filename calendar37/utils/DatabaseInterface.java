@@ -12,6 +12,7 @@ import models.Activity;
 import models.Calendar;
 import models.Group;
 import models.Invite;
+import models.Notification;
 
 /**
  * 
@@ -30,6 +31,38 @@ import models.Invite;
  * @since 1.0
  */
 public class DatabaseInterface {
+
+	/*
+	 * Mal for å lage databaseinterface-metoder. husk å lage
+	 * javadoc-dokumentasjon til hver metode
+	 * 
+	 * public Object getObject(params) {
+	 * 
+	 * Object object = null;
+	 * 
+	 * Connection connection = null; ResultSet result = null; Statement
+	 * statement = null;
+	 * 
+	 * try { // create new connection and statement Class.forName(DB_DRIVER);
+	 * connection = DriverManager .getConnection(DB_URL, USERNAME, PASSWORD);
+	 * statement = connection.createStatement(); // method result = statement
+	 * .executeQuery(
+	 * "SELECT invited.activity_id, invited.user_name, invited.invitation_status, activity.owner_user_name FROM activity, invited WHERE activity.activity_id = invited.activity_id and activity.activity_id = "
+	 * + activity_id + " AND invited.user_name='" + user_name + "'");
+	 * result.next(); invite = new Invite(result.getString("owner_user_name"),
+	 * result.getString("user_name"), result.getInt("activity_id"));
+	 * invite.setStatus(result.getString("invitation_status")); } catch
+	 * (Exception e) { e.printStackTrace(); } finally { if (result != null) {
+	 * try { result.close(); } catch (SQLException e) {
+	 * 
+	 * } } if (statement != null) { try { statement.close(); } catch
+	 * (SQLException e) {
+	 * 
+	 * } } if (connection != null) { try { connection.close(); } catch
+	 * (SQLException e) {
+	 * 
+	 * } } } return object; }
+	 */
 
 	private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
 	/*
@@ -1064,7 +1097,7 @@ public class DatabaseInterface {
 	 * account with this user_name is not in the database
 	 * 
 	 * @param account
-	 *            the account we want to add to the database
+	 *            the account we want to add/update in the database
 	 */
 	public void setAccount(Account account) {
 		Connection connection = null;
@@ -1081,7 +1114,7 @@ public class DatabaseInterface {
 			result = statement
 					.executeQuery("select account.user_name from account where account.user_name = \""
 							+ user_name + "\"");
-			result.next();
+			if(result.next()){
 			if (result.getString(1) != null) {// check if account with same id
 												// already exists
 				statement.executeUpdate("UPDATE account SET user_password='"
@@ -1089,7 +1122,10 @@ public class DatabaseInterface {
 						+ account.getFirst_name() + "', last_name='"
 						+ account.getLast_name() + "', mobile_nr='"
 						+ account.getMobile_nr() + "')");
-			} else {// account does not exist, and new row created
+			} else {
+				throw new SQLException("Inconsistency in the database. If problem persists, contact system administrator");
+			}
+			}else{// account does not exist, and new row created
 				statement.executeUpdate("INSERT INTO account VALUES ('"
 						+ user_name + "', '" + account.getPassword() + "', '"
 						+ account.getFirst_name() + "', '"
@@ -1469,8 +1505,7 @@ public class DatabaseInterface {
 		return invite;
 	}
 
-	
-	public ArrayList<Invite> getUserInvitedTo(String user_name){
+	public ArrayList<Invite> getUserInvitedTo(String user_name) {
 		ArrayList<Invite> invitesList = new ArrayList<>();
 
 		Connection connection = null;
@@ -1487,9 +1522,10 @@ public class DatabaseInterface {
 			result = statement
 					.executeQuery("SELECT invited.activity_id, invited.user_name, invited.invitation_status, activity.owner_user_name FROM activity, invited, account where activity.activity_id = invited.activity_id and invited.user_name = account.user_name and account.user_name =  \""
 							+ user_name + "\"");
-			while(result.next()){
+			while (result.next()) {
 				Invite invite = new Invite(result.getString("owner_user_name"),
-						result.getString("user_name"), result.getInt("activity_id"));
+						result.getString("user_name"),
+						result.getInt("activity_id"));
 				invite.setStatus(result.getString("invitation_status"));
 				invitesList.add(invite);
 			}
@@ -1520,7 +1556,7 @@ public class DatabaseInterface {
 		}
 		return invitesList;
 	}
-	
+
 	/**
 	 * Returns a list of Invite-objects that are related to an activity in the
 	 * database.
@@ -1751,5 +1787,217 @@ public class DatabaseInterface {
 			}
 		}
 		return people;
+	}
+
+	/**
+	 * Returns an alarm(notification-object) from the database based on the
+	 * user_name and activity_id given
+	 * 
+	 * @param user_name
+	 *            the user_name we want the alarm for
+	 * @param activity_id
+	 *            the activity_id we want the alarm for
+	 * @return returns a notification-object from information in the database
+	 */
+	public Notification getAlarm(String user_name, int activity_id) {
+
+		Notification notification = null;
+
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+
+		try {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("select alarm.* from alarm, account, activity where alarm.activity_id = activity.activity_id and account.user_name = alarm.user_name and activity.activity_id = "
+							+ activity_id
+							+ " and account.user_name = "
+							+ "\""
+							+ user_name + "\"");
+			if (result.next()) {
+				/* if alarm-object is to be used.
+				String alarm_user_name = result.getString("user_name");
+				int alarm_activity_id = result.getInt("activity_id");
+				LocalTime alarm_time = result.getTime("alarm_time")
+						.toLocalTime();
+				*/
+				String alarm_description = result.getString("description");
+				notification = new Notification(alarm_description);
+			} else {
+				throw new Exception(
+						"empty set returned from database, there is no alarm with this user_name and activity_id registered in the dabase");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
+		}
+		return notification;
+	}
+	
+	/**
+	 * Returns an alarm(notification-object) from the database based on the
+	 * user_name and activity_id given
+	 * 
+	 * @param user_name
+	 *            the user_name we want the alarm for
+	 * @return returns an ArrayList of notification-objects from the information in the database. If there are no alarms registered to this user_name an empty ArrayList is returned.
+	 */
+	public ArrayList<Notification>getAllAlarms(String user_name) {
+
+		ArrayList<Notification> notificationlist = new ArrayList<>(); 
+
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+
+		try {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("select alarm.* from alarm, account, activity where alarm.activity_id = activity.activity_id and account.user_name = alarm.user_name"
+							+ " and account.user_name = "
+							+ "\""
+							+ user_name + "\"");
+			if(result.next()){
+				do{
+					/* if alarm-object is to be used.
+					String alarm_user_name = result.getString("user_name");
+					int alarm_activity_id = result.getInt("activity_id");
+					LocalTime alarm_time = result.getTime("alarm_time")
+							.toLocalTime();
+					*/
+					String alarm_description = result.getString("description");
+					Notification notification = new Notification(alarm_description);
+					notificationlist.add(notification);
+				} while(result.next());
+			} else{//no alarms corresponding to that user_name
+				return notificationlist;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
+		}
+		return notificationlist;
+	}
+	
+	/**
+	 * returns an ArrayList of notification-objects from the database based on the
+	 * user_name and activity_id given
+	 * @param activity_id
+	 *            the activity_id we want the alarm for
+	 * @return returns an ArrayList of notification-objects from the information in the database. If there are no alarms registered to this activity_id an empty ArrayList is returned.
+	 */
+	public ArrayList<Notification>getAllAlarms(int activity_id) {
+
+		ArrayList<Notification> notificationlist = new ArrayList<>(); 
+
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+
+		try {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("select alarm.* from alarm, account, activity where alarm.activity_id = activity.activity_id and account.user_name = alarm.user_name"
+							+ " and activity.activity_id = "
+							+ activity_id);
+			if(result.next()){
+				do{
+					/* if alarm-object is to be used.
+					String alarm_user_name = result.getString("user_name");
+					int alarm_activity_id = result.getInt("activity_id");
+					LocalTime alarm_time = result.getTime("alarm_time")
+							.toLocalTime();
+					*/
+					String alarm_description = result.getString("description");
+					Notification notification = new Notification(alarm_description);
+					notificationlist.add(notification);
+				} while(result.next());
+			} else{//no alarms corresponding to that user_name
+				return notificationlist;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
+		}
+		return notificationlist;
 	}
 }
