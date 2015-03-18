@@ -2,6 +2,7 @@ package models;
 
 import java.util.ArrayList;
 
+import utils.DatabaseInterface;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +25,8 @@ public class Group {
 	private ObservableList<String> membersList = FXCollections.observableList(new ArrayList<String>());
 	private ObservableList<Integer> in_groupsList = FXCollections.observableList(new ArrayList<Integer>());
 	private ObservableList<Integer> subgroupsList = FXCollections.observableList(new ArrayList<Integer>());
+	private ObservableList<Integer> calendarsList = FXCollections.observableList(new ArrayList<Integer>());
+	
 	
 	//Constructor
 	public Group(int group_id, String group_name) {
@@ -68,6 +71,26 @@ public class Group {
 	}
 	public void setSubgroups(ArrayList<Integer> subgroups) {
 		subgroupsList.addAll(subgroups);
+	}
+	
+	public ObservableList<Integer> getCalendars() {
+		return calendarsList;
+	}
+	public void addCalendar(int calendar_id) {
+		calendarsList.add(calendar_id);
+	}
+	public void setCalendars(ArrayList<Integer> calendars) {
+		calendarsList.addAll(calendars);
+	}
+
+	
+	public ObservableList<Account> getAccounts(){
+		ObservableList<Account> accountList = FXCollections.observableArrayList();
+		DatabaseInterface db = new DatabaseInterface();
+		for(int i = 0; i < membersList.size(); i++){
+			accountList.add(db.getAccount(membersList.get(i)));
+		}
+		return accountList;
 	}
 	
 	//Oppsett for checkbox i tableview

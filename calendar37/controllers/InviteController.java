@@ -100,19 +100,18 @@ public class InviteController implements Initializable{
         
         //get all accounts and store them in PersonData
         PersonData = FXCollections.observableArrayList();
-        PersonData= db.getAllAccounts();
+        PersonData= FXCollections.observableList(db.getAllAccounts());
         
         //Get all groups and store them in GroupData
         GroupData = FXCollections.observableArrayList();
-        GroupData= db.getAllGroups();
+        GroupData= FXCollections.observableList(db.getAllGroups());
         
         //populate the table with groups / Persons
         PersonTable.setItems(PersonData);
         GroupTable.setItems(GroupData);
         
        
-        //Close the initial connection
-        db.closeItAll();
+        
     }
  
      
@@ -147,7 +146,7 @@ public class InviteController implements Initializable{
     @FXML
     private ObservableList<Account> findInvited(){
     	ObservableList<Account> InvitedAccounts = FXCollections.observableArrayList();
-    	ObservableList<String> InvitedGroups = FXCollections.observableArrayList();
+    	ObservableList<Account> InvitedGroupMembers = FXCollections.observableArrayList();
     	for(int i = 0; i < PersonData.size(); i++) {
 			if(PersonData.get(i).getChecked()==true){
 				System.out.println(PersonData.get(i).getUsername() + " is marked as invited.");
@@ -157,15 +156,19 @@ public class InviteController implements Initializable{
     	}
     	for(int i = 0; i < GroupData.size(); i++) {
     		if(GroupData.get(i).getChecked()==true){
-    			InvitedGroups.addAll(GroupData.get(i).getMembers());
-    			System.out.println(InvitedGroups.size());
+    			InvitedGroupMembers.addAll(GroupData.get(i).getAccounts());
+    		
     			
     		}
     		
     	}
-    	for(int i = 0; i < InvitedGroups.size(); i++) {
-//    		System.out.println(InvitedGroups.get(i));
-    		
+    	for (int i = 0; i < InvitedGroupMembers.size(); i++) {
+    		if(InvitedAccounts.contains(InvitedGroupMembers.get(i))){
+    			System.out.println(InvitedGroupMembers.get(i).getFirst_name() + " is already invited");
+    		} else {
+    			InvitedAccounts.add(InvitedGroupMembers.get(i));
+    			System.out.println(InvitedGroupMembers.get(i).getFirst_name() + " is marked as Invited");
+    		}
     	}
     	return InvitedAccounts;
     }

@@ -208,7 +208,7 @@ public class CreateActivityController_Lars {
 	@FXML
 	private void findInvitedAccounts(){
 //		ObservableList<Account> fetchedAccounts = FXCollections.observableList(new ArrayList<Account>());
-		System.out.println(fetchedAccounts.get(0).getChecked());
+		System.out.println(fetchedAccounts.get(0).getFirst_name());
 	}
 	
 	//Denne kalles i InviteController for å sende lista med inviterte brukere inn i denne kontrolleren
