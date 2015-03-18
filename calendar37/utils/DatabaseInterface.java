@@ -646,6 +646,7 @@ public class DatabaseInterface {
 		}
 		return room_name;
 	}
+	
 
 	/**
 	 * Fetches the group with this id from the database.
@@ -675,22 +676,22 @@ public class DatabaseInterface {
 				group = new Group(group_id, result.getString("group_name"));
 			}
 			result.close();
-			ResultSet members = statement
+			result = statement
 					.executeQuery("select account.user_name from account, isMember where account.user_name=isMember.user_name and isMember.group_id="
 							+ group_id);
-			while (members.next()) {
-				member.add(members.getString(1));
+			while (result.next()) {
+				member.add(result.getString(1));
 			}
 			group.setMembers(member);
-			members.close();
-			ResultSet sub_group = statement
+			result.close();
+			result = statement
 					.executeQuery("select subGroup.subGroup_id from subGroup where superGroup_id="
 							+ group_id);
-			while (sub_group.next()) {
-				sub_groups.add(sub_group.getInt(1));
+			while (result.next()) {
+				sub_groups.add(result.getInt(1));
 			}
 			group.setSubgroups(sub_groups);
-			sub_group.close();
+			result.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -717,6 +718,59 @@ public class DatabaseInterface {
 			}
 		}
 		return group;
+	}
+	
+	/**
+	 * Returns an ArrayList of all groups in the database.
+	 * @return An ArrayList<Group> of all groups in the database.
+	 */
+	public ArrayList<Group>getAllGroups() {
+
+		ArrayList<Group> groupsList= new ArrayList<>(); 
+
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+
+		try {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("select calendarGroup.* from calendarGroup");
+			while(result.next()){
+				Group group = getGroup(result.getInt("group_id"));
+				groupsList.add(group);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
+		}
+		return groupsList;
 	}
 
 	/**
@@ -1737,7 +1791,7 @@ public class DatabaseInterface {
 	}
 
 	public ArrayList<Account> getAllAccounts() {
-		ArrayList<Account> people = new ArrayList<>();
+		ArrayList<Account> people = new ArrayList<Account>();
 		Connection connection = null;
 		ResultSet result = null;
 		Statement statement = null;
