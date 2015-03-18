@@ -1,19 +1,35 @@
 package controllers;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import javax.jws.Oneway;
+
 import utils.DatabaseInterface;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import models.Account;
 import models.Activity;
 
 public class CreateActivityController {
@@ -61,9 +77,7 @@ public class CreateActivityController {
 		}
 		if(this.start_date.getValue().isEqual(this.end_date.getValue()))	{
 			LocalTime start = this.parseTime(this.start_hours.getText() + ":" + this.start_minutes.getText());
-			LocalTime end = this.parseTime(this.end_hours.getText() + ":" + this.end_minutes.getText());
-			System.out.println("Start: " + start + "\nEnd: " + end);
-			System.out.println(start.isBefore(end));
+			LocalTime end = this.parseTime(this.end_hours.getText() + ":" + this.end_minutes.getText());;
 			if(start.isAfter(end))	{
 				return false;
 			}
@@ -89,17 +103,57 @@ public class CreateActivityController {
 	 * @param invited list of all accounts that should be invited
 	 * @param activity_id the id of the activity that has been created
 	 */
-	private void addInvited(ObservableList<String> invited, int activity_id)	{
+	private void addInvited(ObservableList<Account> invited, int activity_id)	{
 		DatabaseInterface db = new DatabaseInterface();
-		for(String invited_account_username : invited)	{
-			db.inviteAccount(activity_id, invited_account_username);
+		for(Account invited_account : invited)	{
+			db.inviteAccount(activity_id, invited_account.getUsername());
 		}
+	}
+	
+	private void closeScene(Stage stage)	{
+		stage.close();
+	}
+	
+	private void makeDialog(String message)	{
+		Stage dialog = new Stage();
+		dialog.initModality(Modality.WINDOW_MODAL);
+		VBox box = new VBox();
+		Button ok = new Button("OK");
+		ok.alignmentProperty();
+		box.getChildren().addAll(new Text(message), ok);
+		ok.setOnAction(new EventHandler<ActionEvent>()	{
+			@Override public void handle(ActionEvent e)	{
+				closeScene(dialog);
+			}
+		});
+		dialog.setScene(new Scene(box, 200, 100));
+		dialog.show();
 	}
 	
 	//Init
 	@SuppressWarnings("unchecked")
 	@FXML void initialize(){
-		System.out.println(checkTimeString("22:30"));
+		
+	}
+	
+	private String anyIsEmpty()	{
+		if(this.name.getText().equals(""))	{
+			return "You have to fill out a name.";
+		}
+		if(this.description.getText().equals(""))	{
+			return "You have to fill out a description.";
+		}
+		if(this.start_date.getValue() == null)	{
+			return "You have to fill out a start date.";
+		}
+		if(this.end_date.getValue() == null)	{
+			return "You have to fill out an end date.";
+		}
+		if(this.start_hours.getText().equals("") || this.start_minutes.getText().equals("")
+				|| this.end_hours.getText().equals("") || this.end_minutes.getText().equals(""))	{
+			return "You have to fill out a time space for your activity to be in.";
+		}
+		return "";
 	}
 	
 	/**
@@ -109,13 +163,15 @@ public class CreateActivityController {
 	@FXML private void createActivity()	{
 		String owner_user_name = "Get username from the program"; // TODO: get the username from somewhere in the nameSpace.
 		String room_name = "Get the room name from the view"; // TODO: not yet defined in view.
-		ObservableList<String> list = FXCollections.observableList(new ArrayList<String>()); // TODO: this is where we get the list of accounts, must be checked with the database
-		if(dateIsOkay() && timeIsLogical())	{
+		if(dateIsOkay() && timeIsLogical() && this.anyIsEmpty().equals(""))	{
 			DatabaseInterface db = new DatabaseInterface();
 			Activity act = db.setActivity(owner_user_name , this.description.getText(), this.start_date.getValue(), this.end_date.getValue(),
 					this.parseTime(this.start_hours.getText() + ":" + this.start_minutes.getText()),
 					this.parseTime(this.end_hours.getText() + ":" + this.end_minutes.getText()), room_name);
-			this.addInvited(list, act.getActivity_id());
+			//this.findInvitedAccounts();
+			this.addInvited(this.fetchedAccounts, act.getActivity_id());
+		}	else	{
+			this.makeDialog(this.anyIsEmpty().equals("") ? "Your time space is not logical." : this.anyIsEmpty());
 		}
 	}
 	
@@ -172,5 +228,30 @@ public class CreateActivityController {
 		
 	}
 	
+		//Litt hacky løsning, men fetchedAccounts fylles med brukerne fra InviteController (Med checked true/false status)
+	static ObservableList<Account> fetchedAccounts = FXCollections.observableList(new ArrayList<Account>());
+	//Denne funksjonen åpner InviteView.FXML som et "modal" vindu.
+	@FXML
+	private void showInviteWindow(ActionEvent event) throws IOException{
+		Stage Invstage = new Stage();
+		Parent root = FXMLLoader.load(InviteController.class.getResource("/views/InviteView.fxml"));
+		//Parent root = FXMLLoader.load(getClass().getResource("/views/InviteView.fxml"));
+		Invstage.setScene(new Scene(root));
+		Invstage.setTitle("Invite");
+		Invstage.initModality(Modality.WINDOW_MODAL);
+		Invstage.initOwner(
+		((Node)event.getSource()).getScene().getWindow() );
+		Invstage.show();
+	}
 	
+	@FXML
+	private void findInvitedAccounts(){
+		// ObservableList<Account> fetchedAccounts = FXCollections.observableList(new ArrayList<Account>());
+		System.out.println(fetchedAccounts.get(0).getChecked());
+	}
+	
+	//Denne kalles i InviteController for å sende lista med inviterte brukere inn i denne kontrolleren
+	public static void fetchList(ObservableList<Account> a){
+		fetchedAccounts = a;
+	}	
 }

@@ -113,6 +113,8 @@
                   <RowConstraints maxHeight="73.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
                </rowConstraints>
             </GridPane>
+            <Button fx:id="Invite_btn" layoutX="97.0" layoutY="568.0" mnemonicParsing="false" onAction="#showInviteWindow" prefHeight="25.0" prefWidth="94.0" text="Invite " />
+			<Button fx:id="Create_btn" layoutX="277.0" layoutY="640.0" mnemonicParsing="false" text="Create" onAction="#createActivity" />
          </children>
       </Pane>
    </children>
