@@ -142,7 +142,7 @@ public class InviteController implements Initializable{
     	}
     }
     
-    //findInvited vil finne alle de inviterte account objektene (også via inviterte grupper) og returnere en ObservableList
+    //findInvited vil finne alle de inviterte account objektene (ogsï¿½ via inviterte grupper) og returnere en ObservableList
     @FXML
     private ObservableList<Account> findInvited(){
     	ObservableList<Account> InvitedAccounts = FXCollections.observableArrayList();
@@ -156,11 +156,13 @@ public class InviteController implements Initializable{
     	}
     	for(int i = 0; i < GroupData.size(); i++) {
     		if(GroupData.get(i).getChecked()==true){
-    			InvitedGroupMembers.addAll(GroupData.get(i).getAccounts());
-    		
-    			
+    			DatabaseInterface dbi = new DatabaseInterface();
+    			ObservableList<Account> accountList = FXCollections.observableArrayList();
+    			for (int j = 0; j < GroupData.get(i).getMembers().size(); j++) {
+    				accountList.add(dbi.getAccount(GroupData.get(i).getMembers().get(i)));
+    			}
+    			InvitedGroupMembers.addAll(accountList);
     		}
-    		
     	}
     	for (int i = 0; i < InvitedGroupMembers.size(); i++) {
     		if(InvitedAccounts.contains(InvitedGroupMembers.get(i))){
