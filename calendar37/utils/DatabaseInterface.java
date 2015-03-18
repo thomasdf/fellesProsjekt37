@@ -5,8 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import models.Account;
 import models.Activity;
 import models.Calendar;
@@ -1738,9 +1736,8 @@ public class DatabaseInterface {
 		}
 	}
 
-	public ObservableList<Account> getAllAccounts() {
-		ObservableList<Account> people = FXCollections
-				.observableList(new ArrayList<Account>());
+	public ArrayList<Account> getAllAccounts() {
+		ArrayList<Account> people = new ArrayList<>();
 		Connection connection = null;
 		ResultSet result = null;
 		Statement statement = null;
