@@ -179,20 +179,14 @@ public class DatabaseInterface {
 					.getConnection(DB_URL, USERNAME, PASSWORD);
 			statement = connection.createStatement();
 			// method
-			result = statement
-					.executeQuery("SELECT calendar_id FROM hasCalendar WHERE user_name="
-							+ owner_user_name);
-			result.next();
-			int calendar_id = result.getInt(1);
-			statement.executeUpdate("INSERT INTO activity VALUES ("
-					+ calendar_id + ", '" + description + "', " + activity_date
+			statement.executeUpdate("INSERT INTO activity (calendar_id, description, activity_date, end_date, start_time, end_time, owner_user_name, room_name) VALUES ("
+					+ description + "', " + activity_date
 					+ ", " + end_date + ", " + start_time + ", " + end_time
 					+ ", '" + owner_user_name + "', '" + room_name + "')");
-			result.close();
 			// find the id of the new activity
 			result = statement
-					.executeQuery("SELECT activity_id FROM activity ORDER BY activity_id DESC LIMIT 1");
-			activity_id = result.getInt("activity_id");
+					.executeQuery("SELECT LAST_INSERT_ID();");
+			activity_id = result.getInt("0");
 			result.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -221,6 +215,7 @@ public class DatabaseInterface {
 		}
 		return this.getActivity(activity_id);
 	}
+	
 
 	/**
 	 * Sets or updates the activity in question depending on if it exists
@@ -277,7 +272,7 @@ public class DatabaseInterface {
 				result.next();
 				int calendar_id = result.getInt(1);
 				statement.executeUpdate("INSERT INTO activity VALUES ("
-						+ calendar_id + ", " + activity.getDescription() + ", "
+						+ activity.getDescription() + ", "
 						+ activity.getStart_date() + ", "
 						+ activity.getEnd_date() + ", " + activity.getFrom()
 						+ ", " + activity.getTo() + ", "
