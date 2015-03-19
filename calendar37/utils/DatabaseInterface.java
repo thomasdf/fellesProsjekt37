@@ -11,6 +11,7 @@ import models.Calendar;
 import models.Group;
 import models.Invite;
 import models.Notification;
+import models.Room;
 
 /**
  * 
@@ -245,6 +246,8 @@ public class DatabaseInterface {
 		return null;
 	}
 	
+	
+	/*
 
 	/**
 	 * Sets or updates the activity in question depending on if it exists
@@ -253,6 +256,8 @@ public class DatabaseInterface {
 	 * @param activity
 	 *            Activity object that should be updated
 	 */
+	
+	/*
 	public void setActivity(Activity activity) {
 		Connection connection = null;
 		ResultSet result = null;
@@ -293,6 +298,7 @@ public class DatabaseInterface {
 				 * } else { throw new SQLException(); } } else {
 				 * statement.executeUpdate("UPDATE activity calendar_id="); }
 				 */
+	/*
 			} else {
 				result.close();
 				result = statement
@@ -329,6 +335,7 @@ public class DatabaseInterface {
 				 * activity.getOwner_user_name() + ", " + activity.getRoom()); }
 				 * } } } else { throw new SQLException(); }
 				 */
+	/*
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -356,6 +363,8 @@ public class DatabaseInterface {
 			}
 		}
 	}
+	
+	 */
 
 	/**
 	 * Returns the description of the activity defined by the id.
@@ -669,6 +678,72 @@ public class DatabaseInterface {
 			}
 		}
 		return room_name;
+	}
+	
+	/**
+	 * Returns a list of the rooms available inside the dates/time
+	 * @param start_date Localdate
+	 * @param end_date Localdate
+	 * @param start_time LocalTime
+	 * @param end_time LocalTime
+	 * @return Returns an arrayList of rooms available
+	 */
+	public ArrayList<Room> getAvailableRooms(LocalDate start_date, LocalDate end_date, LocalTime start_time, LocalTime end_time){
+		return new ArrayList<Room>();
+	}
+	
+	/**
+	 * Returns a list of all the rooms
+	 * @return Returns an arrayList of rooms.
+	 */
+	public ArrayList<Room> getAllRooms(){
+		ArrayList<Room> roomlist = new ArrayList<>();
+
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+
+		try {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement
+					.executeQuery("select room.* from room");
+			while(result.next()) {
+				Room room = new Room();
+				room.setCapacity(result.getInt("capacity"));
+				room.setRoom_name(result.getString("room_name"));
+				roomlist.add(room);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
+		}
+		return roomlist;
 	}
 	
 
