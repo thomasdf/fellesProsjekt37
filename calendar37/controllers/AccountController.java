@@ -5,11 +5,13 @@ import models.Account;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class AccountController {
 
 	//fxml
+	@FXML Text lbl_user_name;
 	@FXML TextField txf_full_name;
 	@FXML TextField txf_phone;
 	@FXML Button btn_close;
@@ -18,6 +20,7 @@ public class AccountController {
 		DatabaseInterface dbi = new DatabaseInterface();
 		Account model = dbi.getAccount(user_name);
 		
+		lbl_user_name.setText(user_name);
 		txf_full_name.setText(model.getFirst_name() + " " + model.getLast_name());
 		txf_phone.setText(model.getMobile_nr());
 	}
