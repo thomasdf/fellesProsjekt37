@@ -775,8 +775,8 @@ public class DatabaseInterface {
 				} else {
 					groupMemberStatement += ", ";
 				}
-				statement.executeUpdate(groupMemberStatement);
 			}
+			statement.executeUpdate(groupMemberStatement);
 		}
 		return getGroup(group_id);
 		}else{
