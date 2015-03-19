@@ -2,6 +2,7 @@ package controllers;
 
 import utils.DatabaseInterface;
 import models.Activity;
+import models.Calendar;
 import models.Invite;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -19,11 +20,12 @@ public class ActivityController {
 	@FXML Text ActivityView_TitleText;
 	@FXML TextField ActivityView_CreatedBy;
 	@FXML TextField ActivityView_GroupText;
-	@FXML TextArea ActivityView_DescriptionText;
+	@FXML TextField ActivityView_RoomText;
 	@FXML DatePicker ActivityView_StartDate;
 	@FXML DatePicker ActivityView_EndDate;
 	@FXML TextField ActivityView_StartTime;
 	@FXML TextField ActivityView_EndTime;
+	@FXML TextArea ActivityView_DescriptionText;
 	@FXML Button btn_close;
 	
 	private String user_name;
@@ -55,12 +57,31 @@ public class ActivityController {
 		
 		ActivityView_TitleText.setText("Aktivitet nr. " + activity_id);
 		ActivityView_CreatedBy.setText(model.getActivity_owner());
-		ActivityView_GroupText.setText(model.getParticipants().size() > 1 ? "~ GRUPPE ~" : "~ PERSONLIG ~");
+		if (model.getParticipants().isEmpty() && tgb_status.isSelected()) {
+			ActivityView_GroupText.setText(user_name);
+		} else if (!model.getParticipants().isEmpty()){
+			for (int cal_id : model.getParticipants()) {
+				Calendar cal = dbi.getCalendar(cal_id);
+				if (!cal.getIs_group_cal()) {
+					String participant = cal.getCalendar_owner_user();
+					String status = dbi.getInvite(activity_id, participant).getStatus() == "true" ? " [SKAL]" : dbi.getInvite(activity_id, participant).getStatus() == "false" ? " [SKAL IKKE]" : "";
+					ActivityView_GroupText.appendText(participant + status + ", ");
+				}
+			}
+			ActivityView_GroupText.setText(ActivityView_GroupText.getText(0, ActivityView_GroupText.getLength() - 2));
+		}
+		if (model.getRoom() != null) {
+			if (!model.getRoom().isEmpty()) {
+				ActivityView_RoomText.setText(model.getRoom());
+			} else {
+				ActivityView_RoomText.setText("-");
+			}
+		} else {
+			ActivityView_RoomText.setText("-");
+		}
 		ActivityView_DescriptionText.setText(model.getDescription());
 		ActivityView_StartDate.setValue(model.getStart_date());
-		ActivityView_StartDate.setDisable(true);
 		ActivityView_EndDate.setValue(model.getEnd_date());
-		ActivityView_EndDate.setDisable(true);
 		ActivityView_StartTime.setText(model.getFrom().toString());
 		ActivityView_EndTime.setText(model.getTo().toString());
 	}

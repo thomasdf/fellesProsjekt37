@@ -42,36 +42,38 @@
                   <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="NEVER" />
                   <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="NEVER" />
                   <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="NEVER" />
+                  <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="NEVER" />
+                  <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="NEVER" />
                   <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
               </rowConstraints>
                <children>
-                  <TextField fx:id="ActivityView_CreatedBy" focusTraversable="false" mouseTransparent="true" style="-fx-text-fill: #666;" GridPane.rowIndex="1" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Gruppe eller personlig:" GridPane.rowIndex="2">
+                  <TextField fx:id="ActivityView_CreatedBy" focusTraversable="false" mouseTransparent="true" style="-fx-text-fill: #999;" GridPane.rowIndex="1" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Personer som deltar:" GridPane.rowIndex="2">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="ActivityView_GroupText" focusTraversable="false" layoutX="10.0" layoutY="33.0" mouseTransparent="true" style="-fx-text-fill: #666;" GridPane.rowIndex="3" />
-                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="8.0" GridPane.rowIndex="4">
+                  <TextField fx:id="ActivityView_GroupText" focusTraversable="false" layoutX="10.0" layoutY="33.0" mouseTransparent="true" style="-fx-text-fill: #999;" GridPane.rowIndex="3" />
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="8.0" GridPane.rowIndex="6">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start:" wrappingWidth="50.0">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Text>
-                        <DatePicker fx:id="ActivityView_StartDate" focusTraversable="false" mouseTransparent="true" prefWidth="150.0" promptText="Start-dato" style="-fx-text-fill: #666;" />
-                        <TextField fx:id="ActivityView_EndTime" focusTraversable="false" mouseTransparent="true" prefWidth="50.0" style="-fx-text-fill: #666;" />
+                        <DatePicker fx:id="ActivityView_StartDate" focusTraversable="false" mouseTransparent="true" prefWidth="150.0" promptText="Start-dato" style="-fx-text-fill: #999;" />
+                        <TextField fx:id="ActivityView_EndTime" focusTraversable="false" mouseTransparent="true" prefWidth="50.0" style="-fx-text-fill: #999;" />
                      </children>
                   </HBox>
-                  <HBox layoutX="10.0" layoutY="200.0" prefHeight="100.0" prefWidth="200.0" spacing="8.0" GridPane.rowIndex="5">
+                  <HBox layoutX="10.0" layoutY="200.0" prefHeight="100.0" prefWidth="200.0" spacing="8.0" GridPane.rowIndex="7">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Slutt:" wrappingWidth="50.0">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Text>
-                        <DatePicker fx:id="ActivityView_EndDate" focusTraversable="false" mouseTransparent="true" prefWidth="150.0" promptText="Slutt-dato" style="-fx-text-fill: #666;" />
-                        <TextField fx:id="ActivityView_StartTime" focusTraversable="false" mouseTransparent="true" prefWidth="50.0" style="-fx-text-fill: #666;" />
+                        <DatePicker fx:id="ActivityView_EndDate" focusTraversable="false" mouseTransparent="true" prefWidth="150.0" promptText="Slutt-dato" style="-fx-text-fill: #999;" />
+                        <TextField fx:id="ActivityView_StartTime" focusTraversable="false" mouseTransparent="true" prefWidth="50.0" style="-fx-text-fill: #999;" />
                      </children>
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="250.0">
@@ -84,12 +86,18 @@
                         <ToggleButton fx:id="tgb_status" focusTraversable="false" mnemonicParsing="false" onAction="#changeStatus" prefHeight="40.0" prefWidth="112.0" text="Skal delta" visible="false" />
                      </children>
                   </HBox>
-                  <Text layoutX="10.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktivitetsbeskrivelse:" GridPane.rowIndex="6">
+                  <Text layoutX="10.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktivitetsbeskrivelse:" GridPane.rowIndex="8">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <TextArea fx:id="ActivityView_DescriptionText" focusTraversable="false" mouseTransparent="true" style="-fx-text-fill: #999;" wrapText="true" GridPane.rowIndex="7" />
+                  <TextArea fx:id="ActivityView_DescriptionText" focusTraversable="false" mouseTransparent="true" style="-fx-text-fill: #999;" wrapText="true" GridPane.rowIndex="9" />
+                  <Text layoutX="10.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rom:" GridPane.rowIndex="4">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="ActivityView_RoomText" focusTraversable="false" layoutX="10.0" layoutY="124.0" mouseTransparent="true" style="-fx-text-fill: #999;" GridPane.rowIndex="5" />
                </children>
             </GridPane>
             <Button fx:id="btn_close" layoutX="309.0" layoutY="649.0" mnemonicParsing="false" onAction="#close" text="Lukk" />
