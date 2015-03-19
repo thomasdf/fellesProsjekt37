@@ -9,6 +9,7 @@ import models.Account;
 import models.Group;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -75,4 +76,10 @@ public class CreateGroupController implements Initializable{
 		subgroup_menu.getItems().addAll(list);
 
 	}
+	
+	@FXML
+	private void createGroup(ActionEvent event){
+		
+	}
+	
 }
