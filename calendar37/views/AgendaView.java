@@ -308,10 +308,10 @@ public class AgendaView {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/ActivityView.fxml"));
 			Parent root = (Parent) loader.load();
-			ActivityController activity_controller = (ActivityController) loader.getController();
+			ActivityController controller = (ActivityController) loader.getController();
 			
 			//Setter rett aktivitet
-			activity_controller.setActivity_id(activity_id);
+			controller.init(user_name, activity_id);
 			
 			//Lager scenen og stagen
 			Scene scene = new Scene(root);
