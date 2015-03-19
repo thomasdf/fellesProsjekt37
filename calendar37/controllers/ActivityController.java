@@ -3,8 +3,10 @@ package controllers;
 import utils.DatabaseInterface;
 import models.Activity;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class ActivityController {
 
@@ -17,6 +19,7 @@ public class ActivityController {
 	@FXML DatePicker ActivityView_EndDate;
 	@FXML Text ActivityView_StartTime;
 	@FXML Text ActivityView_EndTime;
+	@FXML Button btn_close;
 	
 	public void setActivity_id(int activity_id) {
 		DatabaseInterface dbi = new DatabaseInterface();
@@ -32,5 +35,10 @@ public class ActivityController {
 		ActivityView_EndDate.setDisable(true);
 		ActivityView_StartTime.setText(model.getFrom().toString());
 		ActivityView_EndTime.setText(model.getTo().toString());
+	}
+	
+	@FXML public void close() {
+		Stage stage = (Stage) btn_close.getScene().getWindow();
+		stage.close();
 	}
 }

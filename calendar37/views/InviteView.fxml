@@ -20,7 +20,7 @@
                <children>
                   <TextFlow prefHeight="100.0" prefWidth="783.0" textAlignment="CENTER">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Invite to activity" textAlignment="CENTER">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Inviter til aktivitet" textAlignment="CENTER">
                            <font>
                               <Font name="Franklin Gothic Book" size="34.0" />
                            </font>
@@ -32,7 +32,7 @@
                   </TextFlow>
                </children>
             </HBox>
-            <TabPane fx:id="tabPane" layoutX="178.0" layoutY="184.0" prefHeight="396.0" prefWidth="423.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="tabPane" layoutX="178.0" layoutY="184.0" prefHeight="396.0" prefWidth="423.0" style="-fx-border-color: #ccc;" tabClosingPolicy="UNAVAILABLE">
               <tabs>
                 <Tab text="Person">
                   <content>
@@ -40,11 +40,11 @@
                            <children>
                               <TableView fx:id="PersonTable" editable="true" prefHeight="367.0" prefWidth="423.0">
                                 <columns>
-                                  <TableColumn fx:id="FirstName" prefWidth="174.0" resizable="false" text="First Name" />
+                                  <TableColumn fx:id="FirstName" prefWidth="174.0" resizable="false" text="Fornavn" />
                                   	
-                                  <TableColumn fx:id="LastName" prefWidth="162.0" resizable="false" sortable="true" text="Last Name" />
+                                  <TableColumn fx:id="LastName" prefWidth="162.0" resizable="false" sortable="true" text="Etternavn" />
                                   
-                                  <TableColumn fx:id="checkBoxTableColumn" prefWidth="86.0" resizable="false" sortable="false" text="Invite">
+                                  <TableColumn fx:id="checkBoxTableColumn" prefWidth="86.0" resizable="false" sortable="false" text="Inviter">
                                   	<cellValueFactory><PropertyValueFactory property="checked" /></cellValueFactory>
 									<cellFactory><views.CheckBoxCellFactory_Account /></cellFactory>
                                   </TableColumn>	
@@ -54,15 +54,15 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-                <Tab text="Group">
+                <Tab text="Gruppe">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                             <TableView fx:id="GroupTable" prefHeight="367.0" prefWidth="423.0" editable="true">
+                             <TableView fx:id="GroupTable" editable="true" prefHeight="367.0" prefWidth="423.0">
                                 <columns>
-                                  <TableColumn fx:id="GroupName" prefWidth="335.0" text="Name" />
+                                  <TableColumn fx:id="GroupName" prefWidth="335.0" text="Navn" />
                                   
-                                  <TableColumn prefWidth="89.0" resizable="false" sortable="false" text="Invite" fx:id="checkBoxGroup">
+                                  <TableColumn fx:id="checkBoxGroup" prefWidth="89.0" resizable="false" sortable="false" text="Inviter">
                                   <cellValueFactory><PropertyValueFactory property="checked" /></cellValueFactory>
 									<cellFactory><views.CheckBoxCellFactory_Group /></cellFactory>
 								</TableColumn>
@@ -73,10 +73,9 @@
                 </Tab>
               </tabs>
             </TabPane>
-            <Button layoutX="392.0" layoutY="580.0" mnemonicParsing="false" onAction="#unselectAll" text="Uncheck everything" />
-            <Button fx:id="CheckEverything" layoutX="267.0" layoutY="580.0" mnemonicParsing="false" onAction="#selectAll" prefHeight="25.0" prefWidth="120.0" text="Check everything" />
-            <Button fx:id="invite_btn" layoutX="319.0" layoutY="667.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="150.0" text="Invite"
-            onAction="#closeWindow">
+            <Button layoutX="392.0" layoutY="580.0" mnemonicParsing="false" onAction="#unselectAll" text="Fjern alle valg" />
+            <Button fx:id="CheckEverything" layoutX="267.0" layoutY="580.0" mnemonicParsing="false" onAction="#selectAll" prefHeight="25.0" prefWidth="120.0" text="Velg alle" />
+            <Button fx:id="invite_btn" layoutX="319.0" layoutY="667.0" mnemonicParsing="false" onAction="#closeWindow" prefHeight="32.0" prefWidth="150.0" text="Inviter">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

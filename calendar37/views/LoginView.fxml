@@ -33,7 +33,7 @@
                </rowConstraints>
                <children>
                   <TextField fx:id="txt_user_name" prefHeight="25.0" prefWidth="251.0" GridPane.columnIndex="1" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username:" textAlignment="RIGHT" wrappingWidth="135.9365234375">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Brukernavn:" textAlignment="RIGHT" wrappingWidth="135.9365234375">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -42,7 +42,7 @@
             </GridPane>
             <GridPane hgap="6.0" layoutX="129.0" layoutY="305.0" prefHeight="53.0" prefWidth="358.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" textAlignment="RIGHT" wrappingWidth="135.9365234375">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Passord:" textAlignment="RIGHT" wrappingWidth="135.9365234375">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -57,7 +57,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
             </GridPane>
-            <Button fx:id="btn_login" layoutX="308.0" layoutY="416.0" mnemonicParsing="false" onAction="#login" prefHeight="27.0" prefWidth="121.0" text="Log in" />
+            <Button fx:id="btn_login" layoutX="308.0" layoutY="416.0" mnemonicParsing="false" onAction="#login" prefHeight="27.0" prefWidth="121.0" text="Logg inn" />
             <Label fx:id="label_error" layoutX="187.0" layoutY="367.0" textFill="RED" />
          </children>
       </Pane>
