@@ -71,10 +71,25 @@ public class DatabaseInterface {
 	 * Perhaps make class usable for different users by including credentials in
 	 * the constructor instead of making it a static final field.
 	 */
+
+	//local
+	/*
+	private static final String DB_URL = "jdbc:mysql://localhost:3306/fellesprosjekt";
+	private static final String USERNAME = "fellesprosjekt";
+
+	private static final String PASSWORD = "bringIt";
+	*/
+	
+	//ekstern
 	private static final String DB_URL = "jdbc:mysql://mysql.stud.ntnu.no/thomasdf_fellesprosjekt";
 	private static final String USERNAME = "thomasdf_fellesp";
 
 	private static final String PASSWORD = "bringIt";
+	
+	private String localTimetoDatabaseTime(LocalTime time){
+		String dbTime = time.toString();
+		return dbTime.substring(0,5) + ":00";
+	}
 
 	/**
 	 * Fetches the activity with the given id from the database. Throws a
@@ -171,7 +186,7 @@ public class DatabaseInterface {
 		Connection connection = null;
 		ResultSet result = null;
 		Statement statement = null;
-		int activity_id = 0;
+		int calendar_id = 0;
 		try {
 			// create new connection and statement
 			Class.forName(DB_DRIVER);
@@ -179,15 +194,29 @@ public class DatabaseInterface {
 					.getConnection(DB_URL, USERNAME, PASSWORD);
 			statement = connection.createStatement();
 			// method
+			
+			result = statement.executeQuery("select calendar.calendar_id from calendar, account, hasCalendar where account.user_name = hasCalendar.user_name and hasCalendar.calendar_id = calendar.calendar_id and account.user_name = '" + owner_user_name + "'");
+			if(result.next()){
+				calendar_id = result.getInt("calendar_id");
+				
+			} else {
+				throw new SQLException("empty set");
+			}			
 			statement.executeUpdate("INSERT INTO activity (calendar_id, description, activity_date, end_date, start_time, end_time, owner_user_name, room_name) VALUES ("
-					+ description + "', " + activity_date
-					+ ", " + end_date + ", " + start_time + ", " + end_time
-					+ ", '" + owner_user_name + "', '" + room_name + "')");
+					+ calendar_id + ", '" + description + "', '" + activity_date.toString()
+					+ "', '" + end_date.toString() + "', '" + localTimetoDatabaseTime(start_time) + "', '" + localTimetoDatabaseTime(end_time)
+					+ "', '" + owner_user_name + "', '" + room_name + "')");
+			
+			result.close();
 			// find the id of the new activity
 			result = statement
-					.executeQuery("SELECT LAST_INSERT_ID();");
-			activity_id = result.getInt("0");
-			result.close();
+					.executeQuery("SELECT LAST_INSERT_ID()");
+			if(result.next()){
+			int activity_id = result.getInt(1);
+			return getActivity(activity_id);
+			}else{
+				throw new SQLException();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -213,7 +242,7 @@ public class DatabaseInterface {
 				}
 			}
 		}
-		return this.getActivity(activity_id);
+		return null;
 	}
 	
 
@@ -1221,7 +1250,7 @@ public class DatabaseInterface {
 			connection = DriverManager
 					.getConnection(DB_URL, USERNAME, PASSWORD);
 			statement = connection.createStatement();
-			statement.executeQuery("DELETE FROM account WHERE user_name='" + account_user_name + "'");
+			statement.executeUpdate("DELETE FROM account WHERE user_name='" + account_user_name + "'");
 		} catch (Exception e) {
 			System.out.println("Error from DatabaseInterface: "
 					+ e.getLocalizedMessage());
