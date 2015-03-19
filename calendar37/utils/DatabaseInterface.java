@@ -1309,7 +1309,7 @@ public class DatabaseInterface {
 
 	/**
 	 * Updates an account and creates a new account in the database if an
-	 * account with this user_name is not in the database
+	 * account with this user_name is not in the database. Also Creates a new calendar for the user.
 	 * 
 	 * @param account
 	 *            the account we want to add/update in the database
@@ -1340,16 +1340,26 @@ public class DatabaseInterface {
 			} else {
 				throw new SQLException("Inconsistency in the database. If problem persists, contact system administrator");
 			}
-			}else{// account does not exist, and new row created
+			}else{// account does not exist, and new row created + new calendar created for user
 				statement.executeUpdate("INSERT INTO account VALUES ('"
 						+ user_name + "', '" + account.getPassword() + "', '"
 						+ account.getFirst_name() + "', '"
 						+ account.getLast_name() + "', '"
 						+ account.getMobile_nr() + "')");
+				statement.executeUpdate("INSERT INTO calendar VALUES (NULL)");
+				result.close();
+				result = statement.executeQuery("SELECT LAST_INSERT_ID() as last_id");
+				if(result.next()){
+				int calendar_id = result.getInt("last_id");
+				result.close();
+				
+				statement.executeUpdate("INSERT INTO hasCalendar VALUES ('" + user_name + "', " + calendar_id + ")");
+				} else {
+					throw new SQLException("Could not get last_id for calendar from database");
+				}
 			}
 		} catch (Exception e) {
-			System.out.println("Error from DatabaseInterface: "
-					+ e.getLocalizedMessage());
+					e.printStackTrace();
 		} finally {
 			if (result != null) {
 				try {
