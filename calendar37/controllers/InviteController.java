@@ -1,10 +1,7 @@
 package controllers;
 
-
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import com.sun.javafx.scene.control.SelectedCellsMap;
 
 import utils.DatabaseInterface;
 import models.Account;
@@ -17,7 +14,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -26,53 +22,37 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 public class InviteController implements Initializable{
-	
+
 	//misc variables
 	private String currentTab = "Person";
  
     // The table and columns
-    @FXML
-    TableView<Account> PersonTable;
-    
-    @FXML 
-    TableView<Group> GroupTable;
- 
-    @FXML
-    TableColumn FirstName;
-    @FXML
-    TableColumn LastName;
-    @FXML
-    TableColumn checkBoxTableColumn;
-    
-    @FXML
-    TableColumn GroupName;
-    
-    @FXML
-    TableColumn checkBoxGroup;
-    
-    
-    @FXML
-    Button CheckEverything;
-    
-    @FXML
-    Button invite_btn;
-    
-    @FXML
-    Tab groupTab;
-    
-    @FXML
-    TabPane tabPane;
+    @FXML TableView<Account> PersonTable;
+    @FXML TableView<Group> GroupTable;
+    @SuppressWarnings("rawtypes")
+	@FXML TableColumn FirstName;
+    @SuppressWarnings("rawtypes")
+    @FXML TableColumn LastName;
+    @SuppressWarnings("rawtypes")
+    @FXML TableColumn checkBoxTableColumn;
+    @SuppressWarnings("rawtypes")
+    @FXML TableColumn GroupName;
+    @SuppressWarnings("rawtypes")
+    @FXML TableColumn checkBoxGroup;
+    @FXML Button CheckEverything;
+    @FXML Button invite_btn;
+    @FXML Tab groupTab;
+    @FXML TabPane tabPane;
 
     //Store all the accounts from the database in this list:
     ObservableList<Account> PersonData;
     ObservableList<Group> GroupData;
      
-    @Override
+	@SuppressWarnings("unchecked")
+	@Override
     public void initialize(URL url, ResourceBundle rb) {
     	//TODO: Implementer henting av ALLE accounts fra databasen (Og sette ALLE brukerne sine CHECKED variabler til false)
-    	//TODO: 
-    	
-    	
+		//TODO: KRÆSJER OM MAN UNCHECKER ALLE, OG INVITERER FOLK FLERE GANGER
     	tabPane.getSelectionModel().selectedItemProperty().addListener(
     		    new ChangeListener<Tab>() {
     		        @Override
@@ -90,10 +70,9 @@ public class InviteController implements Initializable{
         LastName.setCellValueFactory(
             new PropertyValueFactory<Account,String>("last_name")
         );
-        
         GroupName.setCellValueFactory(
-                new PropertyValueFactory<Group,String>("group_name")
-            );
+        	new PropertyValueFactory<Group,String>("group_name")
+        );
         
         //Create a connection to the databse interface
         DatabaseInterface db = new DatabaseInterface();
@@ -109,12 +88,8 @@ public class InviteController implements Initializable{
         //populate the table with groups / Persons
         PersonTable.setItems(PersonData);
         GroupTable.setItems(GroupData);
-        
-       
-        
     }
- 
-     
+	
     @FXML
     private void selectAll(ActionEvent event) {
     	if(currentTab.equals("Person")){
@@ -175,21 +150,14 @@ public class InviteController implements Initializable{
     	return InvitedAccounts;
     }
     
-    
     //CloseWindow vil lukke invite vinduet og sende en liste med inviterte brukere tilbake til "CreateActivity" kontrolleren
     @FXML
     private void closeWindow(ActionEvent event){
-    	
     	CreateActivityController.fetchList(findInvited());
     	
-    	 // get a handle to the stage
+    	// get a handle to the stage
         Stage stage = (Stage) invite_btn.getScene().getWindow();
         // do what you have to do
         stage.close();
     }
-    
-   
 }
-
-
-

@@ -1,12 +1,9 @@
 package controllers;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
-import javax.jws.Oneway;
 
 import utils.DatabaseInterface;
 import javafx.collections.FXCollections;
@@ -15,13 +12,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -33,12 +27,7 @@ import models.Account;
 import models.Activity;
 
 public class CreateActivityController {
-	
-	// Model initialization
-	private Activity activity;
-	
-	@SuppressWarnings("rawtypes")
-	
+
 	// FXML fields
 	@FXML private TextField name;
 	@FXML private TextArea description;
@@ -48,6 +37,8 @@ public class CreateActivityController {
 	@FXML private DatePicker end_date;
 	@FXML private TextField end_hours;
 	@FXML private TextField end_minutes;
+	
+	private String user_name;
 	
 	/**
 	 * Checks if date fields are correctly filled out
@@ -131,9 +122,7 @@ public class CreateActivityController {
 	}
 	
 	//Init
-	@SuppressWarnings("unchecked")
 	@FXML void initialize(){
-		
 	}
 	
 	private String anyIsEmpty()	{
@@ -159,17 +148,18 @@ public class CreateActivityController {
 	/**
 	 * Function that creates an activity in the dbInterface if and only if the data is validated correctly
 	 * TODO: Let user know if data is not valid
+	 * TODO: Burde lukke viewet om en avtale opprettes
 	 */
 	@FXML private void createActivity()	{
-		String owner_user_name = "Get username from the program"; // TODO: get the username from somewhere in the nameSpace.
-		String room_name = "Get the room name from the view"; // TODO: not yet defined in view.
+		String owner_user_name = user_name;
+		String room_name = "batcave"; // TODO: not yet defined in view.
 		if(dateIsOkay() && timeIsLogical() && this.anyIsEmpty().equals(""))	{
-			DatabaseInterface db = new DatabaseInterface();
+			DatabaseInterface db = new DatabaseInterface(); //TODO: DENN KNEKKER HELE PROGRAMMET MED AT act = null UANSETT
 			Activity act = db.setActivity(owner_user_name , this.description.getText(), this.start_date.getValue(), this.end_date.getValue(),
 					this.parseTime(this.start_hours.getText() + ":" + this.start_minutes.getText()),
 					this.parseTime(this.end_hours.getText() + ":" + this.end_minutes.getText()), room_name);
 			//this.findInvitedAccounts();
-			this.addInvited(this.fetchedAccounts, act.getActivity_id());
+			this.addInvited(fetchedAccounts, act.getActivity_id());
 		}	else	{
 			this.makeDialog(this.anyIsEmpty().equals("") ? "Your time space is not logical." : this.anyIsEmpty());
 		}
@@ -253,5 +243,9 @@ public class CreateActivityController {
 	//Denne kalles i InviteController for å sende lista med inviterte brukere inn i denne kontrolleren
 	public static void fetchList(ObservableList<Account> a){
 		fetchedAccounts = a;
-	}	
+	}
+	
+	public void setUserInfo(String user_name) {
+		this.user_name = user_name;
+	}
 }

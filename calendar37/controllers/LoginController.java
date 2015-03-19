@@ -17,14 +17,10 @@ import utils.DatabaseInterface;
 
 public class LoginController implements Initializable {
 
-	@FXML
-	private Button btn_login;
-	@FXML
-	private TextField txt_user_name;
-	@FXML
-	private PasswordField txt_password;
-	@FXML
-	private Label label_error;
+	@FXML private Button btn_login;
+	@FXML private TextField txt_user_name;
+	@FXML private PasswordField txt_password;
+	@FXML private Label label_error;
 	
 	private Stage stage;
 	private boolean is_ok = false;
@@ -36,10 +32,14 @@ public class LoginController implements Initializable {
 		@Override
 	    public void changed(ObservableValue<? extends String> observable,
 	            String oldValue, String newValue) {
-			txt_user_name.setText(newValue.toLowerCase());
-		}
-	});
+				txt_user_name.setText(newValue.toLowerCase());
+				}
+		});
 		
+		//FOR TESTING
+		txt_user_name.setText("lahey");
+		txt_password.setText("police");
+		//FOR TESTING
 	}
 	
 	@FXML
