@@ -6,6 +6,8 @@ import models.Invite;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -15,13 +17,13 @@ public class ActivityController {
 	//fxml
 	@FXML ToggleButton tgb_status;
 	@FXML Text ActivityView_TitleText;
-	@FXML Text ActivityView_CreatedBy;
-	@FXML Text ActivityView_GroupText;
-	@FXML Text ActivityView_DescriptionText;
+	@FXML TextField ActivityView_CreatedBy;
+	@FXML TextField ActivityView_GroupText;
+	@FXML TextArea ActivityView_DescriptionText;
 	@FXML DatePicker ActivityView_StartDate;
 	@FXML DatePicker ActivityView_EndDate;
-	@FXML Text ActivityView_StartTime;
-	@FXML Text ActivityView_EndTime;
+	@FXML TextField ActivityView_StartTime;
+	@FXML TextField ActivityView_EndTime;
 	@FXML Button btn_close;
 	
 	private String user_name;

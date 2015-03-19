@@ -36,7 +36,7 @@
                 <RowConstraints maxHeight="53.0" minHeight="10.0" prefHeight="28.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TextField fx:id="txf_full_name" editable="false" focusTraversable="false" prefHeight="38.0" prefWidth="475.0" GridPane.rowIndex="1" />
+                  <TextField fx:id="txf_full_name" focusTraversable="false" mouseTransparent="true" prefHeight="38.0" prefWidth="475.0" style="-fx-text-fill: #999;" GridPane.rowIndex="1" />
                   <TextFlow prefHeight="34.0" prefWidth="475.0">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Navn:">
@@ -53,7 +53,7 @@
             </GridPane>
             <GridPane layoutX="92.0" layoutY="243.0" prefHeight="65.0" prefWidth="475.0">
                <children>
-                  <TextField fx:id="txf_phone" editable="false" focusTraversable="false" prefHeight="38.0" prefWidth="475.0" GridPane.rowIndex="1" />
+                  <TextField fx:id="txf_phone" focusTraversable="false" mouseTransparent="true" prefHeight="38.0" prefWidth="475.0" style="-fx-text-fill: #999;" GridPane.rowIndex="1" />
                   <TextFlow prefHeight="34.0" prefWidth="475.0">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Telefonnr:">
