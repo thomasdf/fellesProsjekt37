@@ -13,7 +13,7 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CreateGroupController">
    <children>
-      <Pane layoutX="263.0" layoutY="23.0" prefHeight="747.0" prefWidth="778.0" style="-fx-border-style: dotted;">
+      <Pane layoutX="263.0" layoutY="23.0" prefHeight="747.0" prefWidth="778.0" styleClass="mainbox">
          <children>
             <HBox prefHeight="85.0" prefWidth="778.0">
                <children>
@@ -32,14 +32,9 @@
                </children>
             </HBox>
 
-            <Button fx:id="uncheckAll_btn" layoutX="395.0" layoutY="471.0" mnemonicParsing="false" text="Fjern alle valg" onAction="#unselectAll" />
-            <Button fx:id="CheckEverything" layoutX="300.0" layoutY="471.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Velg alle" onAction="#selectAll" />
-            <Button fx:id="create_btn" layoutX="283.0" layoutY="669.0" mnemonicParsing="false" onAction="#createGroup" prefHeight="32.0" prefWidth="124.0" text="Opprett gruppe">
-
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
+            <Button fx:id="uncheckAll_btn" layoutX="395.0" layoutY="471.0" mnemonicParsing="false" onAction="#unselectAll" text="Fjern alle valg" />
+            <Button fx:id="CheckEverything" layoutX="300.0" layoutY="471.0" mnemonicParsing="false" onAction="#selectAll" prefHeight="25.0" prefWidth="89.0" text="Velg alle" />
+            <Button fx:id="create_btn" layoutX="289.0" layoutY="689.0" mnemonicParsing="false" onAction="#createGroup" prefWidth="100.0" styleClass="close" text="Opprett gruppe" />
             <GridPane layoutX="183.0" layoutY="84.0" prefHeight="47.0" prefWidth="423.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -127,7 +122,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button layoutX="422.0" layoutY="669.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="124.0" text="Avbryt" fx:id="cancel_btn" onAction="#cancel" />
+            <Button fx:id="cancel_btn" layoutX="401.0" layoutY="689.0" mnemonicParsing="false" onAction="#cancel" prefWidth="100.0" styleClass="close" text="Avbryt" />
 
          </children>
       </Pane>

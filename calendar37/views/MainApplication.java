@@ -29,7 +29,7 @@ public class MainApplication extends Application {
 		Scene scene = new Scene(root);
 		
 		//Adds a css-stylesheet to the scene
-		scene.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("secondary.css").toExternalForm());
 		
 		//Initializes the stage and shows it
 		primaryStage.setTitle("Calendar37 - Logg inn");

@@ -22,7 +22,7 @@ public class Utilities {
 	/**
 	 * A list of all the days in one week, <em>in Norwegian</em>.
 	 */
-	public final List<String> weekdays = Arrays.asList("Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag");
+	public final List<String> weekdays = Arrays.asList("Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "LÃ¸rdag", "SÃ¸ndag");
 	
 	
 	/**
