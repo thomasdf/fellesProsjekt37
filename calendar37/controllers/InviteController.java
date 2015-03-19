@@ -1,6 +1,8 @@
 package controllers;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import utils.DatabaseInterface;
@@ -24,8 +26,7 @@ import javafx.stage.Stage;
 public class InviteController implements Initializable{
 
 	//misc variables
-	private String currentTab = "Person";
- 
+	String currentTab = "";
     // The table and columns
     @FXML TableView<Account> PersonTable;
     @FXML TableView<Group> GroupTable;
@@ -43,6 +44,7 @@ public class InviteController implements Initializable{
     @FXML Button invite_btn;
     @FXML Tab groupTab;
     @FXML TabPane tabPane;
+    @FXML Button cancel_btn;
 
     //Store all the accounts from the database in this list:
     ObservableList<Account> PersonData;
@@ -51,8 +53,13 @@ public class InviteController implements Initializable{
 	@SuppressWarnings("unchecked")
 	@Override
     public void initialize(URL url, ResourceBundle rb) {
+		
     	//TODO: Implementer henting av ALLE accounts fra databasen (Og sette ALLE brukerne sine CHECKED variabler til false)
 		//TODO: KRÆSJER OM MAN UNCHECKER ALLE, OG INVITERER FOLK FLERE GANGER
+		
+		
+
+		
     	tabPane.getSelectionModel().selectedItemProperty().addListener(
     		    new ChangeListener<Tab>() {
     		        @Override
@@ -77,43 +84,65 @@ public class InviteController implements Initializable{
         //Create a connection to the databse interface
         DatabaseInterface db = new DatabaseInterface();
         
-        //get all accounts and store them in PersonData
-        PersonData = FXCollections.observableArrayList();
-        PersonData= FXCollections.observableList(db.getAllAccounts());
+        
         
         //Get all groups and store them in GroupData
         GroupData = FXCollections.observableArrayList();
         GroupData= FXCollections.observableList(db.getAllGroups());
+       
         
+        
+      
         //populate the table with groups / Persons
-        PersonTable.setItems(PersonData);
+//        PersonTable.setItems(PersonData);
         GroupTable.setItems(GroupData);
     }
+
+	//-----Mottar en liste med Accounter som er inviterte til aktiviteten (hvis et er noen, ellers er den tom)
+	ObservableList<Account> InvitedAccounts = FXCollections.observableArrayList();
+	
+	
+	public void setTableData(ObservableList<Account> list, ObservableList<Account> PersonData){
+		this.InvitedAccounts.addAll(list);
+		for(int i = 0; i < InvitedAccounts.size(); i++) {
+			for(int y = 0; y < PersonData.size(); y++){
+				if(InvitedAccounts.get(i).getUsername().equals(PersonData.get(y).getUsername())){
+					PersonData.get(y).setChecked(true);
+					
+				}
+			}
+		}
+		
+		PersonTable.setItems(PersonData);
+	}
+	
+	public ObservableList<Account> getTableData(){
+		return PersonTable.getItems();
+	}
 	
     @FXML
     private void selectAll(ActionEvent event) {
-    	if(currentTab.equals("Person")){
-    		for(int i = 0; i < PersonData.size(); i++) {
-    			PersonData.get(i).setChecked(true);
+    	if(currentTab.equals("Group")){
+    		for(int i = 0; i < GroupData.size(); i++) {
+    			GroupData.get(i).setChecked(true);
     		} 
     	}else {
-    			for(int i = 0; i < GroupData.size(); i++) {
-        			GroupData.get(i).setChecked(true);
-        			System.out.println(GroupData.get(i).getGroup_name());
+    			for(int i = 0; i < getTableData().size(); i++) {
+        			getTableData().get(i).setChecked(true);        			
     		}
     	}
     }
     
     @FXML
     private void unselectAll(ActionEvent event) {
-    	if(currentTab=="Person"){
-    		for(int i = 0; i < PersonData.size(); i++) {
-    			PersonData.get(i).setChecked(false);
-    		}} else {
-    			for(int i = 0; i < PersonData.size(); i++) {
-        			GroupData.get(i).setChecked(false);
+    	if(currentTab.equals("Group")){
+    		for(int i = 0; i < GroupData.size(); i++) {
+    			GroupData.get(i).setChecked(false);
+    		} 
+    	}else {
+    			for(int i = 0; i < getTableData().size(); i++) {
+        			getTableData().get(i).setChecked(false);        			
     		}
-    			
     	}
     }
     
@@ -122,32 +151,42 @@ public class InviteController implements Initializable{
     private ObservableList<Account> findInvited(){
     	ObservableList<Account> InvitedAccounts = FXCollections.observableArrayList();
     	ObservableList<Account> InvitedGroupMembers = FXCollections.observableArrayList();
-    	for(int i = 0; i < PersonData.size(); i++) {
-			if(PersonData.get(i).getChecked()==true){
-				System.out.println(PersonData.get(i).getUsername() + " is marked as invited.");
-				InvitedAccounts.add(PersonData.get(i));
+    	for(int i = 0; i < getTableData().size(); i++) {
+			if(getTableData().get(i).getChecked()==true){
+//				System.out.println(getTableData().get(i).getUsername() + " is marked as invited.");
+				InvitedAccounts.add(getTableData().get(i));
 			} 
 			
-    	}
+    	} //Henter ut alle Account objektene knyttet til gruppene som er huket av og lagrer i "InvitedGroupMembers"
     	for(int i = 0; i < GroupData.size(); i++) {
     		if(GroupData.get(i).getChecked()==true){
     			DatabaseInterface dbi = new DatabaseInterface();
     			ObservableList<Account> accountList = FXCollections.observableArrayList();
     			for (int j = 0; j < GroupData.get(i).getMembers().size(); j++) {
-    				accountList.add(dbi.getAccount(GroupData.get(i).getMembers().get(i)));
+    				accountList.add(dbi.getAccount(GroupData.get(i).getMembers().get(j)));
     			}
     			InvitedGroupMembers.addAll(accountList);
     		}
+    	} //Finner ut om noen i gruppen allerede er inviterte. 
+    	List<String> list = new ArrayList<String>();
+    	for(int i=0; i < InvitedAccounts.size(); i++){
+    		list.add(InvitedAccounts.get(i).getUsername());
     	}
-    	for (int i = 0; i < InvitedGroupMembers.size(); i++) {
-    		if(InvitedAccounts.contains(InvitedGroupMembers.get(i))){
-    			System.out.println(InvitedGroupMembers.get(i).getFirst_name() + " is already invited");
+		
+    	for(int x=0; x < InvitedGroupMembers.size(); x++){
+    		if(list.contains(InvitedGroupMembers.get(x).getUsername())){
+    			
     		} else {
-    			InvitedAccounts.add(InvitedGroupMembers.get(i));
-    			System.out.println(InvitedGroupMembers.get(i).getFirst_name() + " is marked as Invited");
+    			InvitedAccounts.add(InvitedGroupMembers.get(x));
     		}
     	}
+    	for(int x=0; x < InvitedAccounts.size(); x++){
+    		System.out.println(InvitedAccounts.get(x).getUsername());
+    	}
+    	
     	return InvitedAccounts;
+    	
+    	
     }
     
     //CloseWindow vil lukke invite vinduet og sende en liste med inviterte brukere tilbake til "CreateActivity" kontrolleren
@@ -159,5 +198,11 @@ public class InviteController implements Initializable{
         Stage stage = (Stage) invite_btn.getScene().getWindow();
         // do what you have to do
         stage.close();
+    }
+    
+    @FXML
+    private void cancel(ActionEvent event){
+    	Stage stage = (Stage) cancel_btn.getScene().getWindow();
+    	stage.close();
     }
 }

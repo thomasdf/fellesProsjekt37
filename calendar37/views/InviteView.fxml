@@ -62,7 +62,7 @@
                                 <columns>
                                   <TableColumn fx:id="GroupName" prefWidth="335.0" text="Navn" />
                                   
-                                  <TableColumn fx:id="checkBoxGroup" prefWidth="89.0" resizable="false" sortable="false" text="Inviter">
+                                  <TableColumn fx:id="checkBoxGroup" prefWidth="89.0" resizable="false" sortable="false" text="Invite">
                                   <cellValueFactory><PropertyValueFactory property="checked" /></cellValueFactory>
 									<cellFactory><views.CheckBoxCellFactory_Group /></cellFactory>
 								</TableColumn>
@@ -73,13 +73,15 @@
                 </Tab>
               </tabs>
             </TabPane>
-            <Button layoutX="392.0" layoutY="580.0" mnemonicParsing="false" onAction="#unselectAll" text="Fjern alle valg" />
-            <Button fx:id="CheckEverything" layoutX="267.0" layoutY="580.0" mnemonicParsing="false" onAction="#selectAll" prefHeight="25.0" prefWidth="120.0" text="Velg alle" />
-            <Button fx:id="invite_btn" layoutX="319.0" layoutY="667.0" mnemonicParsing="false" onAction="#closeWindow" prefHeight="32.0" prefWidth="150.0" text="Inviter">
+            <Button layoutX="392.0" layoutY="580.0" mnemonicParsing="false" onAction="#unselectAll" text="Uncheck everything" />
+            <Button fx:id="CheckEverything" layoutX="267.0" layoutY="580.0" mnemonicParsing="false" onAction="#selectAll" prefHeight="25.0" prefWidth="120.0" text="Check everything" />
+            <Button fx:id="invite_btn" layoutX="290.0" layoutY="666.0" mnemonicParsing="false" onAction="#closeWindow" prefHeight="32.0" prefWidth="82.0" text="Invite">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
+            <Button layoutX="404.0" layoutY="669.0" mnemonicParsing="false" fx:id="cancel_btn" prefHeight="25.0" prefWidth="78.0" text="Cancel" 
+            onAction="#cancel"/>
          </children>
       </Pane>
    </children>
