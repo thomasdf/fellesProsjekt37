@@ -125,7 +125,7 @@
             </GridPane>
             <Button fx:id="Invite_btn" layoutX="97.0" layoutY="568.0" mnemonicParsing="false" onAction="#showInviteWindow" prefHeight="25.0" prefWidth="94.0" text="Inviter" />
 			<Button fx:id="Create_btn" layoutX="277.0" layoutY="640.0" mnemonicParsing="false" onAction="#createActivity" text="Utfør" />
-            <Button layoutX="331.0" layoutY="640.0" mnemonicParsing="false" text="Avbryt" />
+            <Button fx:id="abort" layoutX="331.0" layoutY="640.0" mnemonicParsing="false" onAction="#closeStage" text="Avbryt" />
          </children>
       </Pane>
    </children>
