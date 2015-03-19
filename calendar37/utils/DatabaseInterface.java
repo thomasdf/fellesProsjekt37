@@ -11,7 +11,6 @@ import models.Calendar;
 import models.Group;
 import models.Invite;
 import models.Notification;
-import models.Room;
 
 /**
  * 
@@ -688,16 +687,70 @@ public class DatabaseInterface {
 	 * @param end_time LocalTime
 	 * @return Returns an arrayList of rooms available
 	 */
-	public ArrayList<Room> getAvailableRooms(LocalDate start_date, LocalDate end_date, LocalTime start_time, LocalTime end_time){
-		return new ArrayList<Room>();
+	public ArrayList<String> getAvailableRooms(LocalDate start_date, LocalDate end_date, LocalTime start_time, LocalTime end_time){
+		ArrayList<String> room_list = new ArrayList<>();
+
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+		
+		String db_start_time = localTimetoDatabaseTime(start_time);
+		String db_end_time = localTimetoDatabaseTime(end_time);
+
+		try {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			// method
+			result = statement.executeQuery("SELECT room_name FROM activity WHERE "
+					+ "NOT((activity_date<='" + start_date.toString() + "' AND end_date>='"
+					+ start_date.toString() + "') OR (activity_date<='" + end_date.toString()
+					+ "' AND end_date>='" + end_date.toString() + "')) AND "
+					+ "NOT((start_time<='" + db_start_time + "' AND end_time>='"
+							+ db_start_time + "') OR (start_time<='" + db_end_time
+							+ "' AND end_time>='" + db_end_time + "'))");
+			while(result.next())	{
+				if(room_list.contains(result.getString("room_name")))	{
+					continue;
+				}
+				room_list.add(result.getString("room_name"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
+		}
+		return room_list;
 	}
 	
 	/**
 	 * Returns a list of all the rooms
 	 * @return Returns an arrayList of rooms.
 	 */
-	public ArrayList<Room> getAllRooms(){
-		ArrayList<Room> roomlist = new ArrayList<>();
+	public ArrayList<String> getAllRooms(){
+		ArrayList<String> roomlist = new ArrayList<>();
 
 		Connection connection = null;
 		ResultSet result = null;
@@ -713,10 +766,7 @@ public class DatabaseInterface {
 			result = statement
 					.executeQuery("select room.* from room");
 			while(result.next()) {
-				Room room = new Room();
-				room.setCapacity(result.getInt("capacity"));
-				room.setRoom_name(result.getString("room_name"));
-				roomlist.add(room);
+				roomlist.add(result.getString("room_name"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
