@@ -479,12 +479,12 @@ public class CalendarView {
 			Parent root = (Parent) loader.load();
 			CreateActivityController controller = (CreateActivityController) loader.getController();
 			
-			//Setter rett aktivitet
-			controller.setUserInfo(user_name);
-			
 			//Lager scenen og stagen
 			Scene scene = new Scene(root);
 			Stage stage = new Stage();
+			
+			//Setter rett aktivitet
+			controller.setUserInfo(stage, user_name);
 			
 			//Disables this view
 			CalendarView.this.root.disableProperty().set(true);

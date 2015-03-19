@@ -38,6 +38,7 @@ public class CreateActivityController {
 	@FXML private TextField end_hours;
 	@FXML private TextField end_minutes;
 	
+	private Stage stage;
 	private String user_name;
 	
 	/**
@@ -160,6 +161,7 @@ public class CreateActivityController {
 					this.parseTime(this.end_hours.getText() + ":" + this.end_minutes.getText()), room_name);
 			//this.findInvitedAccounts();
 			this.addInvited(fetchedAccounts, act.getActivity_id());
+			stage.close();
 		}	else	{
 			this.makeDialog(this.anyIsEmpty().equals("") ? "Your time space is not logical." : this.anyIsEmpty());
 		}
@@ -245,7 +247,8 @@ public class CreateActivityController {
 		fetchedAccounts = a;
 	}
 	
-	public void setUserInfo(String user_name) {
+	public void setUserInfo(Stage stage, String user_name) {
+		this.stage = stage;
 		this.user_name = user_name;
 	}
 }

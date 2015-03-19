@@ -37,13 +37,7 @@ public class MainApplication extends Application {
 		primaryStage.show();
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			public void handle(WindowEvent we) {
-				 if (login_controller.isOk()) {
-					 user_name = login_controller.getUser_name();
-					 cal_id = dbi.getCalendarId(user_name);
-					 openCalendar();
-				 } else {
-					 System.exit(0);
-				 }
+				System.exit(0);
 			}
 		});
 		primaryStage.setOnHiding(new EventHandler<WindowEvent>() {
