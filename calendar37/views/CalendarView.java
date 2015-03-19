@@ -408,7 +408,7 @@ public class CalendarView {
 			ActivityController controller = (ActivityController) loader.getController();
 			
 			//Setter rett aktivitet
-			controller.setActivity_id(activity_id);
+			controller.init(user_name, activity_id);
 			
 			//Lager scenen og stagen
 			Scene scene = new Scene(root);

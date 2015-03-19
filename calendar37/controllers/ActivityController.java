@@ -2,15 +2,18 @@ package controllers;
 
 import utils.DatabaseInterface;
 import models.Activity;
+import models.Invite;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class ActivityController {
 
 	//fxml
+	@FXML ToggleButton tgb_status;
 	@FXML Text ActivityView_TitleText;
 	@FXML Text ActivityView_CreatedBy;
 	@FXML Text ActivityView_GroupText;
@@ -21,8 +24,31 @@ public class ActivityController {
 	@FXML Text ActivityView_EndTime;
 	@FXML Button btn_close;
 	
-	public void setActivity_id(int activity_id) {
-		DatabaseInterface dbi = new DatabaseInterface();
+	private String user_name;
+	private int activity_id;
+	
+	DatabaseInterface dbi = new DatabaseInterface();
+	
+	public void init(String user_name, int activity_id) {
+		this.user_name = user_name;
+		this.activity_id = activity_id;
+		
+		try {
+			Invite inv = dbi.getInvite(activity_id, user_name);
+			if (inv != null) {
+				if (inv.getStatus().equals("true")) {
+					tgb_status.setSelected(true);
+				} else {
+					tgb_status.setSelected(false);
+				}
+				tgb_status.visibleProperty().set(true);
+			} else {
+				tgb_status.visibleProperty().set(false);
+			}
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+		
 		Activity model = dbi.getActivity(activity_id);
 		
 		ActivityView_TitleText.setText("Aktivitet nr. " + activity_id);
@@ -35,6 +61,10 @@ public class ActivityController {
 		ActivityView_EndDate.setDisable(true);
 		ActivityView_StartTime.setText(model.getFrom().toString());
 		ActivityView_EndTime.setText(model.getTo().toString());
+	}
+	
+	@FXML public void changeStatus() {
+		dbi.changeInvitedStatus(activity_id, user_name);
 	}
 	
 	@FXML public void close() {
