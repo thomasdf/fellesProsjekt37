@@ -342,8 +342,6 @@ public class AgendaView {
 	/**
 	 * Opens up the view for an {@link Account} that is pressed in this {@link AgendaView},
 	 * and retains information about in what {@link models.Calendar} the {@link Account} was pressed.
-	 * 
-	 * TODO: Fill in when we get an AccountView up and running.
 	 */
 	private void openProfile() {
 		try {
