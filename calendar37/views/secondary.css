@@ -22,3 +22,9 @@
 .button:hover {
 	-fx-cursor: hand;
 }
+
+#login-mainbox {
+	-fx-background-position: right;
+	-fx-background-repeat: no-repeat;
+	-fx-background-image: url("http://i247.photobucket.com/albums/gg154/HvitrEbrithil/Private/login_background_zpsxflgyquc.png");
+}
