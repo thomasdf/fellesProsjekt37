@@ -56,7 +56,7 @@ public class CalendarView {
 	private GridPane calendar = new GridPane();
 	private GridPane header = new GridPane();
 	private Label cal_title = new Label("<kalendernavn>");
-	private Label cur_month_year = new Label("<mÃ¥ned Ã¥r>");
+	private Label cur_month_year = new Label("<måned år>");
 	private Button prev_month = new Button("Forrige");
 	private Button next_month = new Button("Neste");
 	private HBox footer = new HBox();
