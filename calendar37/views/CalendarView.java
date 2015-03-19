@@ -9,7 +9,6 @@ import java.util.GregorianCalendar;
 import controllers.AccountController;
 import controllers.ActivityController;
 import controllers.CreateActivityController;
-import controllers.CreateGroupController;
 import utils.DatabaseInterface;
 import utils.Utilities;
 import models.Activity;
@@ -57,7 +56,7 @@ public class CalendarView {
 	private GridPane calendar = new GridPane();
 	private GridPane header = new GridPane();
 	private Label cal_title = new Label("<kalendernavn>");
-	private Label cur_month_year = new Label("<mÂned Âr>");
+	private Label cur_month_year = new Label("<m√•ned √•r>");
 	private Button prev_month = new Button("Forrige");
 	private Button next_month = new Button("Neste");
 	private HBox footer = new HBox();
@@ -96,7 +95,7 @@ public class CalendarView {
 		cur_month_year.getStyleClass().add("month_year");
 		prev_month.getStyleClass().add("left");
 		next_month.getStyleClass().add("right");
-		calendar.setId("calendar");
+		calendar.getStyleClass().add("background");
 		calendar.setMaxSize(primWidth, primHeight);
 		calendar.setMinSize(primWidth, primHeight);
 		footer.getStyleClass().add("footer");
@@ -418,6 +417,9 @@ public class CalendarView {
 			//Disables this view
 			CalendarView.this.root.disableProperty().set(true);
 			
+			//Adds css
+			scene.getStylesheets().add(getClass().getResource("secondary.css").toExternalForm());
+			
 			//Initializes the stage and shows it
 			stage.setTitle("Activity " + activity_id);
 			stage.setScene(scene);
@@ -452,6 +454,9 @@ public class CalendarView {
 			//Disables this view
 			CalendarView.this.root.disableProperty().set(true);
 			
+			//Adds css
+			scene.getStylesheets().add(getClass().getResource("secondary.css").toExternalForm());
+			
 			//Initializes the stage and shows it
 			stage.setTitle("Admin panel");
 			stage.setScene(scene);
@@ -474,17 +479,11 @@ public class CalendarView {
 	/**
 	 * Opens up the view for an {@link Activity} that is pressed in this {@link CalendarView},
 	 * and retains information about in what {@link models.Calendar} the {@link Activity} was pressed.
-	 * 
-	 * TODO: Venter p√• CreateGroupController
 	 */
 	private void openCreateGroup() {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/CreateGroupView.fxml"));
 			Parent root = (Parent) loader.load();
-			CreateGroupController controller = (CreateGroupController) loader.getController();
-			
-			//Setter rett aktivitet
-//			controller.setActivity_id(activity_id);
 			
 			//Lager scenen og stagen
 			Scene scene = new Scene(root);
@@ -492,6 +491,9 @@ public class CalendarView {
 			
 			//Disables this view
 			CalendarView.this.root.disableProperty().set(true);
+			
+			//Adds css
+			scene.getStylesheets().add(getClass().getResource("secondary.css").toExternalForm());
 			
 			//Initializes the stage and shows it
 			stage.setTitle("Opprett gruppe");
@@ -532,6 +534,9 @@ public class CalendarView {
 			//Disables this view
 			CalendarView.this.root.disableProperty().set(true);
 			
+			//Adds css
+			scene.getStylesheets().add(getClass().getResource("secondary.css").toExternalForm());
+			
 			//Initializes the stage and shows it
 			stage.setTitle("Opprett aktivitet");
 			stage.setScene(scene);
@@ -570,6 +575,9 @@ public class CalendarView {
 			
 			//Disables this view
 			CalendarView.this.root.disableProperty().set(true);
+			
+			//Adds css
+			scene.getStylesheets().add(getClass().getResource("secondary.css").toExternalForm());
 			
 			//Initializes the stage and shows it
 			stage.setTitle(user_name);

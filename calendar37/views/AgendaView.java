@@ -114,7 +114,7 @@ public class AgendaView {
 		header.add(ag_title, 0, 0);
 		header.add(timeframe, 1, 0);
 			//agenda
-		timeframe.setItems(FXCollections.observableArrayList("1 Dag","1 Uke","1 Måned", "1 År", "All tid"));
+		timeframe.setItems(FXCollections.observableArrayList("1 Dag","1 Uke","1 MÃ¥ned", "1 Ã¥r", "All tid"));
 		timeframe.getSelectionModel().select(timeframe_index);
 			//footer
 		footer.getChildren().addAll(profile, close);

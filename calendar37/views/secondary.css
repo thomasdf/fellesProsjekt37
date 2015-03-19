@@ -1,0 +1,24 @@
+.root {
+	-fx-background-color: #eeeefa;
+}
+
+.root .mainbox {
+	-fx-background-color: #fff;
+	-fx-border-style: dotted;
+}
+
+.disabled {
+	-fx-text-fill: #999;
+}
+
+.disabled .text-field {
+	-fx-text-fill: #999;
+}
+
+.close {
+	-fx-pref-height: 32;
+}
+
+.button:hover {
+	-fx-cursor: hand;
+}
