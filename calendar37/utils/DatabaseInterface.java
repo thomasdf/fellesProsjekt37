@@ -746,6 +746,70 @@ public class DatabaseInterface {
 		return roomlist;
 	}
 	
+	public Group setGroup(String group_name, ArrayList<String> members_user_name){
+	Connection connection = null;
+	ResultSet result = null;
+	Statement statement = null;
+	try {
+		// create new connection and statement
+		Class.forName(DB_DRIVER);
+		connection = DriverManager
+				.getConnection(DB_URL, USERNAME, PASSWORD);
+		statement = connection.createStatement();
+		// method
+			
+		statement.executeUpdate("INSERT INTO calendarGroup (group_name) VALUES ( '"
+				+ group_name + " ')");
+		// find the id of the new group
+		result = statement
+				.executeQuery("SELECT LAST_INSERT_ID()");
+		if(result.next()){
+		int group_id = result.getInt(1);
+		
+		if(members_user_name.size() > 0){
+			String groupMemberStatement = "INSERT INTO isMember VALUES ";
+			for (int i = 0; i < members_user_name.size(); i++) {
+				groupMemberStatement += "(" + group_id + ", '" + members_user_name.get(i) + "')";
+				if(i == (members_user_name.size() - 1)){
+					groupMemberStatement += ";";
+				} else {
+					groupMemberStatement += ", ";
+				}
+				statement.executeUpdate(groupMemberStatement);
+			}
+		}
+		return getGroup(group_id);
+		}else{
+			throw new SQLException();
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	} finally {
+		if (result != null) {
+			try {
+				result.close();
+			} catch (SQLException e) {
+
+			}
+		}
+		if (statement != null) {
+			try {
+				statement.close();
+			} catch (SQLException e) {
+
+			}
+		}
+		if (connection != null) {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+
+			}
+		}
+	}
+	return null;
+		
+	}
 
 	/**
 	 * Fetches the group with this id from the database.
