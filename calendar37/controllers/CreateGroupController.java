@@ -2,17 +2,21 @@ package controllers;
 
 import java.net.URL;
 import java.util.ArrayList;
+
 import java.util.List;
+
 import java.util.ResourceBundle;
 
 import utils.DatabaseInterface;
 import models.Account;
 import models.Group;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -21,6 +25,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
@@ -29,6 +34,7 @@ public class CreateGroupController implements Initializable{
 	
 	String currentTab = "";
 	
+
 	@FXML TableView<Account> PersonTable;
     @FXML TableView<Group> GroupTable;
     @SuppressWarnings("rawtypes")
@@ -48,13 +54,16 @@ public class CreateGroupController implements Initializable{
     @FXML Button cancel_btn;
     @SuppressWarnings("rawtypes")
 	@FXML ComboBox subgroup_menu;
+
     @FXML TextField GroupName_field;
+
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 	// TODO Auto-generated method stub
 		
+
 		//listener - listens on tabchange
 		tabPane.getSelectionModel().selectedItemProperty().addListener(
     		    new ChangeListener<Tab>() {
@@ -66,14 +75,16 @@ public class CreateGroupController implements Initializable{
     		    }
     		);
 		//----------------------------------------------------------------------------------\\
-		
+
 		DatabaseInterface db = new DatabaseInterface();
 		
 		ObservableList<Account> Accounts = FXCollections.observableArrayList(db.getAllAccounts()); //Inneholder ALLE accountene i databasen
 		ObservableList<Group> Groups = FXCollections.observableArrayList(db.getAllGroups()); // Inneholder ALLE gruppene i databasen
+
 		ObservableList<String> list = FXCollections.observableArrayList("");
 		for(int x = 0; x < Groups.size(); x++){
 			list.add(Groups.get(x).getGroup_name() + " - ID ="+Groups.get(x).getGroup_id());
+
 		}
 		
 		// Set up the table data
@@ -96,6 +107,7 @@ public class CreateGroupController implements Initializable{
 		subgroup_menu.getItems().addAll(list);
 
 	}
+
 	
 	//Knappefunksjoner
 //-----------------------------------------------------------------------------------
@@ -210,4 +222,5 @@ public class CreateGroupController implements Initializable{
 		
 	}
 	
+
 }
