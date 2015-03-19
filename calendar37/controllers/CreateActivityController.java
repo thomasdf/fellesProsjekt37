@@ -38,6 +38,7 @@ public class CreateActivityController {
 	@FXML private TextField end_hours;
 	@FXML private TextField end_minutes;
 	
+	private Stage dialogStage;	
 	private Stage stage;
 	private String user_name;
 	
@@ -67,13 +68,11 @@ public class CreateActivityController {
 		if(!checkTimeString(start_hours.getText() + ":" + start_minutes.getText()) || !checkTimeString(end_hours.getText() + ":" + end_minutes.getText()))	{
 			return false;
 		}
-		if(this.start_date.getValue().isEqual(this.end_date.getValue()))	{
 			LocalTime start = this.parseTime(this.start_hours.getText() + ":" + this.start_minutes.getText());
 			LocalTime end = this.parseTime(this.end_hours.getText() + ":" + this.end_minutes.getText());;
 			if(start.isAfter(end))	{
 				return false;
 			}
-		}
 		return true;
 	}
 	
@@ -107,7 +106,11 @@ public class CreateActivityController {
 	}
 	
 	private void makeDialog(String message)	{
-		Stage dialog = new Stage();
+		if(this.dialogStage != null)	{
+			this.dialogStage.close();
+		}
+		dialogStage = new Stage();
+		Stage dialog = dialogStage;
 		dialog.initModality(Modality.WINDOW_MODAL);
 		VBox box = new VBox();
 		Button ok = new Button("OK");
@@ -118,7 +121,7 @@ public class CreateActivityController {
 				closeScene(dialog);
 			}
 		});
-		dialog.setScene(new Scene(box, 200, 100));
+		dialog.setScene(new Scene(box, 300, 100));
 		dialog.show();
 	}
 	
@@ -128,20 +131,20 @@ public class CreateActivityController {
 	
 	private String anyIsEmpty()	{
 		if(this.name.getText().equals(""))	{
-			return "You have to fill out a name.";
+			return "Du må fylle ut et navn til aktiviteten";
 		}
 		if(this.description.getText().equals(""))	{
-			return "You have to fill out a description.";
+			return "Du må fylle ut en beskrivelse for aktiviteten.";
 		}
 		if(this.start_date.getValue() == null)	{
-			return "You have to fill out a start date.";
+			return "Du må fylle ut en start dato.";
 		}
 		if(this.end_date.getValue() == null)	{
-			return "You have to fill out an end date.";
+			return "Du må fylle ut en slutt dato.";
 		}
 		if(this.start_hours.getText().equals("") || this.start_minutes.getText().equals("")
 				|| this.end_hours.getText().equals("") || this.end_minutes.getText().equals(""))	{
-			return "You have to fill out a time space for your activity to be in.";
+			return "Du må fylle ut tidspunkt for aktiviteten.";
 		}
 		return "";
 	}
@@ -201,21 +204,26 @@ public class CreateActivityController {
 			makeTimeColor("none");
 			return;
 		}
-		if(start_date.getValue() == null || end_date.getValue() == null)	{
+		if(!timeIsLogical() && (start_date.getValue() == null || end_date.getValue() == null))	{
+			makeTimeColor("red");
+			return;
+		}	else if(timeIsLogical() && (start_date.getValue() == null || end_date.getValue() == null))	{
 			makeTimeColor("none");
 			return;
-		}
-		if(start_date.getValue().isBefore(end_date.getValue()))	{
-			makeTimeColor("none");
-			return;
-		}
-		if(start_date.getValue().isEqual(end_date.getValue()))	{
-			if(!timeIsLogical())	{
-				makeTimeColor("red");
-			}	else	{
+		}	else	{
+			if(start_date.getValue().isBefore(end_date.getValue()))	{
 				makeTimeColor("none");
+				return;
 			}
-			return;
+			if(start_date.getValue().isEqual(end_date.getValue()))	{
+				if(!timeIsLogical())	{
+					makeTimeColor("red");
+					return;
+				}	else	{
+					makeTimeColor("none");
+					return;
+				}
+			}
 		}
 		
 	}
