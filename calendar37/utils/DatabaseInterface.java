@@ -31,7 +31,7 @@ import models.Notification;
 public class DatabaseInterface {
 
 	/*
-	 * Mal for å lage databaseinterface-metoder. husk å lage
+	 * Mal for ï¿½ lage databaseinterface-metoder. husk ï¿½ lage
 	 * javadoc-dokumentasjon til hver metode
 	 * 
 	 * public Object getObject(params) {
@@ -1179,6 +1179,49 @@ public class DatabaseInterface {
 						+ account.getLast_name() + "', '"
 						+ account.getMobile_nr() + "')");
 			}
+		} catch (Exception e) {
+			System.out.println("Error from DatabaseInterface: "
+					+ e.getLocalizedMessage());
+		} finally {
+			if (result != null) {
+				try {
+					result.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException e) {
+
+				}
+			}
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Removes an account from the system. NB: only to use by admin user. Check if user_name exists in database before use.
+	 * @param account_user_name User name for the account to be removed.
+	 */
+	public void removeAccount(String account_user_name) {
+		Connection connection = null;
+		ResultSet result = null;
+		Statement statement = null;
+		try {
+			// create new connection and statement
+			Class.forName(DB_DRIVER);
+			connection = DriverManager
+					.getConnection(DB_URL, USERNAME, PASSWORD);
+			statement = connection.createStatement();
+			statement.executeQuery("DELETE FROM account WHERE user_name='" + account_user_name + "'");
 		} catch (Exception e) {
 			System.out.println("Error from DatabaseInterface: "
 					+ e.getLocalizedMessage());
