@@ -3,7 +3,9 @@ CalendarView.java
 CheckBoxCellFactory_Account.java
 CheckBoxCellFactory_Group.java
 MainApplication.java
+AccountView.java
 ActivityView.java
+AdminPanelView.java
 CreateActivityView.fxml
 CreateGroupView.java
 InviteView.fxml
