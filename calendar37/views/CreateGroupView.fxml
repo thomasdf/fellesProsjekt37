@@ -34,7 +34,7 @@
 
             <Button fx:id="uncheckAll_btn" layoutX="395.0" layoutY="471.0" mnemonicParsing="false" text="Fjern alle valg" onAction="#unselectAll" />
             <Button fx:id="CheckEverything" layoutX="300.0" layoutY="471.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Velg alle" onAction="#selectAll" />
-            <Button layoutX="283.0" layoutY="669.0" mnemonicParsing="false" onAction="#createGroup" prefHeight="32.0" prefWidth="124.0" text="Opprett gruppe">
+            <Button fx:id="create_btn" layoutX="283.0" layoutY="669.0" mnemonicParsing="false" onAction="#createGroup" prefHeight="32.0" prefWidth="124.0" text="Opprett gruppe">
 
                <font>
                   <Font size="14.0" />

@@ -54,6 +54,7 @@ public class CreateGroupController implements Initializable{
     @FXML Button cancel_btn;
     @SuppressWarnings("rawtypes")
 	@FXML ComboBox subgroup_menu;
+    @FXML Button create_btn;
 
     @FXML TextField GroupName_field;
 
@@ -205,6 +206,8 @@ public class CreateGroupController implements Initializable{
 			} else {
 				DatabaseInterface db = new DatabaseInterface();
 				db.setGroup(GroupName_field.getText(), findInvited());
+				Stage stage = (Stage) create_btn.getScene().getWindow();
+			    stage.close();
 			}
 	//-------This kicks in if a user chose a group in the dropdown menu-----\\
 		} else {
@@ -216,7 +219,8 @@ public class CreateGroupController implements Initializable{
 				int SubGroupId = db.setGroup(GroupName_field.getText(), findInvited()).getGroup_id();
 				int SuperGroupId = getSupergroupID(supergroup_name);
 				db.setSubGroup(SuperGroupId, SubGroupId);
-				
+				Stage stage = (Stage) create_btn.getScene().getWindow();
+			    stage.close();
 			}
 		}
 		
