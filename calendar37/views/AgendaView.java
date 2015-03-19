@@ -1,13 +1,16 @@
 package views;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import controllers.ActivityController;
 import utils.DatabaseInterface;
 import utils.Utilities;
 import models.Activity;
@@ -18,8 +21,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -190,7 +195,10 @@ public class AgendaView {
 		
 		//Fylle inn aktiviteter
 		Map<LocalDate, ArrayList<String>> acts_on_day = new TreeMap<LocalDate, ArrayList<String>>();
-		for (Activity cur_act : dbi.getAllActivities(user_name)) {
+		ArrayList<Activity> all_acts = dbi.getAllActivities(user_name);
+		Collections.sort(all_acts);
+		for (Activity cur_act : all_acts) {
+			int cur_act_id = cur_act.getActivity_id();
 			LocalDate start_key = cur_act.getStart_date();
 			LocalDate end_key = cur_act.getEnd_date();
 			if (timeframe_index == 0 && start_key.isAfter(LocalDate.now().plus(Period.ofDays(1)))) {
@@ -204,28 +212,29 @@ public class AgendaView {
 			}
 			if (end_key == null || end_key.equals(start_key)) {
 				if (acts_on_day.containsKey(start_key)) {
-					acts_on_day.get(start_key).add(utils.getFormattedActivity(cur_act, true, 42));
+					acts_on_day.get(start_key).add(cur_act_id + utils.getFormattedActivity(cur_act, true, 42));
 				} else {
 					acts_on_day.put(start_key, new ArrayList<String>());
-					acts_on_day.get(start_key).add(utils.getFormattedActivity(cur_act, true, 42));
+					acts_on_day.get(start_key).add(cur_act_id + utils.getFormattedActivity(cur_act, true, 42));
 				}
 			} else {
 				if (acts_on_day.containsKey(start_key)) {
-					acts_on_day.get(start_key).add("> " + utils.getFormattedActivity(cur_act, true, 40));
+					acts_on_day.get(start_key).add(cur_act_id + "> " + utils.getFormattedActivity(cur_act, true, 40));
 				} else {
 					acts_on_day.put(start_key, new ArrayList<String>());
-					acts_on_day.get(start_key).add("> " + utils.getFormattedActivity(cur_act, true, 40));
+					acts_on_day.get(start_key).add(cur_act_id + "> " + utils.getFormattedActivity(cur_act, true, 40));
 				}
 				if (acts_on_day.containsKey(end_key)) {
-					acts_on_day.get(end_key).add("< " + utils.getFormattedActivity(cur_act, false, 40));
+					acts_on_day.get(end_key).add(cur_act_id + "< " + utils.getFormattedActivity(cur_act, false, 40));
 				} else {
 					acts_on_day.put(end_key, new ArrayList<String>());
-					acts_on_day.get(end_key).add("< " + utils.getFormattedActivity(cur_act, false, 40));
+					acts_on_day.get(end_key).add(cur_act_id + "< " + utils.getFormattedActivity(cur_act, false, 40));
 				}
 			}
 		}
 		for (Invite cur_inv : dbi.getUserInvitedTo(user_name)) {
 			Activity cur_act = dbi.getActivity(cur_inv.getInvited_to());
+			int cur_act_id = cur_act.getActivity_id();
 			LocalDate start_key = cur_act.getStart_date();
 			LocalDate end_key = cur_act.getEnd_date();
 			if (timeframe_index == 0 && start_key.isAfter(LocalDate.now().plus(Period.ofDays(1)))) {
@@ -240,23 +249,23 @@ public class AgendaView {
 			String status = ", S: " + (cur_inv.getStatus().equals("true") ? "ja" : "nei");
 			if (end_key == null || end_key.equals(start_key)) {
 				if (acts_on_day.containsKey(start_key)) {
-					acts_on_day.get(start_key).add(utils.getFormattedActivity(cur_act, true, 42) + status);
+					acts_on_day.get(start_key).add(cur_act_id + utils.getFormattedActivity(cur_act, true, 42) + status);
 				} else {
 					acts_on_day.put(start_key, new ArrayList<String>());
-					acts_on_day.get(start_key).add(utils.getFormattedActivity(cur_act, true, 42) + status);
+					acts_on_day.get(start_key).add(cur_act_id + utils.getFormattedActivity(cur_act, true, 42) + status);
 				}
 			} else {
 				if (acts_on_day.containsKey(start_key)) {
-					acts_on_day.get(start_key).add("> " + utils.getFormattedActivity(cur_act, true, 40) + status);
+					acts_on_day.get(start_key).add(cur_act_id + "> " + utils.getFormattedActivity(cur_act, true, 40) + status);
 				} else {
 					acts_on_day.put(start_key, new ArrayList<String>());
-					acts_on_day.get(start_key).add("> " + utils.getFormattedActivity(cur_act, true, 40) + status);
+					acts_on_day.get(start_key).add(cur_act_id + "> " + utils.getFormattedActivity(cur_act, true, 40) + status);
 				}
 				if (acts_on_day.containsKey(end_key)) {
-					acts_on_day.get(end_key).add("< " + utils.getFormattedActivity(cur_act, false, 40));
+					acts_on_day.get(end_key).add(cur_act_id + "< " + utils.getFormattedActivity(cur_act, false, 40));
 				} else {
 					acts_on_day.put(end_key, new ArrayList<String>());
-					acts_on_day.get(end_key).add("< " + utils.getFormattedActivity(cur_act, false, 40));
+					acts_on_day.get(end_key).add(cur_act_id + "< " + utils.getFormattedActivity(cur_act, false, 40));
 				}
 			}
 		}
@@ -272,12 +281,60 @@ public class AgendaView {
 			date.getChildren().addAll(date_txt, date_acts);
 				//for hver act. på enhver dato
 			for (String act : entry.getValue()) {
-				Button date_act = new Button(act);
+				Button date_act = new Button(act.substring(5));
 				date_acts.getChildren().add(date_act);
+				date_act.setOnAction(new EventHandler<ActionEvent>() {
+					@Override
+					public void handle(ActionEvent event) {
+						openActivity(Integer.valueOf(act.subSequence(0, 5).toString()));
+					}
+				});
 			}
 			date.getStyleClass().add("date");
 			date_acts.getStyleClass().add("date-acts");
 			agenda_body.getChildren().add(date);
+		}
+	}
+	
+	/**
+	 * Opens up the view for an {@link Activity} that is pressed in this {@link CalendarView},
+	 * and retains information about in what {@link models.Calendar} the {@link Activity} was pressed.
+	 * 
+	 * @param activity_id
+	 * @throws IOException 
+	 */
+	private void openActivity(int activity_id) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/ActivityView.fxml"));
+			Parent root = (Parent) loader.load();
+			ActivityController activity_controller = (ActivityController) loader.getController();
+			
+			//Setter rett aktivitet
+			activity_controller.setActivity_id(activity_id);
+			
+			//Lager scenen og stagen
+			Scene scene = new Scene(root);
+			Stage stage = new Stage();
+			
+			//Disables this view
+			AgendaView.this.root.disableProperty().set(true);
+			
+			//Initializes the stage and shows it
+			stage.setTitle("Activity " + activity_id);
+			stage.setScene(scene);
+			stage.show();
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					AgendaView.this.root.disableProperty().set(false);
+				}
+			});
+			stage.setOnHiding(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					AgendaView.this.root.disableProperty().set(false);
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 	

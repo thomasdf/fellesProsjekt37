@@ -19,7 +19,7 @@ import javafx.collections.ObservableList;
  * @author gruppe37
  * @version %I%, %G%
  */
-public class Activity {
+public class Activity implements Comparable<Activity> {
 
 	//Final attributes
 	private final int activity_id;
@@ -158,5 +158,10 @@ public class Activity {
 	}
 	public void setParticipants(ArrayList<Integer> participants) {
 		participantsList.setAll(participants);
+	}
+	
+	@Override
+	public int compareTo(Activity o) {
+		return fromProperty.getValue().compareTo(o.getFrom());
 	}
 }

@@ -1,9 +1,13 @@
 package views;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 
+import controllers.ActivityController;
+import controllers.CreateActivityController;
 import utils.DatabaseInterface;
 import utils.Utilities;
 import models.Activity;
@@ -11,9 +15,12 @@ import models.Invite;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -52,6 +59,8 @@ public class CalendarView {
 	private Button prev_month = new Button("Forrige");
 	private Button next_month = new Button("Neste");
 	private HBox footer = new HBox();
+	private Button create_group = new Button("Opprett gruppe");
+	private Button create_activity = new Button("Opprett aktivitet");
 	private Button profile = new Button("Min profil");
 	private Button tasks = new Button("Aktivitets-agenda");
 	private Button close = new Button("Lukk");
@@ -107,6 +116,18 @@ public class CalendarView {
 				updateActivitiesView();
 			}
 		});
+		create_group.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				openCreateGroup();
+			}
+		});
+		create_activity.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				openCreateActivity();
+			}
+		});
 		profile.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -141,7 +162,7 @@ public class CalendarView {
 		header.add(prev_month, 2, 0);
 		header.add(next_month, 3, 0);
 			//footer
-		footer.getChildren().addAll(profile, tasks, close);
+		footer.getChildren().addAll(create_group, create_activity, profile, tasks, close);
 			//calendar
 			//the days
 		for (int i = 0; i < utils.weekdays.size(); i++) {
@@ -266,7 +287,9 @@ public class CalendarView {
 			day_activities.get(i).getChildren().clear();
 		}
 		//Personal activities
-		for (Activity cur_act : dbi.getAllActivities(user_name)) {
+		ArrayList<Activity> all_acts = dbi.getAllActivities(user_name);
+		Collections.sort(all_acts);
+		for (Activity cur_act : all_acts) {
 			try {
 				if (cur_act.getStart_date().getYear() == cal.get(Calendar.YEAR) && cur_act.getStart_date().getMonthValue() == cal.get(Calendar.MONTH) + 1) {
 					String formatted_act = (cur_act.getEnd_date() == null || cur_act.getEnd_date().equals(cur_act.getStart_date()) ?
@@ -298,7 +321,7 @@ public class CalendarView {
 					}
 				}
 			} catch (NullPointerException e) {
-				System.err.println("NullPointerException: " + e.getMessage());
+				System.err.println("[CUSTOM] NullPointerException in CalendarView: " + e.getMessage());
 			}
 		}
 		//Invited
@@ -335,7 +358,7 @@ public class CalendarView {
 					}
 				}
 			} catch (NullPointerException e) {
-				System.err.println("NullPointerException: " + e.getMessage());
+				System.err.println("[CUSTOM] NullPointerException in CalendarView: " + e.getMessage());
 			}
 		}
 	}
@@ -364,11 +387,125 @@ public class CalendarView {
 	 * Opens up the view for an {@link Activity} that is pressed in this {@link CalendarView},
 	 * and retains information about in what {@link models.Calendar} the {@link Activity} was pressed.
 	 * 
-	 * TODO: Fill in when we get an ActivityView up and running.
-	 * 
 	 * @param activity_id
 	 */
 	private void openActivity(int activity_id) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/ActivityView.fxml"));
+			Parent root = (Parent) loader.load();
+			ActivityController controller = (ActivityController) loader.getController();
+			
+			//Setter rett aktivitet
+			controller.setActivity_id(activity_id);
+			
+			//Lager scenen og stagen
+			Scene scene = new Scene(root);
+			Stage stage = new Stage();
+			
+			//Disables this view
+			CalendarView.this.root.disableProperty().set(true);
+			
+			//Initializes the stage and shows it
+			stage.setTitle("Activity " + activity_id);
+			stage.setScene(scene);
+			stage.show();
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					CalendarView.this.root.disableProperty().set(false);
+				}
+			});
+			stage.setOnHiding(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					CalendarView.this.root.disableProperty().set(false);
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Opens up the view for an {@link Activity} that is pressed in this {@link CalendarView},
+	 * and retains information about in what {@link models.Calendar} the {@link Activity} was pressed.
+	 * 
+	 * TODO: Venter på CreateGroupController
+	 * 
+	 * @param activity_id
+	 */
+	private void openCreateGroup() {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/CreateGroupView.fxml"));
+			Parent root = (Parent) loader.load();
+//			ActivityController controller = (ActivityController) loader.getController();
+			
+			//Setter rett aktivitet
+//			controller.setActivity_id(activity_id);
+			
+			//Lager scenen og stagen
+			Scene scene = new Scene(root);
+			Stage stage = new Stage();
+			
+			//Disables this view
+			CalendarView.this.root.disableProperty().set(true);
+			
+			//Initializes the stage and shows it
+			stage.setTitle("Opprett gruppe");
+			stage.setScene(scene);
+			stage.show();
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					CalendarView.this.root.disableProperty().set(false);
+				}
+			});
+			stage.setOnHiding(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					CalendarView.this.root.disableProperty().set(false);
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Opens up the view for an {@link Activity} that is pressed in this {@link CalendarView},
+	 * and retains information about in what {@link models.Calendar} the {@link Activity} was pressed.
+	 * 
+	 * @param activity_id
+	 */
+	private void openCreateActivity() {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/CreateActivityView.fxml"));
+			Parent root = (Parent) loader.load();
+			CreateActivityController controller = (CreateActivityController) loader.getController();
+			
+			//Lager scenen og stagen
+			Scene scene = new Scene(root);
+			Stage stage = new Stage();
+			
+			//Setter rett aktivitet
+			controller.setUserInfo(stage, user_name);
+			
+			//Disables this view
+			CalendarView.this.root.disableProperty().set(true);
+			
+			//Initializes the stage and shows it
+			stage.setTitle("Opprett aktivitet");
+			stage.setScene(scene);
+			stage.show();
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					CalendarView.this.root.disableProperty().set(false);
+				}
+			});
+			stage.setOnHiding(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					CalendarView.this.root.disableProperty().set(false);
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

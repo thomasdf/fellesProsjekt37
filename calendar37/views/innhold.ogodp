@@ -4,7 +4,7 @@ CheckBoxCellFactory_Account.java
 CheckBoxCellFactory_Group.java
 MainApplication.java
 ActivityView.java
-CreateActivity.fxml
+CreateActivityView.fxml
 CreateGroupView.java
 InviteView.fxml
 LoginView.fxml
