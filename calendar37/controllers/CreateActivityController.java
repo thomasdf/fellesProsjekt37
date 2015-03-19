@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,8 +20,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Account;
@@ -114,8 +118,9 @@ public class CreateActivityController {
 		dialog.initModality(Modality.WINDOW_MODAL);
 		VBox box = new VBox();
 		Button ok = new Button("OK");
-		ok.alignmentProperty();
-		box.getChildren().addAll(new Text(message), ok);
+		Text text = new Text(message);
+		box.getChildren().addAll(text, ok);
+		box.setAlignment(Pos.CENTER);
 		ok.setOnAction(new EventHandler<ActionEvent>()	{
 			@Override public void handle(ActionEvent e)	{
 				closeScene(dialog);
@@ -229,19 +234,39 @@ public class CreateActivityController {
 	
 		//Litt hacky løsning, men fetchedAccounts fylles med brukerne fra InviteController (Med checked true/false status)
 	static ObservableList<Account> fetchedAccounts = FXCollections.observableList(new ArrayList<Account>());
+	
 	//Denne funksjonen åpner InviteView.FXML som et "modal" vindu.
-	@FXML
-	private void showInviteWindow(ActionEvent event) throws IOException{
-		Stage Invstage = new Stage();
-		Parent root = FXMLLoader.load(InviteController.class.getResource("/views/InviteView.fxml"));
-		//Parent root = FXMLLoader.load(getClass().getResource("/views/InviteView.fxml"));
-		Invstage.setScene(new Scene(root));
-		Invstage.setTitle("Invite");
-		Invstage.initModality(Modality.WINDOW_MODAL);
-		Invstage.initOwner(
-		((Node)event.getSource()).getScene().getWindow() );
-		Invstage.show();
-	}
+		@FXML
+		private void showInviteWindow(ActionEvent event) throws IOException{
+			try {
+				FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/InviteView.fxml"));
+				Parent root = (Parent) loader.load();
+				InviteController controller = (InviteController) loader.getController();
+				
+				//Lager scenen og stagen
+				Scene scene = new Scene(root);
+				Stage stage = new Stage();
+				
+				//test
+				DatabaseInterface db = new DatabaseInterface();
+				ObservableList<Account> tabledata = FXCollections.observableList(db.getAllAccounts());
+				
+				//Sender inn en liste med inviterte Accounter (hvis det er noen)
+				controller.setTableData(fetchedAccounts, tabledata);
+				
+				
+				//Initializes the stage and shows it
+				stage.setTitle("Inviter til aktivitet");
+				stage.setScene(scene);
+				
+				stage.initModality(Modality.WINDOW_MODAL);
+				stage.initOwner(
+				((Node)event.getSource()).getScene().getWindow() );
+				stage.show();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	
 	@FXML
 	private void findInvitedAccounts(){
