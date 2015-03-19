@@ -15,7 +15,7 @@
                <children>
                   <TextFlow prefHeight="100.0" prefWidth="664.0" textAlignment="CENTER">
                      <children>
-                        <Text fx:id="lbl_user_name" strokeType="OUTSIDE" strokeWidth="0.0" text="Account">
+                        <Text fx:id="lbl_user_name" strokeType="OUTSIDE" strokeWidth="0.0" text="Bruker">
                            <font>
                               <Font size="37.0" />
                            </font>

@@ -60,6 +60,7 @@ public class CalendarView {
 	private Button prev_month = new Button("Forrige");
 	private Button next_month = new Button("Neste");
 	private HBox footer = new HBox();
+	private Button admin_panel = new Button("[ADMIN]");
 	private Button create_group = new Button("Opprett gruppe");
 	private Button create_activity = new Button("Opprett aktivitet");
 	private Button profile = new Button("Min profil");
@@ -99,6 +100,7 @@ public class CalendarView {
 		calendar.setMinSize(primWidth, primHeight);
 		footer.getStyleClass().add("footer");
 		footer.setPrefWidth(primWidth);
+		admin_panel.setStyle("-fx-font-weight: bold;");
 		
 		//Add actions
 		prev_month.setOnAction(new EventHandler<ActionEvent>() {
@@ -115,6 +117,12 @@ public class CalendarView {
 				setMonth(1);
 				fillCalendar();
 				updateActivitiesView();
+			}
+		});
+		admin_panel.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				openAdminPanel();
 			}
 		});
 		create_group.setOnAction(new EventHandler<ActionEvent>() {
@@ -163,6 +171,9 @@ public class CalendarView {
 		header.add(prev_month, 2, 0);
 		header.add(next_month, 3, 0);
 			//footer
+		if (user_name.equals("lahey")) {
+			footer.getChildren().add(admin_panel);
+		}
 		footer.getChildren().addAll(create_group, create_activity, profile, tasks, close);
 			//calendar
 			//the days
@@ -426,12 +437,48 @@ public class CalendarView {
 	}
 	
 	/**
+	 * Opens up the administrator panel for this {@link CalendarView}.
+	 */
+	private void openAdminPanel() {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AdminPanelView.fxml"));
+			Parent root = (Parent) loader.load();
+//			ActivityController controller = (ActivityController) loader.getController();
+			
+			//Setter rett aktivitet
+//			controller.setActivity_id(activity_id);
+			
+			//Lager scenen og stagen
+			Scene scene = new Scene(root);
+			Stage stage = new Stage();
+			
+			//Disables this view
+			CalendarView.this.root.disableProperty().set(true);
+			
+			//Initializes the stage and shows it
+			stage.setTitle("Admin panel");
+			stage.setScene(scene);
+			stage.show();
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					CalendarView.this.root.disableProperty().set(false);
+				}
+			});
+			stage.setOnHiding(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					CalendarView.this.root.disableProperty().set(false);
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * Opens up the view for an {@link Activity} that is pressed in this {@link CalendarView},
 	 * and retains information about in what {@link models.Calendar} the {@link Activity} was pressed.
 	 * 
 	 * TODO: Venter på CreateGroupController
-	 * 
-	 * @param activity_id
 	 */
 	private void openCreateGroup() {
 		try {
@@ -471,8 +518,6 @@ public class CalendarView {
 	/**
 	 * Opens up the view for an {@link Activity} that is pressed in this {@link CalendarView},
 	 * and retains information about in what {@link models.Calendar} the {@link Activity} was pressed.
-	 * 
-	 * @param activity_id
 	 */
 	private void openCreateActivity() {
 		try {
@@ -512,8 +557,6 @@ public class CalendarView {
 	/**
 	 * Opens up the view for an {@link Account} that is pressed in this {@link CalendarView},
 	 * and retains information about in what {@link models.Calendar} the {@link Account} was pressed.
-	 * 
-	 * TODO: Fill in when we get an AccountView up and running.
 	 */
 	private void openProfile() {
 		try {
