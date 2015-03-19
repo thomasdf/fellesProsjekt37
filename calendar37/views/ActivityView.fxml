@@ -7,15 +7,15 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="700.0" maxWidth="1280.0" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: dcdff5;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ActivityController">
+<AnchorPane maxHeight="700.0" maxWidth="1280.0" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ActivityController">
    <children>
-      <Pane layoutX="186.0" layoutY="39.0" prefHeight="620.0" prefWidth="906.0" style="-fx-border-style: none;">
+      <Pane layoutX="272.0" layoutY="39.0" prefHeight="620.0" prefWidth="714.0" style="-fx-border-style: dotted;">
          <children>
-            <HBox layoutX="62.0" prefHeight="108.0" prefWidth="775.0" style="-fx-border-style: solid;">
+            <HBox prefHeight="108.0" prefWidth="775.0">
                <children>
-                  <TextFlow fx:id="ActivityView_TitleBox" prefHeight="156.0" prefWidth="864.0" style="-fx-background-color: f2f2f2;" textAlignment="CENTER">
+                  <TextFlow fx:id="ActivityView_TitleBox" prefHeight="156.0" prefWidth="864.0" textAlignment="CENTER">
                      <children>
-                        <Text fx:id="ActivityView_TitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Møte med Bedrift X (Gratis Kake)&#10;Obligatorisk oppmøte">
+                        <Text fx:id="ActivityView_TitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktivitet">
                            <font>
                               <Font name="System Bold" size="35.0" />
                            </font>
@@ -30,7 +30,7 @@
                   </TextFlow>
                </children>
             </HBox>
-            <GridPane layoutX="62.0" layoutY="139.0" prefHeight="92.0" prefWidth="775.0" style="-fx-background-color: f2f2f2;">
+            <GridPane layoutY="139.0" prefHeight="92.0" prefWidth="714.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -42,7 +42,7 @@
                <children>
                   <TextFlow prefHeight="200.0" prefWidth="200.0" textAlignment="RIGHT">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Created by:">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Opprettet av:">
                            <font>
                               <Font size="27.0" />
                            </font>
@@ -66,7 +66,7 @@
                   </TextFlow>
                   <TextFlow prefHeight="200.0" prefWidth="200.0" textAlignment="RIGHT" GridPane.rowIndex="1">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Group:">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Gruppe eller personlig:">
                            <font>
                               <Font size="27.0" />
                            </font>
@@ -90,7 +90,7 @@
                   </TextFlow>
                </children>
             </GridPane>
-            <GridPane fx:id="test" layoutX="62.0" layoutY="253.0" prefHeight="99.0" prefWidth="775.0" style="-fx-background-color: f2f2f2;" vgap="5.0">
+            <GridPane fx:id="test" layoutY="253.0" prefHeight="99.0" prefWidth="714.0" vgap="5.0">
                <children>
                   <TextFlow prefHeight="200.0" prefWidth="200.0" textAlignment="RIGHT">
                      <children>
@@ -109,12 +109,12 @@
                         <Insets left="40.0" />
                      </padding>
                      <children>
-                        <DatePicker fx:id="ActivityView_StartDate" editable="false" maxHeight="40.0" maxWidth="190.0" minHeight="40.0" minWidth="190.0" prefHeight="40.0" prefWidth="190.0" promptText="Start date" style="-fx-font-size: 250%;" />
+                        <DatePicker fx:id="ActivityView_StartDate" editable="false" maxHeight="40.0" maxWidth="190.0" minHeight="40.0" minWidth="190.0" prefHeight="40.0" prefWidth="190.0" promptText="Start-dato" style="-fx-font-size: 150%;" />
                      </children>
                   </TextFlow>
                   <TextFlow prefHeight="200.0" prefWidth="200.0" textAlignment="RIGHT" GridPane.rowIndex="1">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="End:">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Slutt:">
                            <font>
                               <Font size="27.0" />
                            </font>
@@ -129,14 +129,14 @@
                         <Insets left="40.0" />
                      </padding>
                      <children>
-                        <DatePicker fx:id="ActivityView_EndDate" maxHeight="40.0" maxWidth="190.0" minHeight="40.0" minWidth="190.0" prefHeight="40.0" prefWidth="190.0" promptText="End date" style="-fx-font-size: 250%;" />
+                        <DatePicker fx:id="ActivityView_EndDate" maxHeight="40.0" maxWidth="190.0" minHeight="40.0" minWidth="190.0" prefHeight="40.0" prefWidth="190.0" promptText="Slutt-dato" style="-fx-font-size: 150%;" />
                      </children>
                   </TextFlow>
                   <TextFlow prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
                      <children>
                         <Text fx:id="ActivityView_StartTime" strokeType="OUTSIDE" strokeWidth="0.0" text="12:15">
                            <font>
-                              <Font size="30.0" />
+                              <Font size="20.0" />
                            </font></Text>
                      </children>
                      <opaqueInsets>
@@ -150,7 +150,7 @@
                      <children>
                         <Text fx:id="ActivityView_EndTime" strokeType="OUTSIDE" strokeWidth="0.0" text="14:30">
                            <font>
-                              <Font size="30.0" />
+                              <Font size="20.0" />
                            </font></Text>
                      </children>
                      <GridPane.margin>
@@ -171,11 +171,11 @@
                   <Insets />
                </opaqueInsets>
             </GridPane>
-            <StackPane layoutX="66.0" layoutY="379.0" prefHeight="220.0" prefWidth="780.0" style="-fx-border-style: solid; -fx-background-color: f2f2f2;">
+            <StackPane layoutX="4.0" layoutY="379.0" prefHeight="196.0" prefWidth="707.0">
                <children>
                   <TextFlow prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <Text fx:id="ActivityView_DescriptionText" strokeType="OUTSIDE" strokeWidth="0.0" text="Dette er et arrangement med Bedrift X. her blir det masse kake til de som møter opp (de som ikke møter opp får -50 dkp). Bedrift X vil prate om datating og internett og alle de gode greiene der. &#10;&#10;Vi ber alle ta med godt humør og regnjakker, fordi de første fire radene vil bli våte. Kake er av type bløt.">
+                        <Text fx:id="ActivityView_DescriptionText" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktivitetsbeskrivelse">
                            <font>
                               <Font size="21.0" />
                            </font>
@@ -187,6 +187,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </StackPane>
+            <Button fx:id="btn_close" layoutX="333.0" layoutY="581.0" mnemonicParsing="false" onAction="#close" text="Lukk" />
          </children>
       </Pane>
    </children>
