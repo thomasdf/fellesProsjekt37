@@ -73,19 +73,23 @@ public class DatabaseInterface {
 	 */
 
 	//local
-	
+	/*
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/fellesprosjekt";
 	private static final String USERNAME = "fellesprosjekt";
 
 	private static final String PASSWORD = "bringIt";
+	*/
 	
 	//ekstern
-	/*
 	private static final String DB_URL = "jdbc:mysql://mysql.stud.ntnu.no/thomasdf_fellesprosjekt";
 	private static final String USERNAME = "thomasdf_fellesp";
 
 	private static final String PASSWORD = "bringIt";
-	*/
+	
+	private String localTimetoDatabaseTime(LocalTime time){
+		String dbTime = time.toString();
+		return dbTime.substring(0,5) + ":00";
+	}
 
 	/**
 	 * Fetches the activity with the given id from the database. Throws a
@@ -197,19 +201,18 @@ public class DatabaseInterface {
 				
 			} else {
 				throw new SQLException("empty set");
-			}
-			
+			}			
 			statement.executeUpdate("INSERT INTO activity (calendar_id, description, activity_date, end_date, start_time, end_time, owner_user_name, room_name) VALUES ("
-					+ calendar_id + ", '" + description + "', " + activity_date
-					+ ", " + end_date + ", " + start_time + ", " + end_time
-					+ ", '" + owner_user_name + "', '" + room_name + "')");
+					+ calendar_id + ", '" + description + "', '" + activity_date.toString()
+					+ "', '" + end_date.toString() + "', '" + localTimetoDatabaseTime(start_time) + "', '" + localTimetoDatabaseTime(end_time)
+					+ "', '" + owner_user_name + "', '" + room_name + "')");
 			
 			result.close();
 			// find the id of the new activity
 			result = statement
-					.executeQuery("SELECT LAST_INSERT_ID() as last_id;");
+					.executeQuery("SELECT LAST_INSERT_ID()");
 			if(result.next()){
-			int activity_id = result.getInt("last_id");
+			int activity_id = result.getInt(1);
 			return getActivity(activity_id);
 			}else{
 				throw new SQLException();
@@ -1247,7 +1250,7 @@ public class DatabaseInterface {
 			connection = DriverManager
 					.getConnection(DB_URL, USERNAME, PASSWORD);
 			statement = connection.createStatement();
-			statement.executeQuery("DELETE FROM account WHERE user_name='" + account_user_name + "'");
+			statement.executeUpdate("DELETE FROM account WHERE user_name='" + account_user_name + "'");
 		} catch (Exception e) {
 			System.out.println("Error from DatabaseInterface: "
 					+ e.getLocalizedMessage());
