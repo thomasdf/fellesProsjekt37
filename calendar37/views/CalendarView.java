@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 
+import controllers.AccountController;
 import controllers.ActivityController;
 import controllers.CreateActivityController;
 import utils.DatabaseInterface;
@@ -515,6 +516,38 @@ public class CalendarView {
 	 * TODO: Fill in when we get an AccountView up and running.
 	 */
 	private void openProfile() {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AccountView.fxml"));
+			Parent root = (Parent) loader.load();
+			AccountController controller = (AccountController) loader.getController();
+			
+			//Setter rett aktivitet
+			controller.setAccountView(user_name);
+			
+			//Lager scenen og stagen
+			Scene scene = new Scene(root);
+			Stage stage = new Stage();
+			
+			//Disables this view
+			CalendarView.this.root.disableProperty().set(true);
+			
+			//Initializes the stage and shows it
+			stage.setTitle(user_name);
+			stage.setScene(scene);
+			stage.show();
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					CalendarView.this.root.disableProperty().set(false);
+				}
+			});
+			stage.setOnHiding(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					CalendarView.this.root.disableProperty().set(false);
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
