@@ -9,6 +9,7 @@ import java.util.GregorianCalendar;
 import controllers.AccountController;
 import controllers.ActivityController;
 import controllers.CreateActivityController;
+import controllers.CreateGroupController;
 import utils.DatabaseInterface;
 import utils.Utilities;
 import models.Activity;
@@ -480,7 +481,7 @@ public class CalendarView {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/CreateGroupView.fxml"));
 			Parent root = (Parent) loader.load();
-//			ActivityController controller = (ActivityController) loader.getController();
+			CreateGroupController controller = (CreateGroupController) loader.getController();
 			
 			//Setter rett aktivitet
 //			controller.setActivity_id(activity_id);

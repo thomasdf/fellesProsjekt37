@@ -122,7 +122,7 @@ public class InviteController implements Initializable{
 	
     @FXML
     private void selectAll(ActionEvent event) {
-    	if(currentTab.equals("Group")){
+    	if(currentTab.equals("Gruppe")){
     		for(int i = 0; i < GroupData.size(); i++) {
     			GroupData.get(i).setChecked(true);
     		} 
@@ -135,7 +135,7 @@ public class InviteController implements Initializable{
     
     @FXML
     private void unselectAll(ActionEvent event) {
-    	if(currentTab.equals("Group")){
+    	if(currentTab.equals("Gruppe")){
     		for(int i = 0; i < GroupData.size(); i++) {
     			GroupData.get(i).setChecked(false);
     		} 
