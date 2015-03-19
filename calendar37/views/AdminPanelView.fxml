@@ -49,10 +49,11 @@
                   </Label>
                   <TextField fx:id="txf_au_user_name" onTextChange="#txfUser_nameChangeAdd" promptText="skriv inn brukernavn" GridPane.rowIndex="5" />
                   <Button fx:id="btn_add_user" disable="true" mnemonicParsing="false" onAction="#addUser" text="Legg til" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" />
-                  <TextField fx:id="txf_au_first_name" layoutX="10.0" layoutY="43.0" promptText="skriv inn fornavn" GridPane.rowIndex="2" />
-                  <TextField fx:id="txf_au_last_name" layoutX="10.0" layoutY="73.0" promptText="skriv inn etternavn" GridPane.rowIndex="3" />
-                  <TextField fx:id="txf_au_phone" layoutX="10.0" layoutY="103.0" promptText="skriv inn telefonnr" GridPane.rowIndex="4" />
-                  <TextField fx:id="txf_au_password" layoutX="10.0" layoutY="43.0" promptText="skriv inn passord" GridPane.rowIndex="1" />
+                  <TextField fx:id="txf_au_first_name" layoutX="10.0" layoutY="43.0" onTextChange="#txfFirst_nameChange" promptText="skriv inn fornavn" GridPane.rowIndex="2" />
+                  <TextField fx:id="txf_au_last_name" layoutX="10.0" layoutY="73.0" onTextChange="#txfLast_nameChange" promptText="skriv inn etternavn" GridPane.rowIndex="3" />
+                  <TextField fx:id="txf_au_phone" layoutX="10.0" layoutY="103.0" onTextChange="#txfPhoneChange" promptText="skriv inn telefonnr" GridPane.rowIndex="4" />
+                  <TextField fx:id="txf_au_password" layoutX="10.0" layoutY="43.0" onTextChange="#txfPasswordChange" promptText="skriv inn passord" GridPane.rowIndex="1" />
+                  <Button fx:id="btn_validate_all" layoutX="323.0" layoutY="163.0" mnemonicParsing="false" onAction="#validateAll" text="Valider" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
                </children>
             </GridPane>
             <GridPane layoutX="129.0" layoutY="437.0" prefWidth="400.0">
