@@ -17,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -231,6 +232,8 @@ public class CreateActivityController {
 		}
 		
 	}
+	
+	
 	
 		//Litt hacky løsning, men fetchedAccounts fylles med brukerne fra InviteController (Med checked true/false status)
 	static ObservableList<Account> fetchedAccounts = FXCollections.observableList(new ArrayList<Account>());
