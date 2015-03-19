@@ -88,8 +88,7 @@
                   <TextField fx:id="start_hours" onFocusedChange="#timeChange" promptText="HH" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <TextField fx:id="start_minutes" onFocusedChange="#timeChange" promptText="MM" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                  <TextField GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                  <Label text="Room:" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                  <Label text="Rom:" GridPane.columnIndex="4" GridPane.rowIndex="1">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -97,6 +96,7 @@
                         <Insets bottom="10.0" />
                      </padding>
                   </Label>
+                  <ComboBox fx:id="room_picker" prefWidth="150.0" GridPane.columnIndex="4" GridPane.rowIndex="2" />
                </children>
             </GridPane>
             <GridPane hgap="10.0" layoutX="93.0" layoutY="493.0" prefHeight="49.0" prefWidth="475.0">
@@ -107,8 +107,8 @@
                      </font>
                   </Text>
                   <DatePicker fx:id="end_date" onAction="#dateChange" prefHeight="25.0" prefWidth="171.0" GridPane.rowIndex="1" />
-                  <TextField fx:id="end_hours" onFocusedChange="#timeChange" promptText="tt" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="end_minutes" onFocusedChange="#timeChange" promptText="mm" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <TextField fx:id="end_hours" onFocusedChange="#timeChange" promptText="TT" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="end_minutes" onFocusedChange="#timeChange" promptText="MM" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                </children>
                <columnConstraints>
@@ -123,9 +123,9 @@
                   <RowConstraints maxHeight="73.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
                </rowConstraints>
             </GridPane>
-            <Button fx:id="Invite_btn" layoutX="97.0" layoutY="568.0" mnemonicParsing="false" onAction="#showInviteWindow" prefHeight="25.0" prefWidth="94.0" text="Invite " />
-			<Button fx:id="Create_btn" layoutX="277.0" layoutY="640.0" mnemonicParsing="false" onAction="#createActivity" text="Create" />
-            <Button layoutX="331.0" layoutY="640.0" mnemonicParsing="false" text="Cancel" />
+            <Button fx:id="Invite_btn" layoutX="97.0" layoutY="568.0" mnemonicParsing="false" onAction="#showInviteWindow" prefHeight="25.0" prefWidth="94.0" text="Inviter" />
+			<Button fx:id="Create_btn" layoutX="277.0" layoutY="640.0" mnemonicParsing="false" onAction="#createActivity" text="Utfør" />
+            <Button layoutX="331.0" layoutY="640.0" mnemonicParsing="false" text="Avbryt" />
          </children>
       </Pane>
    </children>
