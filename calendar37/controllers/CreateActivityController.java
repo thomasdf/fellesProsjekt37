@@ -155,11 +155,10 @@ public class CreateActivityController {
 	 * TODO: Burde lukke viewet om en avtale opprettes
 	 */
 	@FXML private void createActivity()	{
-		String owner_user_name = user_name;
 		String room_name = "batcave"; // TODO: not yet defined in view.
 		if(dateIsOkay() && timeIsLogical() && this.anyIsEmpty().equals(""))	{
 			DatabaseInterface db = new DatabaseInterface(); //TODO: DENN KNEKKER HELE PROGRAMMET MED AT act = null UANSETT
-			Activity act = db.setActivity(owner_user_name , this.description.getText(), this.start_date.getValue(), this.end_date.getValue(),
+			Activity act = db.setActivity(this.user_name , this.description.getText(), this.start_date.getValue(), this.end_date.getValue(),
 					this.parseTime(this.start_hours.getText() + ":" + this.start_minutes.getText()),
 					this.parseTime(this.end_hours.getText() + ":" + this.end_minutes.getText()), room_name);
 			//this.findInvitedAccounts();
