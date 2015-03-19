@@ -1,9 +1,11 @@
 package controllers;
 
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import utils.DatabaseInterface;
 import javafx.collections.FXCollections;
@@ -12,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -28,7 +31,7 @@ import javafx.stage.Stage;
 import models.Account;
 import models.Activity;
 
-public class CreateActivityController {
+public class CreateActivityController implements Initializable {
 
 	// FXML fields
 	@FXML private TextField name;
@@ -39,6 +42,7 @@ public class CreateActivityController {
 	@FXML private DatePicker end_date;
 	@FXML private TextField end_hours;
 	@FXML private TextField end_minutes;
+	@FXML private ComboBox room_picker;
 	
 	private Stage dialogStage;	
 	private Stage stage;
@@ -128,10 +132,6 @@ public class CreateActivityController {
 		dialog.show();
 	}
 	
-	//Init
-	@FXML void initialize(){
-	}
-	
 	private String anyIsEmpty()	{
 		if(this.name.getText().equals(""))	{
 			return "Du må fylle ut et navn til aktiviteten";
@@ -152,6 +152,24 @@ public class CreateActivityController {
 		return "";
 	}
 	
+	private boolean roomIsAvailable()	{
+		
+		String room_name = this.room_picker.getValue().toString();
+		if(!anyIsEmpty().equals(""))	{	
+			DatabaseInterface db = new DatabaseInterface();
+			ObservableList list_of_available = FXCollections.observableList(db.getAvailableRooms(
+					start_date.getValue(), end_date.getValue(),
+					parseTime(start_hours.getText() + ":" + start_minutes.getText()),
+					parseTime(end_hours.getText() + ":" + end_minutes.getText())));
+			if(list_of_available.lastIndexOf(room_name) == -1)	{
+				return false;
+			}	else	{
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * Function that creates an activity in the dbInterface if and only if the data is validated correctly
 	 * TODO: Let user know if data is not valid
@@ -159,7 +177,7 @@ public class CreateActivityController {
 	 */
 	@FXML private void createActivity()	{
 		String room_name = "batcave"; // TODO: not yet defined in view.
-		if(dateIsOkay() && timeIsLogical() && this.anyIsEmpty().equals(""))	{
+		if(dateIsOkay() && timeIsLogical() && this.anyIsEmpty().equals("") && roomIsAvailable())	{
 			DatabaseInterface db = new DatabaseInterface(); //TODO: DENN KNEKKER HELE PROGRAMMET MED AT act = null UANSETT
 			Activity act = db.setActivity(this.user_name , this.description.getText(), this.start_date.getValue(), this.end_date.getValue(),
 					this.parseTime(this.start_hours.getText() + ":" + this.start_minutes.getText()),
@@ -168,6 +186,11 @@ public class CreateActivityController {
 			this.addInvited(fetchedAccounts, act.getActivity_id());
 			stage.close();
 		}	else	{
+			if(!roomIsAvailable())	{
+				this.makeDialog("Beklager, rommet du har valgt er ikke tilgjengelig i det valgte tidsrommet.");
+				DatabaseInterface db = new DatabaseInterface();
+				this.room_picker = FXCollections.observableList(db.getAvailableRooms()); 
+			}
 			this.makeDialog(this.anyIsEmpty().equals("") ? "Your time space is not logical." : this.anyIsEmpty());
 		}
 	}
@@ -266,7 +289,7 @@ public class CreateActivityController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
+	}
 	
 	@FXML
 	private void findInvitedAccounts(){
@@ -282,5 +305,12 @@ public class CreateActivityController {
 	public void setUserInfo(Stage stage, String user_name) {
 		this.stage = stage;
 		this.user_name = user_name;
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		DatabaseInterface db = new DatabaseInterface();
+		ObservableList room_list = FXCollections.observableList(db.getAllRooms());
+		room_picker = new ComboBox(room_list);
 	}
 }
