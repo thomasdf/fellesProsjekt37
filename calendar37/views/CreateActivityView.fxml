@@ -15,7 +15,7 @@
                <children>
                   <TextFlow prefHeight="100.0" prefWidth="664.0" textAlignment="CENTER">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Create Activity">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Legg til ny aktivitet">
                            <font>
                               <Font size="37.0" />
                            </font>
@@ -48,7 +48,7 @@
                   <TextField fx:id="name" prefHeight="38.0" prefWidth="475.0" GridPane.rowIndex="1" />
                   <TextFlow prefHeight="34.0" prefWidth="475.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name:">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Navn på aktivitet:">
                            <font>
                               <Font size="18.0" />
                            </font>
@@ -60,7 +60,7 @@
                   </TextFlow>
                </children>
             </GridPane>
-            <Text layoutX="92.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:">
+            <Text layoutX="92.0" layoutY="267.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Beskrivelse:">
                <font>
                   <Font size="18.0" />
                </font>
@@ -79,7 +79,7 @@
                   <RowConstraints maxHeight="73.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start Date:" wrappingWidth="170.302734375">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start-tidspunkt:" wrappingWidth="170.302734375">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -101,14 +101,14 @@
             </GridPane>
             <GridPane hgap="10.0" layoutX="93.0" layoutY="493.0" prefHeight="49.0" prefWidth="475.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="End Date:" wrappingWidth="170.302734375">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Slutt-tidspunkt:" wrappingWidth="170.302734375">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Text>
                   <DatePicker fx:id="end_date" onAction="#dateChange" prefHeight="25.0" prefWidth="171.0" GridPane.rowIndex="1" />
-                  <TextField fx:id="end_hours" onFocusedChange="#timeChange" promptText="HH" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField fx:id="end_minutes" onFocusedChange="#timeChange" promptText="MM" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                  <TextField fx:id="end_hours" onFocusedChange="#timeChange" promptText="tt" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="end_minutes" onFocusedChange="#timeChange" promptText="mm" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                </children>
                <columnConstraints>

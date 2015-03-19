@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import controllers.AccountController;
 import controllers.ActivityController;
 import utils.DatabaseInterface;
 import utils.Utilities;
@@ -341,10 +342,40 @@ public class AgendaView {
 	/**
 	 * Opens up the view for an {@link Account} that is pressed in this {@link AgendaView},
 	 * and retains information about in what {@link models.Calendar} the {@link Account} was pressed.
-	 * 
-	 * TODO: Fill in when we get an AccountView up and running.
 	 */
 	private void openProfile() {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/AccountView.fxml"));
+			Parent root = (Parent) loader.load();
+			AccountController controller = (AccountController) loader.getController();
+			
+			//Setter rett aktivitet
+			controller.setAccountView(user_name);
+			
+			//Lager scenen og stagen
+			Scene scene = new Scene(root);
+			Stage stage = new Stage();
+			
+			//Disables this view
+			AgendaView.this.root.disableProperty().set(true);
+			
+			//Initializes the stage and shows it
+			stage.setTitle(user_name);
+			stage.setScene(scene);
+			stage.show();
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					AgendaView.this.root.disableProperty().set(false);
+				}
+			});
+			stage.setOnHiding(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					AgendaView.this.root.disableProperty().set(false);
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
