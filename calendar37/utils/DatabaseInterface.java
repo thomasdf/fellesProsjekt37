@@ -1667,10 +1667,13 @@ public class DatabaseInterface {
 							+ activity_id
 							+ " AND invited.user_name='"
 							+ user_name + "'");
-			result.next();
-			invite = new Invite(result.getString("owner_user_name"),
-					result.getString("user_name"), result.getInt("activity_id"));
-			invite.setStatus(result.getString("invitation_status"));
+			if(result.next()){
+				invite = new Invite(result.getString("owner_user_name"),
+						result.getString("user_name"), result.getInt("activity_id"));
+				invite.setStatus(result.getString("invitation_status"));				
+			} else {
+				return null;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
