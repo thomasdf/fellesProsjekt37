@@ -2,32 +2,33 @@ package controllers;
 
 import java.net.URL;
 import java.util.ArrayList;
-
 import java.util.List;
-
 import java.util.ResourceBundle;
 
 import utils.DatabaseInterface;
 import models.Account;
 import models.Group;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class CreateGroupController implements Initializable{
@@ -57,8 +58,9 @@ public class CreateGroupController implements Initializable{
     @FXML Button create_btn;
 
     @FXML TextField GroupName_field;
-
-
+    
+	private Stage dialogStage;
+    
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -82,7 +84,7 @@ public class CreateGroupController implements Initializable{
 		ObservableList<Account> Accounts = FXCollections.observableArrayList(db.getAllAccounts()); //Inneholder ALLE accountene i databasen
 		ObservableList<Group> Groups = FXCollections.observableArrayList(db.getAllGroups()); // Inneholder ALLE gruppene i databasen
 
-		ObservableList<String> list = FXCollections.observableArrayList("");
+		ObservableList<String> list = FXCollections.observableArrayList("--- INGEN ---");
 		for(int x = 0; x < Groups.size(); x++){
 			list.add(Groups.get(x).getGroup_name() + " - ID ="+Groups.get(x).getGroup_id());
 
@@ -106,6 +108,7 @@ public class CreateGroupController implements Initializable{
 		
 		
 		subgroup_menu.getItems().addAll(list);
+		subgroup_menu.getSelectionModel().select(0);
 
 	}
 
@@ -200,9 +203,9 @@ public class CreateGroupController implements Initializable{
 	@FXML
 	private void createGroup(ActionEvent event){
 	//-------Checks if you selected a group in the dropdown menu (subgroup)-----\\
-		if(subgroup_menu.getValue().equals("")){
+		if(subgroup_menu.getValue().equals("--- INGEN ---")){
 			if(GroupName_field.getText().equals("")){
-				System.out.println("Du må gi gruppen et navn.");
+				makeDialog("Du mÃ¥ gi gruppen et navn.");
 			} else {
 				DatabaseInterface db = new DatabaseInterface();
 				db.setGroup(GroupName_field.getText(), findInvited());
@@ -212,7 +215,7 @@ public class CreateGroupController implements Initializable{
 	//-------This kicks in if a user chose a group in the dropdown menu-----\\
 		} else {
 			if(GroupName_field.getText().equals("")){
-				System.out.println("Du må gi gruppen et navn.");
+				makeDialog("Du mÃ¥ gi gruppen et navn.");
 			} else {
 				DatabaseInterface db = new DatabaseInterface();
 				String supergroup_name = (String) subgroup_menu.getValue();
@@ -226,5 +229,24 @@ public class CreateGroupController implements Initializable{
 		
 	}
 	
-
+	private void makeDialog(String message)	{
+		if(this.dialogStage != null)	{
+			this.dialogStage.close();
+		}
+		dialogStage = new Stage();
+		Stage dialog = dialogStage;
+		dialog.initModality(Modality.WINDOW_MODAL);
+		VBox box = new VBox();
+		Button ok = new Button("OK");
+		Text text = new Text(message);
+		box.getChildren().addAll(text, ok);
+		box.setAlignment(Pos.CENTER);
+		ok.setOnAction(new EventHandler<ActionEvent>()	{
+			@Override public void handle(ActionEvent e)	{
+				dialog.close();
+			}
+		});
+		dialog.setScene(new Scene(box, 400, 100));
+		dialog.show();
+	}
 }
