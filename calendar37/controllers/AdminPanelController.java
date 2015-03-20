@@ -142,9 +142,9 @@ public class AdminPanelController implements Initializable {
 		validate_all.put(txf_au_user_name, false);
 		txf_au_password.setTooltip(new Tooltip("Må være små bokstaver, tall eller -_ og mellom 6-18 tegn lang"));
 		validate_all.put(txf_au_password, false);
-		txf_au_first_name.setTooltip(new Tooltip("Kan maks være 20 tegn langt og kun bestå av bokstaver"));
+		txf_au_first_name.setTooltip(new Tooltip("Kan maks være 20 tegn langt og kun bestå av bokstaver, bindestrek og mellomrom. Første bokstav må være stor"));
 		validate_all.put(txf_au_first_name, false);
-		txf_au_last_name.setTooltip(new Tooltip("Kan maks være 20 tegn langt og kun bestå av bokstaver"));
+		txf_au_last_name.setTooltip(new Tooltip("Kan maks være 20 tegn langt og kun bestå av bokstaver, bindestrek og mellomrom. Første bokstav må være stor"));
 		validate_all.put(txf_au_last_name, false);
 		txf_au_phone.setTooltip(new Tooltip("Kan kun bestå av tall og må være 8 tegn lang"));
 		validate_all.put(txf_au_phone, false);
