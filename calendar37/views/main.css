@@ -53,9 +53,6 @@
 	-fx-pref-height: 32;
 }
 
-.button {
-}
-
 .button:hover {
 	-fx-cursor: hand;
 }

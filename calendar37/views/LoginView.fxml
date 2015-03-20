@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
    <children>
-      <Pane layoutX="271.0" layoutY="31.0" prefHeight="734.0" prefWidth="734.0" style="-fx-border-style: dotted;">
+      <Pane id="login-mainbox" layoutX="271.0" layoutY="31.0" prefHeight="734.0" prefWidth="734.0" styleClass="mainbox">
          <children>
             <HBox layoutX="-1.0" prefHeight="100.0" prefWidth="734.0">
                <children>
@@ -57,7 +57,7 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
             </GridPane>
-            <Button fx:id="btn_login" layoutX="308.0" layoutY="416.0" mnemonicParsing="false" onAction="#login" prefHeight="27.0" prefWidth="121.0" text="Logg inn" />
+            <Button fx:id="btn_login" layoutX="317.0" layoutY="419.0" mnemonicParsing="false" onAction="#login" prefWidth="100.0" styleClass="close" text="Logg inn" />
             <Label fx:id="label_error" layoutX="187.0" layoutY="367.0" textFill="RED" />
          </children>
       </Pane>

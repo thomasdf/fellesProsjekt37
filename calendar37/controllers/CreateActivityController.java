@@ -145,23 +145,23 @@ public class CreateActivityController implements Initializable {
 	
 	private String anyIsEmpty()	{
 		if(this.name.getText().equals(""))	{
-			return "Du mÃ¥ fylle ut et navn til aktiviteten";
+			return "Du må fylle ut et navn til aktiviteten";
 		}
 		if(this.description.getText().equals(""))	{
-			return "Du mÃ¥ fylle ut en beskrivelse for aktiviteten.";
+			return "Du må fylle ut en beskrivelse for aktiviteten.";
 		}
 		if(this.start_date.getValue() == null)	{
-			return "Du mÃ¥ fylle ut en start dato.";
+			return "Du må fylle ut en start dato.";
 		}
 		if(this.end_date.getValue() == null)	{
-			return "Du mÃ¥ fylle ut en slutt dato.";
+			return "Du må fylle ut en slutt dato.";
 		}
 		if(this.start_hours.getText().equals("") || this.start_minutes.getText().equals("")
 				|| this.end_hours.getText().equals("") || this.end_minutes.getText().equals(""))	{
-			return "Du mÃ¥ fylle ut tidspunkt for aktiviteten.";
+			return "Du må fylle ut tidspunkt for aktiviteten.";
 		}
-		if(this.room_picker.getValue() == null || this.room_picker.getValue().equals(""))	{
-			return "Du mÃ¥ velge et rom.";
+		if(this.room_picker.getValue() == null)	{
+			return "Du må velge et rom.";
 		}
 		return "";
 	}

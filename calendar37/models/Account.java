@@ -1,10 +1,6 @@
 package models;
 
-import java.util.ArrayList;
-
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 /**
  * Account is the class that keeps a record of everything relating to the account of a person,
@@ -30,9 +26,6 @@ public class Account {
 	 * Hvis ikke vil systemet tro at brukeren alltid er huket av, og dermed bli invitert til alt.
 	 */
 	private SimpleBooleanProperty checked = new SimpleBooleanProperty(false);
-	private ObservableList<Integer> in_groupsList = FXCollections.observableList(new ArrayList<Integer>());
-	private ObservableList<Integer> calendarsList = FXCollections.observableList(new ArrayList<Integer>());
-		//TODO: ^ muligvis slette denne?
 	
 	//Constructor
 	public Account(String username, String password, String first_name, String last_name, String mobile_nr) {
@@ -62,26 +55,6 @@ public class Account {
 	
 	public String getMobile_nr() {
 		return mobile_nr;
-	}
-	
-	public ObservableList<Integer> getIn_groups() {
-		return in_groupsList;
-	}
-	public void addIn_group(int group_id) {
-		in_groupsList.add(group_id);
-	}
-	public void setIn_groups(ArrayList<Integer> in_groups) {
-		in_groupsList.addAll(in_groups);
-	}
-	
-	public ObservableList<Integer> getCalendars() {
-		return calendarsList;
-	}
-	public void addCalendar(int calendar_id) {
-		calendarsList.add(calendar_id);
-	}
-	public void setCalendars(ArrayList<Integer> calendars) {
-		calendarsList.addAll(calendars);
 	}
 	
 	public java.lang.Boolean getChecked() {

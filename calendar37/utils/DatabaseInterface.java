@@ -141,6 +141,11 @@ public class DatabaseInterface {
 						.add(getCalendarId(user_names.get(i)));
 			}
 			act.setParticipants(calendar_ids_for_user_names);
+			
+			//getRooms
+			
+			act.setRoom(getRoomName(activity_id));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
