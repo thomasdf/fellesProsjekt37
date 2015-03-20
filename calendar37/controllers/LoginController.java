@@ -56,7 +56,7 @@ public class LoginController implements Initializable {
 			if (!databaseinterface.isUsername(user_name)) {// user_name does not
 															// exist.
 				label_error
-						.setText("Brukernavnet eksisterer ikke. Sjekk at det er skrevet riktig.");
+						.setText("Brukernavn eller passord feil.");
 			} else if (db_password.equals(txt_password.getText())) {
 				// login success-action!
 				label_error.setText("login success! horray!");
@@ -64,7 +64,7 @@ public class LoginController implements Initializable {
 				stage.close();
 			} else {
 				label_error
-						.setText("Passordet er ikke riktig. Sjekk om det er skrevet riktig.");
+						.setText("Brukernavn eller passord feil.");
 			}
 		}
 	}
