@@ -61,7 +61,7 @@ public class AdminPanelController implements Initializable {
 	}
 	
 	private void validateUser_nameAdd(String user_name, TextField textField) {
-		boolean is_valid = !dbi.isUsername(user_name) && !textField.getText().isEmpty() && user_name.matches("^[a-z0-9_-]{3,15}$");
+		boolean is_valid = !dbi.isUsername(user_name) && !textField.getText().isEmpty() && user_name.matches("^[a-z0-9_-]{1,10}$");
 		if (is_valid) {
 			textField.setTooltip(null);
 			textField.setStyle("-fx-border-color: transparent;");
@@ -74,7 +74,7 @@ public class AdminPanelController implements Initializable {
 	}
 	
 	private void validateUser_nameRemove(String user_name, TextField textField) {
-		boolean is_valid = dbi.isUsername(user_name) && !textField.getText().isEmpty() && user_name.matches("^[a-z0-9_-]{3,15}$");
+		boolean is_valid = dbi.isUsername(user_name) && !textField.getText().isEmpty() && user_name.matches("^[a-z0-9_-]{1,10}$");
 		if (is_valid) {
 			textField.setTooltip(null);
 			textField.setStyle("-fx-border-color: transparent;");
@@ -138,7 +138,7 @@ public class AdminPanelController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		validate_all = new HashMap<TextField, Boolean>();
 		
-		txf_au_user_name.setTooltip(new Tooltip("Må være små bokstaver, tall eller -_ og mellom 3-15 tegn lang"));
+		txf_au_user_name.setTooltip(new Tooltip("Må være små bokstaver, tall eller -_ og mellom 1-10 tegn lang"));
 		validate_all.put(txf_au_user_name, false);
 		txf_au_password.setTooltip(new Tooltip("Må være små bokstaver, tall eller -_ og mellom 6-18 tegn lang"));
 		validate_all.put(txf_au_password, false);
