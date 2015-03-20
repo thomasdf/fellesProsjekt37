@@ -206,11 +206,16 @@ public class DatabaseInterface {
 				
 			} else {
 				throw new SQLException("empty set");
-			}			
+			}
+			
+			if(room_name != null){
+				room_name = "'" + room_name + "'";
+			}
+			
 			statement.executeUpdate("INSERT INTO activity (calendar_id, description, activity_date, end_date, start_time, end_time, owner_user_name, room_name) VALUES ("
 					+ calendar_id + ", '" + description + "', '" + activity_date.toString()
 					+ "', '" + end_date.toString() + "', '" + localTimetoDatabaseTime(start_time) + "', '" + localTimetoDatabaseTime(end_time)
-					+ "', '" + owner_user_name + "', '" + room_name + "')");
+					+ "', '" + owner_user_name + "', " + room_name + ")");
 			
 			result.close();
 			// find the id of the new activity
