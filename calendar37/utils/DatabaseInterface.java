@@ -705,14 +705,14 @@ public class DatabaseInterface {
 			statement = connection.createStatement();
 			// method
 			result = statement.executeQuery("SELECT room_name FROM activity WHERE "
-					+ "NOT((activity_date<='" + start_date.toString() + "' AND end_date>='"
-					+ start_date.toString() + "') OR (activity_date<='" + end_date.toString()
+					+ "(NOT(activity_date<='" + start_date.toString() + "' AND end_date>='"
+					+ start_date.toString() + "') OR NOT(activity_date<='" + end_date.toString()
 					+ "' AND end_date>='" + end_date.toString() + "')) AND "
-					+ "NOT((start_time<='" + db_start_time + "' AND end_time>='"
-							+ db_start_time + "') OR (start_time<='" + db_end_time
+					+ "(NOT(start_time<='" + db_start_time + "' AND end_time>='"
+							+ db_start_time + "') OR NOT(start_time<='" + db_end_time
 							+ "' AND end_time>='" + db_end_time + "'))");
 			while(result.next())	{
-				if(room_list.contains(result.getString("room_name")))	{
+				if(room_list.contains(result.getString("room_name")) || result.getString("room_name") == null)	{
 					continue;
 				}
 				room_list.add(result.getString("room_name"));

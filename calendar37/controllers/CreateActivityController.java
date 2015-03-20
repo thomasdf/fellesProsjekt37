@@ -160,7 +160,7 @@ public class CreateActivityController implements Initializable {
 				|| this.end_hours.getText().equals("") || this.end_minutes.getText().equals(""))	{
 			return "Du må fylle ut tidspunkt for aktiviteten.";
 		}
-		if(this.room_picker.getValue() == null)	{
+		if(this.room_picker.getValue() == null || this.room_picker.getValue().equals(""))	{
 			return "Du må velge et rom.";
 		}
 		return "";
@@ -184,15 +184,31 @@ public class CreateActivityController implements Initializable {
 		return false;
 	}
 	
+	private void fixDescription()	{
+		String desc = description.getText();
+		String new_desc = "";
+		for(int i = 0; i < desc.length(); i++)	{
+			if(i == desc.length()-1)	{
+				break;
+			}
+			if(desc.charAt(i+1) == '\'')	{
+				desc = desc.substring(0,i+1) + "\n" + desc.substring(i+1,desc.length());
+			}
+					
+		}
+	}
+	
 	/**
-	 * Function that creates an activity in the dbInterface if and only if the data is validated correctly
+	 * Function that creates an actvity in the dbInterface if and only if the data is validated correctly
 	 */
 	@FXML private void createActivity()	{
 		if(dateIsOkay() && timeIsLogical() && this.anyIsEmpty().equals("") && roomIsAvailable())	{
+			fixDescription();
 			DatabaseInterface db1 = new DatabaseInterface();
+			System.out.println(room_picker.getValue());
 			Activity act = db1.setActivity(this.user_name , this.description.getText(), this.start_date.getValue(), this.end_date.getValue(),
 					this.parseTime(this.start_hours.getText() + ":" + this.start_minutes.getText()),
-					this.parseTime(this.end_hours.getText() + ":" + this.end_minutes.getText()), room_picker.getValue().toString());
+					this.parseTime(this.end_hours.getText() + ":" + this.end_minutes.getText()), room_picker.getValue());
 			//this.findInvitedAccounts();
 			this.addInvited(fetchedAccounts, act.getActivity_id());
 			stage.close();
