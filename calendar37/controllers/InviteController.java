@@ -54,13 +54,6 @@ public class InviteController implements Initializable{
 	@SuppressWarnings("unchecked")
 	@Override
     public void initialize(URL url, ResourceBundle rb) {
-		
-    	//TODO: Implementer henting av ALLE accounts fra databasen (Og sette ALLE brukerne sine CHECKED variabler til false)
-		//TODO: KRÆSJER OM MAN UNCHECKER ALLE, OG INVITERER FOLK FLERE GANGER
-		
-		
-
-		
     	tabPane.getSelectionModel().selectedItemProperty().addListener(
     		    new ChangeListener<Tab>() {
     		        @Override

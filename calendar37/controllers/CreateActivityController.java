@@ -186,7 +186,6 @@ public class CreateActivityController implements Initializable {
 	
 	private void fixDescription()	{
 		String desc = description.getText();
-		String new_desc = "";
 		for(int i = 0; i < desc.length(); i++)	{
 			if(i == desc.length()-1)	{
 				break;

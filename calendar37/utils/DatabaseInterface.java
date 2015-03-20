@@ -64,7 +64,6 @@ public class DatabaseInterface {
 
 	private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
 	/*
-	 * TODO: DB_URL, USERNAME and PASSWORD must be changed when we get the
 	 * database server up and running, these variables were used for testing
 	 * purposes only.
 	 * 
