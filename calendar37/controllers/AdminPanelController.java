@@ -49,11 +49,11 @@ public class AdminPanelController implements Initializable {
 	}
 	
 	public void txfFirst_nameChange(ObservableValue<? extends String> property, String oldValue, String newValue){
-		validateString(newValue, "^[a-zA-ZæøåÆØÅ]{1,20}$", txf_au_first_name);
+		validateString(newValue, "^[A-ZÆØÅ]{1}[-a-zA-ZæøåÆØÅ ]{0,19}$", txf_au_first_name);
 	}
 	
 	public void txfLast_nameChange(ObservableValue<? extends String> property, String oldValue, String newValue){
-		validateString(newValue, "^[a-zA-ZæøåÆØÅ]{1,20}$", txf_au_last_name);
+		validateString(newValue, "^[A-ZÆØÅ]{1}[-a-zA-ZæøåÆØÅ ]{0,19}$", txf_au_last_name);
 	}
 	
 	public void txfPhoneChange(ObservableValue<? extends String> property, String oldValue, String newValue){
