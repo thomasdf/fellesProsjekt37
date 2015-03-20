@@ -212,7 +212,7 @@ public class CreateActivityController implements Initializable {
 			this.addInvited(fetchedAccounts, act.getActivity_id());
 			stage.close();
 		}	else	{
-			if(!roomIsAvailable())	{
+			/*if(!roomIsAvailable())	{
 				this.makeDialog("Rommet du har valgt er ikke tilgjengelig i det valgte tidsrommet.", 
 						"");
 				DatabaseInterface db = new DatabaseInterface();
@@ -222,8 +222,22 @@ public class CreateActivityController implements Initializable {
 						parseTime(start_hours.getText() + ":" + start_minutes.getText()),
 						parseTime(end_hours.getText() + ":" + end_minutes.getText()))));
 				return;
-		}					
-			this.makeDialog(this.anyIsEmpty(), "");
+		}*/
+			String feilmelding = "";
+			if(!anyIsEmpty().equals(""))	{
+				feilmelding = anyIsEmpty();
+			}	else if(!timeIsLogical() || !dateIsOkay())	{
+				feilmelding = "Tidspunktet er ikke logisk.";
+			}	else if(!roomIsAvailable()){
+				feilmelding = "Rommet du har valgt er ikke ledig i det gitte tidspunktet.";
+				DatabaseInterface db = new DatabaseInterface();
+				this.room_picker.getItems().removeAll(this.room_picker.getItems());
+				this.room_picker.getItems().addAll(FXCollections.observableList(
+						db.getAvailableRooms(start_date.getValue(), end_date.getValue(),
+						parseTime(start_hours.getText() + ":" + start_minutes.getText()),
+						parseTime(end_hours.getText() + ":" + end_minutes.getText()))));
+			}
+			this.makeDialog(feilmelding, "");
 		}
 	}
 	
