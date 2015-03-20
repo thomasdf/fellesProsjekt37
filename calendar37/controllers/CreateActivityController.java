@@ -160,16 +160,13 @@ public class CreateActivityController implements Initializable {
 				|| this.end_hours.getText().equals("") || this.end_minutes.getText().equals(""))	{
 			return "Du m� fylle ut tidspunkt for aktiviteten.";
 		}
-		if(this.room_picker.getValue() == null)	{
-			return "Du m� velge et rom.";
-		}
 		return "";
 	}
 	
 	private boolean roomIsAvailable()	{
-		
+		String room_name = "";
 		if(anyIsEmpty().equals(""))	{	
-			String room_name = this.room_picker.getValue().toString();
+			room_name = this.room_picker.getValue() == null ? "" : this.room_picker.getValue();
 			DatabaseInterface db = new DatabaseInterface();
 			ObservableList<String> list_of_available = FXCollections.observableList(db.getAvailableRooms(
 					start_date.getValue(), end_date.getValue(),
@@ -202,7 +199,8 @@ public class CreateActivityController implements Initializable {
 	 * Function that creates an actvity in the dbInterface if and only if the data is validated correctly
 	 */
 	@FXML private void createActivity()	{
-		if(dateIsOkay() && timeIsLogical() && this.anyIsEmpty().equals("") && roomIsAvailable())	{
+		boolean checking_room = room_picker.getValue() == null ? true : roomIsAvailable();
+		if(dateIsOkay() && timeIsLogical() && this.anyIsEmpty().equals("") && checking_room)	{
 			fixDescription();
 			DatabaseInterface db1 = new DatabaseInterface();
 			Activity act = db1.setActivity(this.user_name , this.description.getText(), this.start_date.getValue(), this.end_date.getValue(),
@@ -321,12 +319,6 @@ public class CreateActivityController implements Initializable {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-	}
-	
-	@FXML
-	private void findInvitedAccounts(){
-		// ObservableList<Account> fetchedAccounts = FXCollections.observableList(new ArrayList<Account>());
-		System.out.println(fetchedAccounts.get(0).getChecked());
 	}
 	
 	//Denne kalles i InviteController for å sende lista med inviterte brukere inn i denne kontrolleren

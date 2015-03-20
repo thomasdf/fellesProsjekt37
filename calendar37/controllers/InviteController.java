@@ -180,9 +180,6 @@ public class InviteController implements Initializable{
     			InvitedAccounts.add(InvitedGroupMembers.get(x));
     		}
     	}
-    	for(int x=0; x < InvitedAccounts.size(); x++){
-    		System.out.println(InvitedAccounts.get(x).getUsername());
-    	}
     	
     	return InvitedAccounts;
     	
