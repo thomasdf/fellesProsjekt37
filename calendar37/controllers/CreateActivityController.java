@@ -145,23 +145,23 @@ public class CreateActivityController implements Initializable {
 	
 	private String anyIsEmpty()	{
 		if(this.name.getText().equals(""))	{
-			return "Du må fylle ut et navn til aktiviteten";
+			return "Du mï¿½ fylle ut et navn til aktiviteten";
 		}
 		if(this.description.getText().equals(""))	{
-			return "Du må fylle ut en beskrivelse for aktiviteten.";
+			return "Du mï¿½ fylle ut en beskrivelse for aktiviteten.";
 		}
 		if(this.start_date.getValue() == null)	{
-			return "Du må fylle ut en start dato.";
+			return "Du mï¿½ fylle ut en start dato.";
 		}
 		if(this.end_date.getValue() == null)	{
-			return "Du må fylle ut en slutt dato.";
+			return "Du mï¿½ fylle ut en slutt dato.";
 		}
 		if(this.start_hours.getText().equals("") || this.start_minutes.getText().equals("")
 				|| this.end_hours.getText().equals("") || this.end_minutes.getText().equals(""))	{
-			return "Du må fylle ut tidspunkt for aktiviteten.";
+			return "Du mï¿½ fylle ut tidspunkt for aktiviteten.";
 		}
 		if(this.room_picker.getValue() == null)	{
-			return "Du må velge et rom.";
+			return "Du mï¿½ velge et rom.";
 		}
 		return "";
 	}
@@ -205,7 +205,6 @@ public class CreateActivityController implements Initializable {
 		if(dateIsOkay() && timeIsLogical() && this.anyIsEmpty().equals("") && roomIsAvailable())	{
 			fixDescription();
 			DatabaseInterface db1 = new DatabaseInterface();
-			System.out.println(room_picker.getValue());
 			Activity act = db1.setActivity(this.user_name , this.description.getText(), this.start_date.getValue(), this.end_date.getValue(),
 					this.parseTime(this.start_hours.getText() + ":" + this.start_minutes.getText()),
 					this.parseTime(this.end_hours.getText() + ":" + this.end_minutes.getText()), room_picker.getValue());
