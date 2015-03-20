@@ -271,6 +271,7 @@ public class CalendarView {
 			} else {
 				days.get(i).setText(Integer.toString(date));
 			}
+			days.get(i).setStyle("-fx-font-weight: normal;");
 			if (date == cal.get(Calendar.DAY_OF_MONTH)) {
 				days.get(i).setStyle("-fx-font-weight: bold;");
 			}
