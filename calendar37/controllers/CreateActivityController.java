@@ -306,7 +306,7 @@ public class CreateActivityController implements Initializable {
 				
 				//Sender inn en liste med inviterte Accounter (hvis det er noen)
 				controller.setTableData(fetchedAccounts, tabledata);
-				
+				controller.setCurrentUser(user_name);
 				
 				//Initializes the stage and shows it
 				stage.setTitle("Inviter til aktivitet");
