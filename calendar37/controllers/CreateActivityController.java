@@ -160,6 +160,9 @@ public class CreateActivityController implements Initializable {
 				|| this.end_hours.getText().equals("") || this.end_minutes.getText().equals(""))	{
 			return "Du m� fylle ut tidspunkt for aktiviteten.";
 		}
+		if(this.room_picker.getValue() == null || this.room_picker.equals(""))	{
+			return "Du må velge et rom.";
+		}
 		return "";
 	}
 	
@@ -199,8 +202,7 @@ public class CreateActivityController implements Initializable {
 	 * Function that creates an actvity in the dbInterface if and only if the data is validated correctly
 	 */
 	@FXML private void createActivity()	{
-		boolean checking_room = room_picker.getValue() == null ? true : roomIsAvailable();
-		if(dateIsOkay() && timeIsLogical() && this.anyIsEmpty().equals("") && checking_room)	{
+		if(dateIsOkay() && timeIsLogical() && this.anyIsEmpty().equals("") && roomIsAvailable())	{
 			fixDescription();
 			DatabaseInterface db1 = new DatabaseInterface();
 			Activity act = db1.setActivity(this.user_name , this.description.getText(), this.start_date.getValue(), this.end_date.getValue(),
@@ -210,7 +212,7 @@ public class CreateActivityController implements Initializable {
 			this.addInvited(fetchedAccounts, act.getActivity_id());
 			stage.close();
 		}	else	{
-			if(!roomIsAvailable())	{
+			/*if(!roomIsAvailable())	{
 				this.makeDialog("Rommet du har valgt er ikke tilgjengelig i det valgte tidsrommet.", 
 						"");
 				DatabaseInterface db = new DatabaseInterface();
@@ -220,8 +222,22 @@ public class CreateActivityController implements Initializable {
 						parseTime(start_hours.getText() + ":" + start_minutes.getText()),
 						parseTime(end_hours.getText() + ":" + end_minutes.getText()))));
 				return;
+		}*/
+			String feilmelding = "";
+			if(!anyIsEmpty().equals(""))	{
+				feilmelding = anyIsEmpty();
+			}	else if(!timeIsLogical() || !dateIsOkay())	{
+				feilmelding = "Tidspunktet er ikke logisk.";
+			}	else if(!roomIsAvailable()){
+				feilmelding = "Rommet du har valgt er ikke ledig i det gitte tidspunktet.";
+				DatabaseInterface db = new DatabaseInterface();
+				this.room_picker.getItems().removeAll(this.room_picker.getItems());
+				this.room_picker.getItems().addAll(FXCollections.observableList(
+						db.getAvailableRooms(start_date.getValue(), end_date.getValue(),
+						parseTime(start_hours.getText() + ":" + start_minutes.getText()),
+						parseTime(end_hours.getText() + ":" + end_minutes.getText()))));
 			}
-			this.makeDialog(this.anyIsEmpty(), "");
+			this.makeDialog(feilmelding, "");
 		}
 	}
 	
