@@ -139,7 +139,7 @@ public class CreateActivityController implements Initializable {
 				closeScene(dialog);
 			}
 		});
-		dialog.setScene(new Scene(box, 300, 100));
+		dialog.setScene(new Scene(box, 400, 100));
 		dialog.show();
 	}
 	
