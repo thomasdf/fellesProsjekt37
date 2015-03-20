@@ -64,9 +64,6 @@ public class CreateGroupController implements Initializable{
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-	// TODO Auto-generated method stub
-		
-
 		//listener - listens on tabchange
 		tabPane.getSelectionModel().selectedItemProperty().addListener(
     		    new ChangeListener<Tab>() {
