@@ -27,6 +27,7 @@ public class InviteController implements Initializable{
 
 	//misc variables
 	String currentTab = "";
+	String current_user;
     // The table and columns
     @FXML TableView<Account> PersonTable;
     @FXML TableView<Group> GroupTable;
@@ -133,6 +134,10 @@ public class InviteController implements Initializable{
     	}
     }
     
+    public void setCurrentUser(String username){
+    	current_user = username;
+    }
+    
     @FXML
     private void unselectAll(ActionEvent event) {
     	if(currentTab.equals("Gruppe")){
@@ -178,6 +183,12 @@ public class InviteController implements Initializable{
     			
     		} else {
     			InvitedAccounts.add(InvitedGroupMembers.get(x));
+    		}
+    	}
+    	
+    	for(int x=0; x < InvitedAccounts.size(); x++){
+    		if(InvitedAccounts.get(x).getUsername().equals(current_user)){
+    			InvitedAccounts.remove(x);
     		}
     	}
     	
