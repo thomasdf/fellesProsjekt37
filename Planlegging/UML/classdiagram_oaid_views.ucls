@@ -3,25 +3,43 @@
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
   <class id="1" language="java" name="views.CalendarView" project="fellesProsjekt37" 
     file="/fellesProsjekt37/src/views/CalendarView.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="607" width="288" x="369" y="37"/>    
+    <position height="660" width="285" x="-113" y="-36"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="views.AgendaView" project="fellesProsjekt37" 
+  <class id="2" language="java" name="views.CheckBoxCellFactory_Group" project="fellesProsjekt37" 
+    file="/fellesProsjekt37/src/views/CheckBoxCellFactory_Group.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="302" y="112"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="views.AgendaView" project="fellesProsjekt37" 
     file="/fellesProsjekt37/src/views/AgendaView.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="185" y="241"/>    
+    <position height="-1" width="-1" x="580" y="274"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="views.MainApplication" project="fellesProsjekt37" 
+  <class id="4" language="java" name="views.MainApplication" project="fellesProsjekt37" 
     file="/fellesProsjekt37/src/views/MainApplication.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="184" y="574"/>    
+    <position height="-1" width="-1" x="301" y="282"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="views.CheckBoxCellFactory_Account" project="fellesProsjekt37" 
+    file="/fellesProsjekt37/src/views/CheckBoxCellFactory_Account.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="298" y="482"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
