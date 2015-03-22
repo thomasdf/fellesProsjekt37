@@ -17,50 +17,12 @@ import models.Notification;
  * DatabaseInterface provides a connection to the database. This is based on the
  * user for select, update, but not for administrating options like alter and
  * drop.
- * <p>
- * Remeber to always close the connection when done with the object.
- * <p>
- * To use this class you must first provide the jdbc connector projects build
- * path. It can be found at http://dev.mysql.com/downloads/connector/j/.
- * <p>
  * 
  * @author
  * @version %I%, %G%
  * @since 1.0
  */
 public class DatabaseInterface {
-
-	/*
-	 * Mal for � lage databaseinterface-metoder. husk � lage
-	 * javadoc-dokumentasjon til hver metode
-	 * 
-	 * public Object getObject(params) {
-	 * 
-	 * Object object = null;
-	 * 
-	 * Connection connection = null; ResultSet result = null; Statement
-	 * statement = null;
-	 * 
-	 * try { // create new connection and statement Class.forName(DB_DRIVER);
-	 * connection = DriverManager .getConnection(DB_URL, USERNAME, PASSWORD);
-	 * statement = connection.createStatement(); // method result = statement
-	 * .executeQuery(
-	 * "SELECT invited.activity_id, invited.user_name, invited.invitation_status, activity.owner_user_name FROM activity, invited WHERE activity.activity_id = invited.activity_id and activity.activity_id = "
-	 * + activity_id + " AND invited.user_name='" + user_name + "'");
-	 * result.next(); invite = new Invite(result.getString("owner_user_name"),
-	 * result.getString("user_name"), result.getInt("activity_id"));
-	 * invite.setStatus(result.getString("invitation_status")); } catch
-	 * (Exception e) { e.printStackTrace(); } finally { if (result != null) {
-	 * try { result.close(); } catch (SQLException e) {
-	 * 
-	 * } } if (statement != null) { try { statement.close(); } catch
-	 * (SQLException e) {
-	 * 
-	 * } } if (connection != null) { try { connection.close(); } catch
-	 * (SQLException e) {
-	 * 
-	 * } } } return object; }
-	 */
 
 	private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
 	/*
@@ -70,16 +32,8 @@ public class DatabaseInterface {
 	 * Perhaps make class usable for different users by including credentials in
 	 * the constructor instead of making it a static final field.
 	 */
-
-	//local
-	/*
-	private static final String DB_URL = "jdbc:mysql://localhost:3306/fellesprosjekt";
-	private static final String USERNAME = "fellesprosjekt";
-
-	private static final String PASSWORD = "bringIt";
-	*/
 	
-	//ekstern
+	
 	private static final String DB_URL = "jdbc:mysql://mysql.stud.ntnu.no/thomasdf_fellesprosjekt";
 	private static final String USERNAME = "thomasdf_fellesp";
 
@@ -91,13 +45,13 @@ public class DatabaseInterface {
 	}
 
 	/**
-	 * Fetches the activity with the given id from the database. Throws a
+	 * Fetches the activity with the given id from the database. Throws an
 	 * SQLException if something goes wrong, then it returns an Activity object
 	 * with no fields set but the id.
 	 * 
 	 * @param activity_id
 	 *            the identity of the activity in question
-	 * @return returns an Activity model object with the information required.
+	 * @return returns an Activity-model-object with the information required.
 	 */
 	public Activity getActivity(int activity_id) {
 		Activity act = null;
@@ -173,17 +127,17 @@ public class DatabaseInterface {
 		return act;
 	}
 
-	/**
-	 * 
-	 * 
-	 * @param owner_user_name
-	 * @param activity_date
-	 * @param end_date
-	 * @param start_time
-	 * @param end_time
-	 * @param room_name
-	 * @return
-	 */
+/**
+ * Creates a new Activity in the database, and creates relation between the new activity and the calendar in the database.
+ * @param owner_user_name - the username for the owner/administrator of the activity
+ * @param description - the description for the activity (max 256 characters)
+ * @param activity_date - the start-date for the activity
+ * @param end_date - the date the activity is to end
+ * @param start_time - the time for the activity-start
+ * @param end_time - the planned time for ending the activity
+ * @param room_name - the name of the room which is to be used.
+ * @return
+ */
 	public Activity setActivity(String owner_user_name, String description,
 			LocalDate activity_date, LocalDate end_date, LocalTime start_time,
 			LocalTime end_time, String room_name) {
@@ -255,125 +209,6 @@ public class DatabaseInterface {
 	}
 	
 	
-	/*
-
-	/**
-	 * Sets or updates the activity in question depending on if it exists
-	 * already or not
-	 * 
-	 * @param activity
-	 *            Activity object that should be updated
-	 */
-	
-	/*
-	public void setActivity(Activity activity) {
-		Connection connection = null;
-		ResultSet result = null;
-		Statement statement = null;
-		try {
-			// create new connection and statement
-			Class.forName(DB_DRIVER);
-			connection = DriverManager
-					.getConnection(DB_URL, USERNAME, PASSWORD);
-			statement = connection.createStatement();
-			// method
-			result = statement
-					.executeQuery("select * from activity where activity_id="
-							+ activity.getActivity_id());
-			result.next();
-			if (result.getString(1) != null) {
-				result.close();
-				result = statement
-						.executeQuery("SELECT calendar_id FROM hasCalendar WHERE user_name="
-								+ activity.getActivity_owner());
-				result.next();
-				int calendar_id = result.getInt(1);
-				statement.executeUpdate("UPDATE activity SET calendar_id="
-						+ calendar_id + ", description="
-						+ activity.getDescription() + ", activity_date="
-						+ activity.getStart_date() + ", end_date="
-						+ activity.getEnd_date() + ", start_time="
-						+ activity.getFrom() + ", end_time=" + activity.getTo()
-						+ ", owner_user_name=" + activity.getActivity_owner()
-						+ ", room_name=" + activity.getRoom());
-				/*
-				 * if(activity.getRoom() != null) { result =
-				 * statement.executeQuery
-				 * ("SELECT room_name FROM room WHERE room_name=" +
-				 * activity.getRoom()); result.next(); if(result.getString(1)!=
-				 * null) {
-				 * 
-				 * } else { throw new SQLException(); } } else {
-				 * statement.executeUpdate("UPDATE activity calendar_id="); }
-				 */
-	/*
-			} else {
-				result.close();
-				result = statement
-						.executeQuery("SELECT calendar_id FROM hasCalendar WHERE user_name="
-								+ activity.getActivity_owner());
-				result.next();
-				int calendar_id = result.getInt(1);
-				statement.executeUpdate("INSERT INTO activity VALUES ("
-						+ activity.getDescription() + ", "
-						+ activity.getStart_date() + ", "
-						+ activity.getEnd_date() + ", " + activity.getFrom()
-						+ ", " + activity.getTo() + ", "
-						+ activity.getActivity_owner() + ", "
-						+ activity.getRoom() + ")");
-				/*
-				 * // check if user name exists result = statement.executeQuery(
-				 * "SELECT user_name FROM account WHERE user_name=" +
-				 * activity.getOwner_user_name()); result.next();
-				 * if(result.getString(1) != null) { result.close(); // check if
-				 * user has calendar result = statement.executeQuery(
-				 * "SELECT calendar_id FROM hasCalendar WHERE user_name=" +
-				 * activity.getOwner_user_name()); result.next(); int
-				 * calendar_id = result.getInt(1); if(result.getString(1)!=null)
-				 * { result.close(); // check if room_name exists
-				 * if(activity.getRoom() != null) { result =
-				 * statement.executeQuery
-				 * ("SELECT room_name FROM room WHERE room_name=" +
-				 * activity.getRoom()); result.next(); if(result.getString(1) !=
-				 * null) { result.close(); // insert the damn data
-				 * statement.executeUpdate("INSERT INTO activity VALUES (" +
-				 * calendar_id + ", " + activity.getDescription() + ", " +
-				 * activity.getDate() + ", " + activity.getDate() + ", " +
-				 * activity.getFrom() + ", " + activity.getTo() + ", " +
-				 * activity.getOwner_user_name() + ", " + activity.getRoom()); }
-				 * } } } else { throw new SQLException(); }
-				 */
-	/*
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (result != null) {
-				try {
-					result.close();
-				} catch (SQLException e) {
-
-				}
-			}
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException e) {
-
-				}
-			}
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-
-				}
-			}
-		}
-	}
-	
-	 */
-
 	/**
 	 * Returns the description of the activity defined by the id.
 	 * 
@@ -430,7 +265,7 @@ public class DatabaseInterface {
 	}
 
 	/**
-	 * Method to get the start and end time from the db of the given activity
+	 * Method to get the start and end time from the database for the given activity
 	 * 
 	 * @param activity_id
 	 *            the identity of the activity in question
@@ -632,7 +467,7 @@ public class DatabaseInterface {
 	}
 
 	/**
-	 * Fetches the id of the room that connects with the activity. Returns an
+	 * Fetches the name of the room that is booked for an activity. Returns an
 	 * empty string if something goes wrong
 	 * 
 	 * @param activity_id
@@ -690,10 +525,10 @@ public class DatabaseInterface {
 	
 	/**
 	 * Returns a list of the rooms available inside the dates/time
-	 * @param start_date Localdate
-	 * @param end_date Localdate
-	 * @param start_time LocalTime
-	 * @param end_time LocalTime
+	 * @param start_date - the start date of the interval  we want to check if rooms are available
+	 * @param end_date - the end date of the interval we want to check if rooms are available
+	 * @param start_time - the start time of the interval we want to check if rooms are available
+	 * @param end_time - the end time of the interval we want to check if rooms are available
 	 * @return Returns an arrayList of rooms available
 	 */
 	public ArrayList<String> getAvailableRooms(LocalDate start_date, LocalDate end_date, LocalTime start_time, LocalTime end_time){
@@ -805,6 +640,12 @@ public class DatabaseInterface {
 		return roomlist;
 	}
 	
+	/**
+	 * Creates a group in the database.
+	 * @param group_name - the name of the group
+	 * @param members_user_name - a list of user names for the accounts that are in the group
+	 * @return
+	 */
 	public Group setGroup(String group_name, ArrayList<String> members_user_name){
 	Connection connection = null;
 	ResultSet result = null;
@@ -1049,33 +890,10 @@ public class DatabaseInterface {
 		return admin_user_name;
 	}
 
-	/*
-	 * 
-	 * /** Returns the employee-number registered in an account.
-	 * 
-	 * @param user_name the user name which is the primary key of the account we
-	 * want to find the employee number from.
-	 * 
-	 * @return the employee-number for the account.
-	 */
-
-	/*
-	 * public int getEmployeeNr(String user_name) { int employeeNr = 0; try {
-	 * result = statement.executeQuery(
-	 * "select person.employee_nr from person, account where account.employee_nr = person.employee_nr and account.user_name = "
-	 * + "\"" + user_name + "\""); result.next(); employeeNr = result.getInt(1);
-	 * } catch (SQLException e) {
-	 * System.out.println("Error from DatabaseInterface: " +
-	 * e.getLocalizedMessage()); } return employeeNr; }
-	 */
-
 	/**
-	 * Returns the full name registered in an account.
-	 * 
-	 * @param user_name
-	 *            the user name which is the primary key of the account we want
-	 *            to find the full name from.
-	 * @return the full name for the account.
+	 * Returns the full name for a person.
+	 * @param user_name the user name for the account related to the person in question
+	 * @return an ArrayList of the full name. The first element is the name, and the second element is the surname
 	 */
 	public ArrayList<String> getFullName(String user_name) {
 		ArrayList<String> fullName = new ArrayList<String>();
@@ -1188,8 +1006,7 @@ public class DatabaseInterface {
 	 *            to find the password from.
 	 * @return the password for the account.
 	 */
-	public String getPassword(String user_name) { // this method is not a smart
-													// way to do things
+	public String getPassword(String user_name) {
 		String password = null;
 		Connection connection = null;
 		ResultSet result = null;
@@ -1445,7 +1262,7 @@ public class DatabaseInterface {
 	}
 	
 	/**
-	 * Removes an account from the system. NB: only to use by admin user. Check if user_name exists in database before use.
+	 * Removes an account from the system. Only to be used by admin-account. Check if user_name exists in database before use.
 	 * @param account_user_name User name for the account to be removed.
 	 */
 	public void removeAccount(String account_user_name) {
@@ -1546,12 +1363,10 @@ public class DatabaseInterface {
 	}
 
 	/**
-	 * Returns an ArrayList of all Activity-objects related to an Account
+	 * Returns an ArrayList of all Activity-objects related to a Group
 	 * 
-	 * @param user_name
-	 *            the user name which is the primary key for the account
-	 * @return an ArrayList<Activity> with all Activity-objects related to an
-	 *         Account.
+	 * @param group_id - the identity for the group we want to find all acitivities for.
+	 * @return an ArrayList<Activity> with all Activity-objects related to a group
 	 */
 	public ArrayList<Activity> getAllActivities(int group_id) {
 		ArrayList<Activity> activityList = new ArrayList<Activity>();
@@ -1603,22 +1418,6 @@ public class DatabaseInterface {
 		return activityList;
 	}
 
-	/*
-	 * 
-	 * public Person getPerson(String user_name) { Person person = null; try {
-	 * ResultSet result = statement .executeQuery(
-	 * "select * from account, person where account.employee_nr = person.employee_nr and user_name = "
-	 * + "\"" + user_name + "\""); result.next(); int employee_nr =
-	 * result.getInt("employee_nr"); String first_name =
-	 * result.getString("first_name"); String last_name =
-	 * result.getString("last_name"); String mobile_nr =
-	 * result.getString("mobile_nr"); String internal_nr = ""; // denne linjen
-	 * skal fjernes n�r modellene // oppdateres til � ikke lenger ha //
-	 * internal_nr person = new Person(employee_nr, first_name, last_name,
-	 * internal_nr, mobile_nr); } catch (SQLException e) {
-	 * System.out.println("Error from DatabaseInterface: " +
-	 * e.getLocalizedMessage()); } return person; }
-	 */
 
 	/**
 	 * Creates a supgroup-supergroup relation between groups
@@ -1717,7 +1516,12 @@ public class DatabaseInterface {
 			}
 		}
 	}
-
+	
+	/**
+	 * invites all members of a group to an activity
+	 * @param activity_id the id for the activity
+	 * @param group_id the id for the group
+	 */
 	public void inviteGroup(int activity_id, int group_id) {
 		Connection connection = null;
 		ResultSet result = null;
@@ -1835,6 +1639,11 @@ public class DatabaseInterface {
 		return invite;
 	}
 
+	/**
+	 * Returns an arrayList of all the invites related to an account, to find out which activities the user is invited to.
+	 * @param user_name the user_name for the user we want to get all invites from
+	 * @return returns an arraylist of invites
+	 */
 	public ArrayList<Invite> getUserInvitedTo(String user_name) {
 		ArrayList<Invite> invitesList = new ArrayList<>();
 
@@ -2014,8 +1823,8 @@ public class DatabaseInterface {
 	/**
 	 * Changes status of invite to the opposite of what it is
 	 * 
-	 * @param activity_id
-	 * @param user_name
+	 * @param activity_id the id for the activity
+	 * @param user_name the username for the user
 	 */
 	public void changeInvitedStatus(int activity_id, String user_name) {
 		Connection connection = null;
@@ -2068,6 +1877,10 @@ public class DatabaseInterface {
 		}
 	}
 
+	/**
+	 * fetches all accounts from the database
+	 * @return returns an ArrayList of account-objects
+	 */
 	public ArrayList<Account> getAllAccounts() {
 		ArrayList<Account> people = new ArrayList<Account>();
 		Connection connection = null;
